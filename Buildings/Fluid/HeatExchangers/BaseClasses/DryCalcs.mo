@@ -39,7 +39,7 @@ model DryCalcs
   output Modelica.SIunits.Temperature TAirOut
     "Temperature of air at the outlet";
 
-  Real eff(min=0, max=1, unit="1")
+  Real eps(min=0, max=1, unit="1")
     "Effectiveness for heat exchanger";
   Modelica.SIunits.ThermalConductance CWat_flow
     "Capacitance rate of water";
@@ -47,8 +47,6 @@ model DryCalcs
     "Capacitance rate of air";
   Modelica.SIunits.ThermalConductance CMin_flow
     "Minimum capacity rate";
-  Modelica.SIunits.ThermalConductance CMax_flow
-    "Maximum capacity rate";
   Real Z(unit="1")
     "capacitance rate ratio (C*)";
   Modelica.SIunits.ThermalConductance UA
@@ -69,7 +67,6 @@ equation
   CWat_flow = mWat_flow * cpWat;
   CAir_flow = mAir_flow * cpAir;
   CMin_flow = min(CWat_flow, CAir_flow);
-  CMax_flow = max(CWat_flow, CAir_flow);
 
   CWatNonZer_flow = mWatNonZer_flow * cpWat;
   CAirNonZer_flow = mAirNonZer_flow * cpAir;
@@ -78,14 +75,15 @@ equation
   UA = 1/ (1 / UAAir + 1 / UAWat) "UA is for the overall coil (i.e., both sides)";
   Z = CMinNonZer_flow / CMaxNonZer_flow "Braun 1988 eq 4.1.10";
   NTU = fraHex*UA/CMinNonZer_flow;
-  eff = epsilon_ntuZ(
+
+  eps = epsilon_ntuZ(
       Z = Z,
       NTU = NTU,
       flowRegime = Integer(cfg));
   // Use CMin to compute Q_flow
-  Q_flow = eff * CMin_flow * (TWatIn - TAirIn)
+  Q_flow = eps * CMin_flow * (TWatIn - TAirIn)
       "Note: positive heat transfer is air to water";
-  TAirOut = TAirIn + eff * (TWatIn - TAirIn)
+  TAirOut = TAirIn + eps * (TWatIn - TAirIn)
       "Braun 1988 eq 4.1.8";
   TWatOut = TWatIn + Z * (TAirIn - TAirOut)
       "Braun 1988 eq 4.1.9";

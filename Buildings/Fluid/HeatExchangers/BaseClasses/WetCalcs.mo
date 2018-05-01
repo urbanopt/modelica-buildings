@@ -69,7 +69,7 @@ protected
   Modelica.SIunits.SpecificEnthalpy hSurEff
     "Effective surface enthalpy; assumes coil surface is at a uniform
     temperature and enthalpy";
-  Real effSta(start=0.66, unit="1")
+  Real epsSta(start=0.66, unit="1")
     "Effectiveness for heat exchanger (e*)";
   Modelica.SIunits.Temperature TSurEff
     "Effective surface temperature of the coil";
@@ -115,7 +115,7 @@ equation
     hAirOut = hAirIn;
     hAirSatSurOut = hAirIn;
     hSurEff = hAirIn;
-    effSta = 0;
+    epsSta = 0;
     TSurEff = TAirIn;
     pSatEff = 0;
     XSurEff[1] = 0;
@@ -160,11 +160,11 @@ equation
     "Mitchell 2012 eq 13.19";
   NTUSta =  fraHex * UASta/mAirNonZer_flow
     "Mitchell 2012 eq 13.20";
-  effSta = epsilon_ntuZ(
+  epsSta = epsilon_ntuZ(
     Z = mSta,
     NTU = NTUSta,
     flowRegime = Integer(cfg));
-  QTot_flow = effSta * mAir_flow * (hAirSatSurIn - hAirIn);
+  QTot_flow = epsSta * mAir_flow * (hAirSatSurIn - hAirIn);
   TWatOut = TWatIn - QTot_flow / (mWatNonZer_flow * cpWat);
   hAirOut = hAirIn + QTot_flow / mAirNonZer_flow;
   // The number of transfer units are usually of order 1. Hence, we can add a small
