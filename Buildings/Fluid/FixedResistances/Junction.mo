@@ -4,7 +4,6 @@ model Junction
     extends Buildings.Fluid.BaseClasses.PartialThreeWayResistance(
     mDyn_flow_nominal = sum(abs(m_flow_nominal[:])/3),
     redeclare Buildings.Fluid.FixedResistances.PressureDrop res1(
-      final allowFlowReversal=true,
       from_dp=from_dp,
       final m_flow_nominal=m_flow_nominal[1],
       final dp_nominal=dp_nominal[1],
@@ -12,7 +11,6 @@ model Junction
       homotopyInitialization=homotopyInitialization,
       deltaM=deltaM),
     redeclare Buildings.Fluid.FixedResistances.PressureDrop res2(
-      final allowFlowReversal=true,
       from_dp=from_dp,
       final m_flow_nominal=m_flow_nominal[2],
       final dp_nominal=dp_nominal[2],
@@ -20,7 +18,6 @@ model Junction
       homotopyInitialization=homotopyInitialization,
       deltaM=deltaM),
     redeclare Buildings.Fluid.FixedResistances.PressureDrop res3(
-      final allowFlowReversal=true,
       from_dp=from_dp,
       final m_flow_nominal=m_flow_nominal[3],
       final dp_nominal=dp_nominal[3],
@@ -120,25 +117,34 @@ system of equations.
 </html>", revisions="<html>
 <ul>
 <li>
+March 26, 2018 by Filip Jorissen:<br/>
+Removed <code>final allowFlowReversal=true</code> from all resistances 
+since this overrides the default simplification when the flow
+is not bidirectional.
+This change can lead to smaller algebraic loops.
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/898\">issue 898</a>.
+</li>
+<li>
 December 1, 2016, by Michael Wetter:<br/>
 Renamed model from <code>SplitterFixedResistanceDpM</code> to
 <code>FlowJunction</code> and removed the parameters
 <code>use_dh</code>, <code>dh</code> and <code>ReC</code>.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/451\">issue 451</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/451\">issue 451</a>.
 </li>
 <li>
 October 14, 2016 by Michael Wetter:<br/>
 Added to Annex 60 library.<br/>
 Updated comment for parameter <code>use_dh</code>.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/451\">issue 451</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/451\">issue 451</a>.
 </li>
 <li>
 Removed parameter <code>dynamicBalance</code> that overwrote the setting
 of <code>energyDynamics</code> and <code>massDynamics</code>.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/411\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/411\">
 Annex 60, issue 411</a>.
 </li>
 <li>

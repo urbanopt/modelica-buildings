@@ -30,7 +30,7 @@ int initialize(PARA_DATA *para) {
 
   /* Overwrite the default values using user defined values*/
   if(read_parameter(para)) {
-    ffd_log("initialize(): Failed to read paramter file.", FFD_ERROR);
+    ffd_log("initialize(): Failed to read parameter file.", FFD_ERROR);
     return 1;
   }
 
@@ -79,7 +79,7 @@ void set_default_parameter(PARA_DATA *para) {
   para->prob->rho = (REAL) 1.0; /**/
   para->prob->tur_model = LAM; /* No turbulence model*/
 
-  para->solv->check_residual = 0; 
+  para->solv->check_residual = 0;
   para->solv->solver = GS; /* Gauss-Seidel Solver*/
   para->solv->interpolation = BILINEAR; /* Bilinear interpolation*/
 
@@ -126,7 +126,7 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
   para->outp->cal_mean = 0;
 
   /****************************************************************************
-  | Set inital value for FFD variables
+  | Set initial value for FFD variables
   ****************************************************************************/
   for(i=0; i<size; i++) {
     var[GX][i]      = 0.0;
@@ -322,7 +322,7 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
   }
 
   /****************************************************************************
-  | Conduct the data exchange at the inital state of cosimulation
+  | Conduct the data exchange at the initial state of cosimulation
   ****************************************************************************/
   if(para->solv->cosimulation==1) {
     /*------------------------------------------------------------------------
@@ -424,4 +424,3 @@ int set_initial_data(PARA_DATA *para, REAL **var, int **BINDEX) {
 
   return flag;
 } /* set_initial_data()*/
-

@@ -94,7 +94,6 @@ model ThermalZoneHVACNoExhaust
     "Outdoor temperature used for the HVAC model" annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
-        rotation=0,
         origin={-190,-24})));
 equation
   connect(mov.port_b,hea. port_a) annotation (Line(points={{-70,10},{-70,10},{-40,
@@ -196,7 +195,7 @@ connected to the adaptor <code>hvacAda</code>, rather than the volume <code>vol<
 November 29, 2016, by Michael Wetter:<br/>
 Added separate signal for outdoor temperature used by HVAC system. This is
 to improve clarity regarding what signals are exchanged, see also
-<a href=\"https://github.com/ibpsa/modelica/pull/598\">#598</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/pull/598\">#598</a>.
 </li>
 <li>
 June 29, 2016, by Michael Wetter:<br/>

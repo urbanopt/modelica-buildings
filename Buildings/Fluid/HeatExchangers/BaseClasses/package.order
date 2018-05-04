@@ -17,12 +17,12 @@ PartialDuctPipeManifold
 PartialEffectiveness
 PartialHexElement
 PartialPipeManifold
+PartialPrescribedOutlet
 PipeManifoldFixedResistance
 PipeManifoldFlowDistributor
 PipeManifoldNoResistance
 RayleighNumber
 WetCalcs
-appartusDewPoint
 determineWaterIndex
 dynamicViscosityWater
 epsilon_C

@@ -15,6 +15,7 @@ model EN12975SolarGain "Model calculating solar gains per the EN12975 standard"
     min=0.0,
     max=1.0) = 0 "Shading coefficient 0.0: no shading, 1.0: full shading"
     annotation(Dialog(enable = not use_shaCoe_in,group="Shading"));
+
   parameter Real iamDiff "Incidence angle modifier for diffuse radiation";
 
   Modelica.Blocks.Interfaces.RealInput shaCoe_in if use_shaCoe_in
@@ -28,7 +29,7 @@ model EN12975SolarGain "Model calculating solar gains per the EN12975 standard"
   Modelica.Blocks.Interfaces.RealInput incAng(
     quantity="Angle",
     unit="rad",
-    displayUnit="degree") "Incidence angle of the sun beam on a tilted surface"
+    displayUnit="deg") "Incidence angle of the sun beam on a tilted surface"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
   Modelica.Blocks.Interfaces.RealInput HDirTil(
     unit="W/m2", quantity="RadiantEnergyFluenceRate")
@@ -57,15 +58,10 @@ equation
   connect(shaCoe_internal, shaCoe_in);
 
   // E+ Equ (555)
-  iamBea = Buildings.Utilities.Math.Functions.smoothHeaviside(x=Modelica.Constants.pi
-    /3 - incAng, delta=Modelica.Constants.pi/60)*
-    SolarCollectors.BaseClasses.IAM(
-    incAng,
-    B0,
-    B1);
+  iamBea = SolarCollectors.BaseClasses.IAM(incAng, B0, B1);
+
   // Modified from EnergyPlus Equ (559) by applying shade effect for direct solar radiation
   // Only solar heat gain is considered here
-
   if not use_shaCoe_in then
     shaCoe_internal = shaCoe;
   end if;
@@ -135,7 +131,7 @@ equation
       <p>
         This model reduces the heat gain rate to 0 W when the fluid temperature is
         within 1 degree C of the maximum temperature of the medium model. The
-        calucation is performed using the
+        calculation is performed using the
         <a href=\"modelica://Buildings.Utilities.Math.Functions.smoothHeaviside\">
         Buildings.Utilities.Math.Functions.smoothHeaviside</a> function.
       </p>
@@ -148,6 +144,19 @@ equation
     </html>",
     revisions="<html>
 <ul>
+<li>
+April 27, 2018, by Michael Wetter:<br/>
+Corrected <code>displayUnit</code>.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/912\">Buildings, issue 912</a>.
+</li>
+<li>
+May 31, 2017, by Michael Wetter and Filip Jorissen:<br/>
+Change limits for incident angle modifier to avoid dip in temperature
+at shallow incidence angles.<br/>
+This is for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/785\">issue 785</a>.
+</li>
 <li>
 September 17, 2016, by Michael Wetter:<br/>
 Corrected quantity from <code>Temperature</code> to <code>ThermodynamicTemperature</code>
@@ -163,7 +172,7 @@ to make it more efficient.
 <li>
 June 29, 2015, by Filip Jorissen:<br/>
 Fixed sign mistake causing model to fail under high
-solar irradiation because temperature goes above 
+solar irradiation because temperature goes above
 medium temperature bound.
 </li>
 <li>

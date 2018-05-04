@@ -47,7 +47,7 @@ model HeatingCoolingCarnot_T
     "Heat from ambient to heat pump evaporator"
     annotation (Placement(transformation(extent={{100,-50},{120,-30}})));
   Modelica.Blocks.Interfaces.RealOutput QAmbChi_flow(unit="W")
-    "Heat from chiller condensor to ambient"
+    "Heat from chiller condenser to ambient"
     annotation (Placement(transformation(extent={{100,-70},{120,-50}})));
 protected
   replaceable package MediumSin =
@@ -197,8 +197,7 @@ equation
           {-28,-40},{110,-40}}, color={0,0,127}));
   connect(coo.QCon_flow, QAmbChi_flow) annotation (Line(points={{59,15},{66,15},
           {66,-60},{110,-60}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}})), Icon(coordinateSystem(preserveAspectRatio=false,
+  annotation ( Icon(coordinateSystem(preserveAspectRatio=false,
           extent={{-100,-100},{100,100}}), graphics={
                                 Rectangle(
         extent={{-100,-100},{100,100}},
@@ -284,7 +283,7 @@ Changed default temperature to compute COP to be the leaving temperature as
 use of the entering temperature can violate the 2nd law if the temperature
 lift is small.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/497\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/497\">
 Annex 60, issue 497</a>.
 </li>
 <li>

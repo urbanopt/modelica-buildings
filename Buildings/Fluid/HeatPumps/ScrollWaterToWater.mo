@@ -1,7 +1,6 @@
 within Buildings.Fluid.HeatPumps;
 model ScrollWaterToWater
   "Model for a scroll water to water heat pump"
-
   extends Buildings.Fluid.HeatPumps.BaseClasses.PartialWaterToWater(
     final UAEva=datHeaPum.UAEva*scaling_factor,
     final UACon=datHeaPum.UACon*scaling_factor,
@@ -30,7 +29,7 @@ in Jin (2002). The thermodynamic heat pump cycle is represented below.
 <img  alt=\"image\" src=\"modelica://Buildings/Resources/Images/Fluid/HeatPumps/WaterToWater_Cycle.png\" border=\"1\"/>
 </p>
 <p>
-The rate of heat transfered to the evaporator is given by:
+The rate of heat transferred to the evaporator is given by:
 </p>
 <p align=\"center\" style=\"font-style:italic;\">
 Q&#775;<sub>Eva</sub> = m&#775;<sub>ref</sub> ( h<sub>Vap</sub>(T<sub>Eva</sub>) - h<sub>Liq</sub>(T<sub>Con</sub>) ).
@@ -62,10 +61,26 @@ located in
 <a href=\"modelica://Buildings.Fluid.HeatPumps.Calibration.ScrollWaterToWater\">
 Buildings.Fluid.HeatPumps.Calibration.ScrollWaterToWater</a>.
 </p>
+<h4>Options</h4>
+<p>
+Parameters <code>TConMax</code> and <code>TEvaMin</code>
+may be used to set an upper or lower bound for the
+condenser and evaporator.
+The compressor is disabled when these conditions
+are not satisfied, or when the
+evaporator temperature is larger
+than the condenser temperature.
+This mimics the temperature protection
+of heat pumps and moreover it avoids
+non-converging algebraic loops of equations,
+or freezing of evaporator medium.
+This option can be disabled by setting
+<code>enable_temperature_protection = false</code>.
+</p>
 <h4>Assumptions and limitations</h4>
 <p>
 The compression process is assumed isentropic. The thermal energy
-of superheating is ignored in the evaluation of the heat transfered to the refrigerant
+of superheating is ignored in the evaluation of the heat transferred to the refrigerant
 in the evaporator. There is no supercooling.
 </p>
 <h4>References</h4>
@@ -78,6 +93,11 @@ PhD Thesis. Oklahoma State University. Stillwater, Oklahoma, USA. 2012.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+May 30, 2017, by Filip Jorissen:<br/>
+Revised documentation for temperature protection.
+See <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/769\">#769</a>.
+</li>
 <li>
 November 11, 2016, by Massimo Cimmino:<br/>
 First implementation.

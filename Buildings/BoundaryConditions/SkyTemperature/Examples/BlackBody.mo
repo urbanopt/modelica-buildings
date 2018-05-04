@@ -3,7 +3,7 @@ model BlackBody "Test model for black body sky temperature"
   extends Modelica.Icons.Example;
 
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
-        "modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos")
+        Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
   Buildings.BoundaryConditions.SkyTemperature.BlackBody TBlaSky
     "Black body sky temperature computed from temperature and sky cover"
@@ -77,13 +77,13 @@ February 18, 2017, by Filip Jorissen:<br/>
 Now computing both options of <code>TBlaSky</code>.
 This verifies the consistency of the two computation methods.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/648\">#648</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/648\">#648</a>.
 </li>
 <li>
 January 7, 2016, by Michael Wetter:<br/>
 Changed <code>connect</code> statement for infrared radiation due renaming of the
 variable. This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/376\">issue 376</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/376\">issue 376</a>.
 Added comments.
 </li>
 <li>
@@ -94,7 +94,5 @@ First implementation.
 </html>"),
 experiment(Tolerance=1e-6, StartTime=0, StopTime=86400),
     __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/BoundaryConditions/SkyTemperature/Examples/BlackBody.mos"
-        "Simulate and plot"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}})));
+        "Simulate and plot"));
 end BlackBody;

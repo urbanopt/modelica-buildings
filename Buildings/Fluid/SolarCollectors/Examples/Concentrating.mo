@@ -19,7 +19,7 @@ model Concentrating "Example showing the use of Concentrating"
     annotation (Placement(transformation(extent={{4,-20},{24,0}})));
 
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
-    "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos")
+    Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
     "Weather data input file"
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
@@ -103,6 +103,6 @@ First implementation
 </html>"),
     __Dymola_Commands(file=
           "modelica://Buildings/Resources/Scripts/Dymola/Fluid/SolarCollectors/Examples/Concentrating.mos"
-        "Simulate and Plot"),
+        "Simulate and plot"),
     experiment(Tolerance=1e-6, StopTime=86400.0));
 end Concentrating;

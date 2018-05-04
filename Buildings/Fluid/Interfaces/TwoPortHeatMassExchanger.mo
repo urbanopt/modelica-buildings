@@ -127,8 +127,8 @@ Buildings.Fluid.HeatExchangers.HeaterCooler_u</a>, and
 </li>
 <li>
 the ideal humidifier
-<a href=\"modelica://Buildings.Fluid.MassExchangers.Humidifier_u\">
-Buildings.Fluid.MassExchangers.Humidifier_u</a>.
+<a href=\"modelica://Buildings.Fluid.Humidifiers.Humidifier_u\">
+Buildings.Fluid.Humidifiers.Humidifier_u</a>.
 </li>
 </ul>
 
@@ -145,7 +145,7 @@ Modelica.Fluid.Examples.HeatExchanger.BaseClasses.BasicHX
 December 1, 2016, by Michael Wetter:<br/>
 Updated model as <code>use_dh</code> is no longer a parameter in the pressure drop model.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/480\">#480</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/480\">#480</a>.
 </li>
 <li>
 January 26, 2016, by Michael Wetter:<br/>
@@ -248,13 +248,13 @@ First implementation.
           fillColor={95,95,95},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{-101,6},{100,-4}},
+          extent={{-101,5},{100,-4}},
           lineColor={0,0,255},
           pattern=LinePattern.None,
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid),
         Rectangle(
-          extent={{0,-4},{100,6}},
+          extent={{0,-4},{100,5}},
           lineColor={0,0,255},
           pattern=LinePattern.None,
           fillColor={255,0,0},

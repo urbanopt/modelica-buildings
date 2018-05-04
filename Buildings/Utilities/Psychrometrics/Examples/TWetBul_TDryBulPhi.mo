@@ -127,7 +127,7 @@ Changed graphical annotation.
 <li>
 May 24, 2016, by Filip Jorissen:<br/>
 Updated example with validation data.
-See  <a href=\"https://github.com/ibpsa/modelica/issues/474\">#474</a>
+See  <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/474\">#474</a>
 for a discussion.
 </li>
 <li>
@@ -135,7 +135,5 @@ October 1, 2012 by Michael Wetter:<br/>
 First implementation.
 </li>
 </ul>
-</html>"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}})));
+</html>"));
 end TWetBul_TDryBulPhi;

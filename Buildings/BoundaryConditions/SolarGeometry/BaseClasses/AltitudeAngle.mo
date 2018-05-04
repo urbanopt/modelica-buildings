@@ -11,7 +11,7 @@ annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
 annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 equation
   alt = (Modelica.Constants.pi/2) - zen;
-  annotation (Icon(graphics={Bitmap(extent={{-92,92},{92,-92}}, fileName=
+  annotation (Icon(graphics={Bitmap(extent={{-90,-90},{90,90}}, fileName=
               "modelica://Buildings/Resources/Images/BoundaryConditions/SolarGeometry/BaseClasses/AltitudeAngle.png")}),
     defaultComponentName="altAng", Documentation(info="<html>
 <p>
@@ -26,7 +26,7 @@ It is the complementory angle to the zenith angle.
 January 5, 2015, by Michael Wetter:<br/>
 Updated comment of the output connector as this is used in the weather bus connector.
 This is for
-issue <a href=\"https://github.com/ibpsa/modelica/issues/376\">376</a>.
+issue <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/376\">376</a>.
 </li>
 <li>
 Feb 01, 2012, by Kaustubh Phalak:<br/>

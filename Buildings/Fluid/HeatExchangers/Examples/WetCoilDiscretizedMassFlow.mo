@@ -56,14 +56,14 @@ equation
       smooth=Smooth.None));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,
             -100},{200,200}})),
-experiment(Tolerance=1e-7, StopTime=3600),
+experiment(Tolerance=1e-8, StopTime=3600),
 __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Fluid/HeatExchangers/Examples/WetCoilDiscretizedMassFlow.mos"
         "Simulate and plot"),
 Documentation(info="<html>
 <p>
 This model demonstrates the use of
-<a href=\"modelica://Buildings.Fluid.HeatExchangers.WetCoilDiscretizedMassFlow\">
-Buildings.Fluid.HeatExchangers.WetCoilDiscretizedMassFlow</a>
+<a href=\"modelica://Buildings.Fluid.HeatExchangers.WetCoilDiscretized\">
+Buildings.Fluid.HeatExchangers.WetCoilDiscretized</a>
 for different inlet conditions.
 </p>
 </html>", revisions="<html>

@@ -200,17 +200,17 @@ block ReaderTMY3 "Reader for TMY3 weather data"
         iconTransformation(extent={{-240,-240},{-200,-200}})));
 
   //--------------------------------------------------------------
-  parameter String filNam="" "Name of weather data file" annotation (Dialog(
-        loadSelector(filter="Weather files (*.mos)", caption=
-            "Select weather file")));
+  parameter String filNam="" "Name of weather data file" annotation (
+    Dialog(loadSelector(filter="Weather files (*.mos)",
+                        caption="Select weather file")));
   final parameter Modelica.SIunits.Angle lon(displayUnit="deg")=
     Buildings.BoundaryConditions.WeatherData.BaseClasses.getLongitudeTMY3(
-    absFilNam) "Longitude";
+    filNam) "Longitude";
   final parameter Modelica.SIunits.Angle lat(displayUnit="deg")=
     Buildings.BoundaryConditions.WeatherData.BaseClasses.getLatitudeTMY3(
-    absFilNam) "Latitude";
+    filNam) "Latitude";
   final parameter Modelica.SIunits.Time timZon(displayUnit="h")=
-    Buildings.BoundaryConditions.WeatherData.BaseClasses.getTimeZoneTMY3(absFilNam)
+    Buildings.BoundaryConditions.WeatherData.BaseClasses.getTimeZoneTMY3(filNam)
     "Time zone";
   Bus weaBus "Weather data bus" annotation (Placement(transformation(extent={{
             290,-10},{310,10}}), iconTransformation(extent={{190,-10},{210,10}})));
@@ -226,13 +226,10 @@ block ReaderTMY3 "Reader for TMY3 weather data"
   constant Modelica.SIunits.HeatFlux solCon = 1367.7 "Solar constant";
 
 protected
-  final parameter String absFilNam = Buildings.BoundaryConditions.WeatherData.BaseClasses.getAbsolutePath(filNam)
-    "Absolute path of the file";
-
   Modelica.Blocks.Tables.CombiTable1Ds datRea(
     final tableOnFile=true,
     final tableName="tab1",
-    final fileName=absFilNam,
+    final fileName=filNam,
     final smoothness=Modelica.Blocks.Types.Smoothness.ContinuousDerivative,
     final columns={2,3,4,5,6,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,
         28,29,30,8})
@@ -290,7 +287,7 @@ protected
   Modelica.Blocks.Tables.CombiTable1Ds datRea1(
     final tableOnFile=true,
     final tableName="tab1",
-    final fileName=absFilNam,
+    final fileName=filNam,
     final smoothness=Modelica.Blocks.Types.Smoothness.ContinuousDerivative,
     final columns=9:11) "Data reader"
     annotation (Placement(transformation(extent={{-80,180},{-60,200}})));
@@ -434,9 +431,6 @@ protected
           extent={{-81,32},{84,-24}},
           lineColor={0,0,0},
             textString="Latitude")}),
-    Diagram(coordinateSystem(
-        preserveAspectRatio=false,
-        extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p>
 Block to output the latitude of the location.
@@ -481,9 +475,6 @@ First implementation.
           extent={{-81,32},{84,-24}},
           lineColor={0,0,0},
             textString="Longitude")}),
-    Diagram(coordinateSystem(
-        preserveAspectRatio=false,
-        extent={{-100,-100},{100,100}})),
     Documentation(info="<html>
 <p>
 Block to output the longitude of the location.
@@ -1564,20 +1555,33 @@ Technical Report, NREL/TP-581-43156, revised May 2008.
 </html>", revisions="<html>
 <ul>
 <li>
+December 4, 2017, by Michael Wetter:<br/>
+Removed function call to <code>getAbsolutePath</code>, as this causes in Dymola 2018FD01
+the error
+\"A call of loadResource with a non-literal string remains in the generated code; it will not work for an URI.\"
+when exporting <a href=\"modelica://Buildings.Fluid.FMI.ExportContainers.Examples.FMUs.ThermalZone\">
+Buildings.Fluid.FMI.ExportContainers.Examples.FMUs.ThermalZone</a>
+as an FMU. Instead, if the weather file is specified as a Modelica, URI, syntax such as
+<code>Modelica.Utilities.Files.loadResource(\"modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos\")</code>
+should be used.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/867\">#867</a>.
+</li>
+<li>
 February 18, 2017, by Filip Jorissen:<br/>
 Infrared radiation on horizontal surface is now delayed by 30 minutes
 such that the results in
-<a href=modelica://Buildings.BoundaryConditions.SkyTemperature.Examples.BlackBody>TBlaSky</a>
+<a href=\"modelica://Buildings.BoundaryConditions.SkyTemperature.Examples.BlackBody\">TBlaSky</a>
 are consistent.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/648\">#648</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/648\">#648</a>.
 </li>
 <li>
 December 06, 2016, by Thierry S. Nouidui:<br/>
 Constrained the direct normal radiation to not be bigger than the solar constant when using
 global and diffuse solar radiation data provided via the inputs connectors.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/608\">#608</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/608\">#608</a>.
 </li>
 <li>
 April 21, 2016, by Michael Wetter:<br/>
@@ -1591,13 +1595,13 @@ This is for
 January 6, 2016, by Moritz Lauster:<br/>
 Changed output <code>radHorIR</code> to <code>HHorIR</code>.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/376\">#376</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/376\">#376</a>.
 </li>
 <li>
 January 4, 2016, by Moritz Lauster:<br/>
 Added a table in documentation with output variables accessible via <code>weaBus</code>.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/376\">#376</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/376\">#376</a>.
 </li>
 <li>
 December 15, 2015, by Michael Wetter:<br/>
@@ -1606,11 +1610,11 @@ connect the black body sky temperature to the weather bus, which is required
 in Dymola 2016 for the variable <code>weaBus.TBlaSky</code> to appear
 in the graphical editor.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/377\">#377</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/377\">#377</a>.
 </li>
 <li>
 September 24, 2015, by Marcus Fuchs:<br/>
-Replace annotation <code>__Dymola_loadSelector</code> by <code>loadSelector</code>
+Replace Dymola specific annotation by <code>loadSelector</code>
 for MSL compliancy as reported by @tbeu at
 <a href=\"https://github.com/RWTH-EBC/AixLib/pull/107\">RWTH-EBC/AixLib#107</a>
 </li>
@@ -1624,7 +1628,7 @@ This avoids a warning if
 Buildings.BoundaryConditions.SolarIrradiation.BaseClasses.Examples.SkyClearness</a>
 is translated in pedantic mode in Dymola 2016.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/266\">#266</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/266\">#266</a>.
 </li>
 <li>
 March 26, 2015, by Michael Wetter:<br/>

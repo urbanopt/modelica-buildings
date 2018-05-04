@@ -5,7 +5,7 @@ block BrighteningCoefficient "Circumsolar and horizon brightening coefficients"
   Modelica.Blocks.Interfaces.RealInput zen(
     quantity="Angle",
     unit="rad",
-    displayUnit="degree") "Zenith angle of the sun beam"
+    displayUnit="deg") "Zenith angle of the sun beam"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
   Modelica.Blocks.Interfaces.RealInput skyCle
     "Sky clearness. skyCle=1: overcast sky; skyCle=8 clear sky"
@@ -119,10 +119,16 @@ This component computes the circumsolar and horizon brightening coefficients.
 </html>", revisions="<html>
 <ul>
 <li>
+April 27, 2018, by Michael Wetter:<br/>
+Corrected <code>displayUnit</code>.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/912\">Buildings, issue 912</a>.
+</li>
+<li>
 March 15, 2016, by Michael Wetter:<br/>
 Replaced <code>spliceFunction</code> with <code>regStep</code>.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/300\">issue 300</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/300\">issue 300</a>.
 </li>
 <li>
 May 25, 2010, by Wangda Zuo:<br/>

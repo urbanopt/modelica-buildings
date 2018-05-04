@@ -1,5 +1,5 @@
 within Buildings.BoundaryConditions.SolarGeometry;
-block ProjectedShadowLength "Lenght of shadow projected onto a direction"
+block ProjectedShadowLength "Length of shadow projected onto a direction"
   extends Modelica.Blocks.Icons.Block;
 
   parameter String filNam=""
@@ -163,7 +163,7 @@ to a weather data file, in which case these values are read from the weather dat
 <ul>
 <li>
 January 20, 2016, by Thierry S. Nouidui:<br/>
-Refactored the model and added a <code>realExpression</code> with <code>noEvent()</code> 
+Refactored the model and added a <code>realExpression</code> with <code>noEvent()</code>
 to avoid spikes in the trajectory.
 This is for
 <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/626\">Buildings, #626</a>.

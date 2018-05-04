@@ -159,7 +159,7 @@ This is for issue
 December 1, 2016, by Michael Wetter:<br/>
 Updated model as <code>use_dh</code> is no longer a parameter in the pressure drop model.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/480\">#480</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/480\">#480</a>.
 </li>
 <li>
 January 22, 2016 by Michael Wetter:<br/>
@@ -173,7 +173,7 @@ November 19, 2015, by Michael Wetter:<br/>
 Removed assignment of parameter
 <code>showDesignFlowDirection</code> in <code>extends</code> statement.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/349\">#349</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/349\">#349</a>.
 </li>
 <li>
 July 2, 2015 by Michael Wetter:<br/>
@@ -182,7 +182,7 @@ added default values for outlet quantities at <code>port_a</code>
 if <code>allowFlowReversal=false</code> and
 updated documentation.
 See
-<a href=\"https://github.com/ibpsa/modelica/issues/281\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/281\">
 issue 281</a> for a discussion.
 </li>
 <li>
@@ -190,7 +190,7 @@ July 1, 2015 by Filip Jorissen:<br/>
 Renamed <code>use_safeDivision</code> into
 <code>prescribedHeatFlowRate</code>.
 See
-<a href=\"https://github.com/ibpsa/modelica/issues/282\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/282\">
 issue 282</a> for a discussion.
 </li>
 <li>
@@ -228,7 +228,7 @@ December 14, 2011 by Michael Wetter:<br/>
 Changed assignment of <code>hOut</code>, <code>XiOut</code> and
 <code>COut</code> to no longer declare that it is continuous.
 The declaration of continuity, i.e, the
-<code>smooth(0, if (port_a.m_flow >= 0) then ...</code> declaration,
+<code>smooth(0, if (port_a.m_flow >= 0) then ...)</code> declaration,
 was required for Dymola 2012 to simulate, but it is no longer needed
 for Dymola 2012 FD01.
 </li>

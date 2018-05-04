@@ -232,7 +232,7 @@ model System7
     Ti=120) "Controller for valve in radiator loop"
     annotation (Placement(transformation(extent={{-180,-20},{-160,0}})));
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
-    filNam="modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos")
+    filNam=Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
     "Weather data reader"
     annotation (Placement(transformation(extent={{-380,60},{-360,80}})));
   BoundaryConditions.WeatherData.Bus weaBus
@@ -607,7 +607,7 @@ The transitions are enabled when their input signal is true.
 The numbers to the right of the transition indicate the delay in seconds.
 If a delay is present, the input needs to be true during the entire duration of the delay
 for a transition to fire. The active state is rendered green.
-Some states have a boolean output signal that is used to switch
+Some states have a Boolean output signal that is used to switch
 components such as the pumps and the boiler on or off.
 </p>
 <p align=\"center\">

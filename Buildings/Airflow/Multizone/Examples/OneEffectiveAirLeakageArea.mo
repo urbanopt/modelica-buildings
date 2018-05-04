@@ -44,7 +44,7 @@ equation
       points={{5.55112e-16,-30},{28,-30},{28,-20},{28,-20}},
       color={0,127,255}));
   connect(ramSou.y, sou.m_flow_in) annotation (Line(
-      points={{-59,-22},{-20,-22}},
+      points={{-59,-22},{-22,-22}},
       color={0,0,127}));
   connect(volB.ports[1], cra.port_b) annotation (Line(
       points={{80,20},{80,-30},{70,-30}},
@@ -65,7 +65,7 @@ equation
         "Simulate and plot"),
         experiment(
       StopTime=7200,
-      Tolerance=1e-06),
+      Tolerance=1e-08),
     Documentation(info="<html>
 <p>
 This model consists of a model for an effective air leakage area

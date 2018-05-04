@@ -10,10 +10,10 @@ model DryCoilDiscretized
 
   constant Boolean initialize_p1 = not Medium1.singleState
     "Set to true to initialize the pressure of volume 1"
-    annotation(HideResult=true);
+    annotation(HideResult=true, Evaluate=true, Dialog(tab="Advanced"));
   constant Boolean initialize_p2 = not Medium2.singleState
     "Set to true to initialize the pressure of volume 2"
-    annotation(HideResult=true);
+    annotation(HideResult=true, Evaluate=true, Dialog(tab="Advanced"));
 
   constant Boolean airSideTemperatureDependent = false
     "Set to false to make air-side hA independent of temperature"
@@ -63,7 +63,7 @@ model DryCoilDiscretized
     "Time constant at nominal flow for medium 1"
     annotation (Dialog(group="Nominal condition",
                        enable=energyDynamics <> Modelica.Fluid.Types.Dynamics.SteadyState));
-  parameter Modelica.SIunits.Time tau2=1
+  parameter Modelica.SIunits.Time tau2=10
     "Time constant at nominal flow for medium 2"
     annotation (Dialog(group="Nominal condition",
                        enable=energyDynamics <> Modelica.Fluid.Types.Dynamics.SteadyState));
@@ -86,9 +86,9 @@ model DryCoilDiscretized
     "Guess value for mass flow rate at port_a2"
     annotation(Dialog(tab="General", group="Initialization"));
 
-  Modelica.SIunits.HeatFlowRate Q1_flow
+  Modelica.SIunits.HeatFlowRate Q1_flow = sum(hexReg[i].Q1_flow for i in 1:nReg)
     "Heat transferred from solid into medium 1";
-  Modelica.SIunits.HeatFlowRate Q2_flow
+  Modelica.SIunits.HeatFlowRate Q2_flow = sum(hexReg[i].Q2_flow for i in 1:nReg)
     "Heat transferred from solid into medium 2";
 
   Buildings.Fluid.HeatExchangers.BaseClasses.CoilRegister hexReg[nReg](
@@ -131,16 +131,14 @@ model DryCoilDiscretized
     final deltaM=deltaM1,
     final from_dp=from_dp1,
     final allowFlowReversal=allowFlowReversal1) "Pipe manifold at port a"
-                                               annotation (Placement(
-        transformation(extent={{-38,18},{-18,38}})));
+    annotation (Placement(transformation(extent={{-38,18},{-18,38}})));
 
   Buildings.Fluid.HeatExchangers.BaseClasses.PipeManifoldNoResistance pipMan_b(
     redeclare package Medium = Medium1,
     final nPipPar=nPipPar,
     final mStart_flow_a=-mStart_flow_a1,
     final allowFlowReversal=allowFlowReversal1) "Pipe manifold at port b"
-                                         annotation (Placement(transformation(
-          extent={{52,50},{32,70}})));
+    annotation (Placement(transformation(extent={{52,50},{32,70}})));
 
   Buildings.Fluid.HeatExchangers.BaseClasses.DuctManifoldNoResistance ducMan_b(
     redeclare package Medium = Medium2,
@@ -176,12 +174,49 @@ model DryCoilDiscretized
     final airSideTemperatureDependent=airSideTemperatureDependent,
     final airSideFlowDependent=airSideFlowDependent)
     "Model for convective heat transfer coefficient"
-        annotation (Placement(transformation(extent={{-60,80},{-40,100}})));
+        annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
 
 protected
   constant Boolean allowCondensation = false
     "Set to false to compute sensible heat transfer only"
     annotation(Dialog(tab="Heat transfer"));
+
+  final parameter Boolean use_temSen_1=
+    waterSideTemperatureDependent and allowFlowReversal1 and
+    (energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState)
+    "Flag, set to true if the temperature sensor 1 is used"
+    annotation(Evaluate=true);
+
+  final parameter Boolean use_temSen_2=
+    airSideTemperatureDependent and allowFlowReversal2 and
+    (energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState)
+    "Flag, set to true if the temperature sensor 2 is used"
+    annotation(Evaluate=true);
+
+  Buildings.Fluid.Sensors.TemperatureTwoPort temSen_1(
+   redeclare package Medium = Medium1,
+    allowFlowReversal=allowFlowReversal1,
+    m_flow_nominal=m1_flow_nominal,
+    tau=if use_temSen_1 then 1 else 0)
+    "Temperature sensor, used to obtain temperature for convective heat transfer calculation"
+    annotation (Placement(transformation(
+          extent={{-58,54},{-46,66}})));
+  Buildings.Fluid.Sensors.MassFlowRate masFloSen_1(
+    redeclare package Medium = Medium1) "Mass flow rate sensor"
+    annotation (Placement(transformation(
+          extent={{-80,54},{-68,66}})));
+
+  Buildings.Fluid.Sensors.TemperatureTwoPort temSen_2(
+    redeclare package Medium = Medium2,
+    final allowFlowReversal=allowFlowReversal2,
+    m_flow_nominal=m2_flow_nominal,
+    tau=if use_temSen_2 then 1 else 0)
+    "Temperature sensor, used to obtain temperature for convective heat transfer calculation"
+    annotation (Placement(transformation(extent={{58,-66},{44,-54}})));
+  Buildings.Fluid.Sensors.MassFlowRate masFloSen_2(
+    redeclare package Medium = Medium2)
+    "Mass flow rate sensor"
+    annotation (Placement(transformation(extent={{82,-66},{70,-54}})));
 
   BaseClasses.CoilHeader hea1[div(nReg,2)](
       redeclare each final package Medium = Medium1,
@@ -207,32 +242,57 @@ protected
     "Gain medium-side 2 to take discretization into account"
     annotation (Placement(transformation(extent={{-14,60},{-2,74}})));
 
-  Buildings.Fluid.Sensors.TemperatureTwoPort temSen_1(
-    redeclare package Medium = Medium1,
-    final allowFlowReversal=allowFlowReversal1,
-    m_flow_nominal=m1_flow_nominal) "Temperature sensor"
-                                      annotation (Placement(transformation(
-          extent={{-58,54},{-48,66}})));
-  Buildings.Fluid.Sensors.MassFlowRate masFloSen_1(
-    redeclare package Medium = Medium1,
-    final allowFlowReversal=allowFlowReversal1) "Mass flow rate sensor"
-                                         annotation (Placement(transformation(
-          extent={{-80,54},{-68,66}})));
-  Buildings.Fluid.Sensors.TemperatureTwoPort temSen_2(
-    redeclare package Medium = Medium2,
-    m_flow_nominal=m2_flow_nominal,
-    final allowFlowReversal=allowFlowReversal2) "Temperature sensor"
-                                      annotation (Placement(transformation(
-          extent={{58,-66},{44,-54}})));
-  Buildings.Fluid.Sensors.MassFlowRate masFloSen_2(redeclare package Medium =
-        Medium2, final allowFlowReversal=allowFlowReversal2)
-    "Mass flow rate sensor"              annotation (Placement(transformation(
-          extent={{82,-66},{70,-54}})));
+  Modelica.Blocks.Sources.RealExpression THA1(
+    y=if waterSideTemperatureDependent then
+        if allowFlowReversal1 then
+          if energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState then
+            temSen_1.T
+          else
+            hexReg[1].ele[1,1].vol1.T
+        else
+          Medium1.temperature(
+            state=Medium1.setState_phX(p=port_a1.p, h=inStream(port_a1.h_outflow), X=inStream(port_a1.Xi_outflow)))
+        else
+          Medium1.T_default)
+    "Temperature used for convective heat transfer calculation for medium 1 (water-side)"
+    annotation (Placement(transformation(extent={{-80,78},{-66,88}})));
+
+  Modelica.Blocks.Sources.RealExpression THA2(
+    y=if airSideTemperatureDependent then
+        if allowFlowReversal1 then
+          if energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState then
+            temSen_2.T
+          else
+            hexReg[1].ele[1,1].vol2.T
+        else
+          Medium2.temperature(
+            state=Medium2.setState_phX(p=port_a2.p, h=inStream(port_a2.h_outflow), X=inStream(port_a2.Xi_outflow)))
+        else
+          Medium2.T_default)
+    "Temperature used for convective heat transfer calculation for medium 2 (air-side)"
+    annotation (Placement(transformation(extent={{-80,72},{-66,82}})));
+
+  parameter Modelica.SIunits.ThermalConductance GDif1 = 1E-2*UA_nominal/(nPipPar*max(1, nPipSeg-1)*nReg)
+    "Thermal conductance to approximate diffusion (which improves model at near-zero flow rates)"
+    annotation(Dialog(tab="Experimental"));
+
+  parameter Modelica.SIunits.ThermalConductance GDif2 = 1E-2*UA_nominal/(nPipPar*nPipSeg*max(1, nReg-1))
+    "Thermal conductance to approximate diffusion (which improves model at near-zero flow rates)"
+    annotation(Dialog(tab="Experimental"));
+
+  Modelica.Thermal.HeatTransfer.Components.ThermalConductor theCon1[nReg, nPipPar, nPipSeg-1](
+    each final G=GDif1)
+    "Thermal connector between the pipe segements to approximate diffusion in water (diffusion through the header is neglected)"
+    annotation (Placement(transformation(extent={{-12,32},{8,52}})));
+
+  Modelica.Thermal.HeatTransfer.Components.ThermalConductor theCon2[nReg-1, nPipPar, nPipSeg](
+    each final G=GDif2)
+    "Thermal connector to approximate diffusion in air"
+    annotation (Placement(transformation(extent={{10,-32},{-10,-12}})));
+
 initial equation
   assert(UA_nominal>0, "Parameter UA_nominal is negative. Check heat exchanger parameters.");
 equation
-  Q1_flow = sum(hexReg[i].Q1_flow for i in 1:nReg);
-  Q2_flow = sum(hexReg[i].Q2_flow for i in 1:nReg);
 
   // air stream connections
   for i in 2:nReg loop
@@ -271,22 +331,21 @@ equation
           color={0,127,255}));
   end for;
   connect(masFloSen_1.m_flow, hA.m1_flow)             annotation (Line(points={{-74,
-          66.6},{-74,72},{-82,72},{-82,97},{-61,97}},       color={0,0,127}));
+          66.6},{-74,70},{-90,70},{-90,92},{-64,92},{-64,87},{-61,87}},
+                                                            color={0,0,127}));
   connect(port_a2, masFloSen_2.port_a) annotation (Line(points={{100,-60},{82,
           -60}}, color={0,127,255}));
   connect(masFloSen_2.port_b, temSen_2.port_a) annotation (Line(points={{70,-60},
           {58,-60}}, color={0,127,255}));
   connect(temSen_2.port_b, ducMan_a.port_a) annotation (Line(points={{44,-60},{
           40,-60},{40,-16}}, color={0,127,255}));
-  connect(temSen_2.T, hA.T_2)             annotation (Line(points={{51,-53.4},{
-          51,-46},{-88,-46},{-88,87},{-61,87}}, color={0,0,127}));
   connect(masFloSen_2.m_flow, hA.m2_flow)             annotation (Line(points={{76,
-          -53.4},{76,-44},{-86,-44},{-86,83},{-61,83}},      color={0,0,127}));
+          -53.4},{76,-44},{-86,-44},{-86,73},{-61,73}},      color={0,0,127}));
   connect(hA.hA_1, gai_1.u)
-    annotation (Line(points={{-39,97},{-28,97},{-28,91},{-15.2,91}}, color={0,0,
+    annotation (Line(points={{-39,87},{-28,87},{-28,91},{-15.2,91}}, color={0,0,
           255}));
-  connect(hA.hA_2, gai_2.u)             annotation (Line(points={{-39,83},{
-          -27.5,83},{-27.5,67},{-15.2,67}}, color={0,0,255}));
+  connect(hA.hA_2, gai_2.u)             annotation (Line(points={{-39,73},{-27.5,
+          73},{-27.5,67},{-15.2,67}},       color={0,0,255}));
   for i in 1:nReg loop
     connect(gai_1.y, hexReg[i].Gc_1) annotation (Line(points={{-1.4,91},{12,91},
             {12,30},{-4,30},{-4,20}}, color={0,0,127}));
@@ -302,13 +361,39 @@ equation
       color={0,127,255},
       smooth=Smooth.None));
   connect(temSen_1.port_b, pipMan_a.port_a) annotation (Line(
-      points={{-48,60},{-38,60},{-38,28}},
+      points={{-46,60},{-38,60},{-38,28}},
       color={0,127,255},
       smooth=Smooth.None));
-  connect(temSen_1.T, hA.T_1) annotation (Line(
-      points={{-53,66.6},{-53,74},{-78,74},{-78,93},{-61,93}},
-      color={0,0,127},
-      smooth=Smooth.None));
+  connect(THA1.y, hA.T_1) annotation (Line(points={{-65.3,83},{-65.3,83},{-61,83}},
+        color={0,0,127}));
+  connect(THA2.y, hA.T_2) annotation (Line(points={{-65.3,77},{-65.3,77},{-61,77}},
+        color={0,0,127}));
+
+  // Heat diffusion approximation inside pipes
+  for iReg in 1:nReg loop
+    for iPipPar in 1:nPipPar loop
+      for iPipSeg in 1:nPipSeg-1 loop
+          connect(hexReg[iReg].heaPor1[iPipPar,iPipSeg],  theCon1[iReg, iPipPar,iPipSeg].port_a) annotation (Line(points={{0,20},{0,30},
+          {-14,30},{-14,42},{-12,42}}, color={191,0,0}));
+          connect(theCon1[iReg, iPipPar,iPipSeg].port_b, hexReg[iReg].heaPor1[iPipPar,iPipSeg+1]) annotation (Line(points={{8,42},{10,42},
+          {10,30},{0,30},{0,20}}, color={191,0,0}));
+      end for;
+    end for;
+  end for;
+
+  // Heat diffusion approximation along air path
+  for iReg in 1:nReg-1 loop
+    for iPipPar in 1:nPipPar loop
+      for iPipSeg in 1:nPipSeg loop
+         connect(hexReg[iReg].heaPor2[iPipPar, iPipSeg], theCon2[iReg, iPipPar, iPipSeg].port_a) annotation (Line(points={{0,0},{0,-10},
+          {12,-10},{12,-22},{10,-22}}, color={191,0,0}));
+         connect(theCon2[iReg, iPipPar, iPipSeg].port_b, hexReg[iReg+1].heaPor2[iPipPar, iPipSeg]) annotation (Line(points={{-10,-22},{-14,
+          -22},{-14,-10},{0,-10},{0,0}}, color={191,0,0}));
+      end for;
+    end for;
+  end for;
+
+
  annotation (
 defaultComponentName="heaCoi",
     Documentation(info="<html>
@@ -319,8 +404,8 @@ that are perpendicular to the air flow path. Each register consists of <code>nPi
 parallel pipes, and each pipe can be divided into <code>nPipSeg</code> pipe segments along
 the pipe length. Thus, the smallest element of the coil consists of a pipe
 segment. Each pipe segment is modeled by an instance of
-<a href=\"modelica://Buildings.Fluid.HeatExchangers.BaseClasses.HexElement\">
-Buildings.Fluid.HeatExchangers.BaseClasses.HexElement</a>.
+<a href=\"modelica://Buildings.Fluid.HeatExchangers.BaseClasses.HexElementSensible\">
+Buildings.Fluid.HeatExchangers.BaseClasses.HexElementSensible</a>.
 Each element has a state variable for the metal.
 </p>
 <p>
@@ -347,8 +432,40 @@ To model humidity condensation, use the model
 Buildings.Fluid.HeatExchangers.WetCoilDiscretized</a> instead of this model, as
 this model computes only sensible heat transfer.
 </p>
+<h4>Implementation</h4>
+<p>
+At very small flow rates, which may be caused when the fan is off but there is wind pressure
+on the building that entrains outside air through the HVAC system, large temperature differences
+could occur if diffusion were neglected.
+This model therefore approximates a small diffusion between the elements to have more uniform
+medium temperatures if the flow is near zero.
+The approximation is done using the heat conductors <code>heaCon1</code> and <code>heaCon2</code>.
+As this is a rough approximation, neighboring elements are connected through these heat conduction
+elements, ignoring the actual geometrical configuration.
+Also, radiation between the coil surfaces on the air side is not modelled explicitly, but
+rather may be considered as approximated by these heat conductors.
+</p>
 </html>", revisions="<html>
 <ul>
+<li>
+November 4, 2017, by Michael wetter:<br/>
+Added approximation of diffusion.<br/>
+This is for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/1038\">Buildings, #1038</a>.
+</li>
+<li>
+October 19, 2017, by Michael Wetter:<br/>
+Changed initialization of pressure from a <code>constant</code> to a <code>parameter</code>.<br/>
+This is for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/1013\">Buildings, issue 1013</a>.
+</li>
+<li>
+September 8, 2017, by Michael Wetter:<br/>
+Changed computation of temperature used for <i>hA</i> calculation
+to avoid a state variable with small time constant for some model parameterizations.<br/>
+This is for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/678\">Buildings, #678</a>.
+</li>
 <li>
 September 17, 2016, by Michael Wetter:<br/>
 Corrected wrong annotation.<br/>

@@ -120,8 +120,11 @@ Hence, the dynamic response is similar to other models of the <code>Buildings.Fl
 The coil models two separate performances, one assuming a dry coil, and one assuming a wet coil.
 The dry coil is modeled using <a href=\"modelica://Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.DryCoil\">Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.DryCoil</a>
 and the wet coil is modeled using <a href=\"modelica://Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.WetCoil\">Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.WetCoil</a>.
-Both use the same model <a href=\"modelica://Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.CoolingCapacity\">Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.CoolingCapacity</a>
-to compute the cooling capacity, but the wet coil uses the wet-bulb temperature of the air inlet instead of the dry bulb temperature to compute the coil performance.
+Both use the same model
+<a href=\"modelica://Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.CoolingCapacityAirCooled\">
+Buildings.Fluid.HeatExchangers.DXCoils.BaseClasses.CoolingCapacityAirCooled</a>
+to compute the cooling capacity, but the wet coil uses the wet-bulb temperature
+of the air inlet instead of the dry bulb temperature to compute the coil performance.
 The wet coil model computes the humidity of the leaving air <i>X<sub>w,o</sub></i>, using the bypass factor model.
 This humidity is compared to the humidity at the evaporator inlet <i>X<sub>i</sub></i>.
 If <i>X<sub>w,o</sub>-X<sub>i</sub> &gt; 0</i> the coil is assumed to be dry, otherwise it is wet.
@@ -144,7 +147,7 @@ This computation requires the ratio <i>UA &frasl; c<sub>p</sub></i>, which is co
 <p>
 Once the ratio <i>UA &frasl; c<sub>p</sub></i> is known,
 the bypass factor is a function of the current mass flow rate only.
-(Under the assumption that the velocity dependence of <i>UA</i> can be neglected.
+(Under the assumption that the velocity dependence of <i>UA</i> can be neglected.)
 </p>
 <h4>Limitations</h4>
 <p>This model has the following limitations: </p>

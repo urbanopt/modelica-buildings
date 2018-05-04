@@ -14,7 +14,7 @@ createPlot(id = 1,
  grid = true,
  color = true,
  online = false,
- filename = "Kalman.mat",
+ filename = "KalmanFilter.mat",
  leftTitleType = 1,
  bottomTitleType = 1,
  colors = {{0,0,255}, {255,0,0}, {0,128,0}},
@@ -22,4 +22,3 @@ createPlot(id = 1,
  markers = {MarkerStyle.Dot, MarkerStyle.None, MarkerStyle.None},
  thicknesses = {0.25, 1.0, 0.5});
 Advanced.CompileWith64 = Advanced_CompileWith64_ori;
-

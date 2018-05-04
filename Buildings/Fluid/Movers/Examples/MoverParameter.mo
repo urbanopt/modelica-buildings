@@ -86,8 +86,6 @@ equation
   connect(pump_Nrpm.port_b, sin.ports[4]) annotation (Line(points={{10,40},{24,40},
           {60,40},{60,-3}}, color={0,127,255}));
   annotation (
-    Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,
-            100}})),
     __Dymola_Commands(file=
           "modelica://Buildings/Resources/Scripts/Dymola/Fluid/Movers/Examples/MoverParameter.mos"
         "Simulate and plot"),
@@ -101,13 +99,13 @@ set point for a mover model.
 <li>
 February 17, 2016, by Michael Wetter:<br/>
 Updated parameter names for
-<a href=\"https://github.com/ibpsa/modelica/issues/396\">#396</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/396\">#396</a>.
 </li>
 <li>
 January 22, 2016, by Michael Wetter:<br/>
 Corrected type declaration of pressure difference.
 This is
-for <a href=\"https://github.com/ibpsa/modelica/issues/404\">#404</a>.
+for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/404\">#404</a>.
 </li>
 <li>
 August 24, 2015, by Filip Jorissen:<br/>

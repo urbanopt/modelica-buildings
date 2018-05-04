@@ -153,7 +153,7 @@ equation
     annotation (Line(points={{-59,48},{-52,48},{-42,48}}, color={0,0,127}));
   annotation ( __Dymola_Commands(file=
           "modelica://Buildings/Resources/Scripts/Dymola/Fluid/Storage/Examples/StratifiedEnhancedInternalHex.mos"
-        "Simulate and Plot"),
+        "Simulate and plot"),
 experiment(Tolerance=1e-6, StopTime=1200),
 Documentation(info="<html>
 <p>
@@ -180,7 +180,7 @@ revisions="<html>
 January 22, 2016, by Michael Wetter:<br/>
 Corrected type declaration of pressure difference.
 This is
-for <a href=\"https://github.com/ibpsa/modelica/issues/404\">#404</a>.
+for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/404\">#404</a>.
 </li>
 <li>
 September 28, 2015 by Michael Wetter:<br/>
@@ -218,7 +218,5 @@ Mar 27, 2013 by Peter Grant:<br/>
 First implementation
 </li>
 </ul>
-</html>"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}})));
+</html>"));
 end StratifiedEnhancedInternalHex;

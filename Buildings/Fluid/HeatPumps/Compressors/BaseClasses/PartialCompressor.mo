@@ -1,5 +1,5 @@
 within Buildings.Fluid.HeatPumps.Compressors.BaseClasses;
-model PartialCompressor "Partial compressor model"
+partial model PartialCompressor "Partial compressor model"
 
   replaceable package ref = Buildings.Media.Refrigerants.R410A
     "Refrigerant in the component"
@@ -38,17 +38,38 @@ model PartialCompressor "Partial compressor model"
   Modelica.SIunits.AbsolutePressure pCon(start = 1000e3)
     "Pressure of saturated liquid at condenser temperature";
 
-  Boolean isOn(fixed=true, start=false)
+  Modelica.SIunits.AbsolutePressure pDis(start = 1000e3)
+    "Discharge pressure of the compressor";
+
+  Modelica.SIunits.AbsolutePressure pSuc(start = 100e3)
+    "Suction pressure of the compressor";
+
+  Modelica.SIunits.Temperature TSuc
+    "Temperature at suction of the compressor";
+
+  Boolean isOn(fixed=false)
     "State of the compressor, true if turned on";
 
+  Modelica.SIunits.SpecificVolume vSuc(start = 1e-4, min = 0)
+    "Specific volume of the refrigerant at suction of the compressor";
+
+protected
+  Real PR(min = 0.0, unit = "1", start = 2.0)
+    "Pressure ratio";
+
+initial equation
+  pre(isOn) = if y > 0.01 then true else false;
+
 equation
-  when initial() then
-    isOn = if y > 0.01 then true else false;
-  elsewhen y > 0.01 then
-    isOn = true;
-  elsewhen y <= 0.0 then
-    isOn = false;
-  end when;
+  isOn = not pre(isOn) and y > 0.01 or pre(isOn) and y >= 0.005;
+
+  PR = max(pDis/pSuc, 0);
+
+
+  // The specific volume at suction of the compressor is calculated
+  // from the Martin-Hou equation of state
+  vSuc = ref.specificVolumeVap_pT(pSuc, TSuc);
+
 
   // Saturation pressure of refrigerant vapor at condenser temperature
   pCon = ref.pressureSatVap_T(port_b.T);
@@ -120,6 +141,28 @@ refrigerant mass flow is not accounted for and heat ports are used instead of fl
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+May 30, 2017, by Filip Jorissen:<br/>
+Removed <code>pressure_error</code> as
+this is replaced by
+<a href=\"modelica://Buildings.Fluid.HeatPumps.Compressors.BaseClasses.TemperatureProtection\">
+Buildings.Fluid.HeatPumps.Compressors.BaseClasses.TemperatureProtection</a>.
+See <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/769\">#769</a>.
+</li>
+<li>
+May 26, 2017, by Michael Wetter and Thierry Nouidui:<br/>
+Reformulated <code>isOn</code> to use the same construct as the hysteresis block,
+and to work around a JModelica limitation.<br/>
+This is for
+<a href=\"modelica://https://github.com/lbl-srg/modelica-buildings/issues/774\">#774</a>.
+</li>
+<li>
+April 25, 2017, by Michael Wetter:<br/>
+Reformulated <code>when</code> conditions and moved common assignments
+to this base class.<br/>
+This is for
+<a href=\"modelica://https://github.com/lbl-srg/modelica-buildings/issues/739\">#739</a>.
+</li>
 <li>
 November 11, 2016, by Massimo Cimmino:<br/>
 First implementation of this base class.

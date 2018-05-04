@@ -84,7 +84,7 @@ There are two implementations for the setpoint reset.
 The model
 <a href=\"modelica://Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl\">
 Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl</a>
-implements a discrete time trim and response logic as follows:
+implements a discrete time trim and respond logic as follows:
 </p>
 <ul>
 <li>A cooling request is triggered if the input signal, <i>y</i>, is larger than 0.
@@ -96,17 +96,17 @@ If there is no cooling request,  <i>u</i> is decreased by <i>0.03</i>. </li>
 The model
 <a href=\"modelica://Buildings.Examples.ChillerPlant.DataCenterContinuousTimeControl\">
 Buildings.Examples.ChillerPlant.DataCenterContinuousTimeControl</a> uses a PI-controller to
-approximate the above trim and response logic. This significantly reduces computing time.
+approximate the above trim and respond logic. This significantly reduces computing time.
 </p>
 <p>
 For both models, the control signal <i>u</i> is converted to setpoints for <i>&Delta;p</i> and <i>T<sub>chi,set</sub></i> as follows:
 </p>
 <ul>
 <li>
-If <i>u &isin; [0, x]</i> then <i>&Delta;p = &Delta;p<sub>min</sub> + u &nbsp;(&Delta;p<sub>max</sub>-&Delta;p<sub>min</sub>)/x</i>
+If <i>0 &le; u &le; x</i> then <i>&Delta;p = &Delta;p<sub>min</sub> + u &nbsp;(&Delta;p<sub>max</sub>-&Delta;p<sub>min</sub>)/x</i>
 and <i>T = T<sub>max</sub></i></li>
 <li>
-If <i>u &isin; (x, 1]</i> then <i>&Delta;p = &Delta;p<sub>max</sub></i>
+If <i> x &lt; u &le; 1</i> then <i>&Delta;p = &Delta;p<sub>max</sub></i>
 and
 <i>T = T<sub>max</sub> - (u-x)&nbsp;(T<sub>max</sub>-T<sub>min</sub>)/(1-x)
 </i></li>

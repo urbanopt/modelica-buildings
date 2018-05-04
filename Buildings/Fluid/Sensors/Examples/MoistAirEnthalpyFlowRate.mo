@@ -52,7 +52,7 @@ model MoistAirEnthalpyFlowRate
     annotation (Placement(transformation(extent={{20,-46},{40,-26}})));
 equation
   connect(ramp.y, sou.m_flow_in) annotation (Line(
-      points={{-69,28},{-70,28},{-60,28}},
+      points={{-69,28},{-62,28},{-62,28}},
       color={0,0,127}));
   connect(sou.ports[1], senH_flow.port_a) annotation (Line(
       points={{-40,20},{-30,20}},
@@ -102,7 +102,7 @@ November 2, 2016, by Michael Wetter:<br/>
 Removed assertion and added the enthalpy flow rates instead
 to the plot window so that they become part of the regression tests.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/564\">issue 564</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/564\">issue 564</a>.
 </li>
 <li>
 January 23 2013, by Michael Wetter:<br/>

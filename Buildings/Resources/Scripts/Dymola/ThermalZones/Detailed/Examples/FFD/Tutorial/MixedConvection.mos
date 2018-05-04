@@ -1,4 +1,4 @@
-simulateModel("Buildings.ThermalZones.Detailed.Examples.FFD.Tutorial.MixedConvection", stopTime=180, method="radau", tolerance=1e-06, resultFile="MixedConvection");
+simulateModel("Buildings.ThermalZones.Detailed.Examples.FFD.Tutorial.MixedConvection", stopTime=180, method="Cvode", tolerance=1e-06, resultFile="MixedConvection");
 removePlots();
 Advanced.FullPlotTooltip = true;
 createPlot(id = 1,
@@ -44,5 +44,3 @@ createPlot(id = 1,
  subPlot = 3,
  leftTitleType = 1,
  bottomTitleType = 1);
-
-

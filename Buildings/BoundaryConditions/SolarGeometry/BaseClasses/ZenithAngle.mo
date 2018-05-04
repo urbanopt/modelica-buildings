@@ -31,7 +31,7 @@ Input are the solar hour angle and the declination angle.
 January 5, 2015, by Michael Wetter:<br/>
 Updated comment of the input connector as this is used in the weather bus connector.
 This is for
-issue <a href=\"https://github.com/ibpsa/modelica/issues/376\">376</a>.
+issue <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/376\">376</a>.
 </li>
 <li>
 Dec 7, 2010, by Michael Wetter:<br/>
@@ -44,7 +44,10 @@ First implementation.
 </ul>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,
-            100}}), graphics={Text(
+            100}}), graphics={
+        Bitmap(extent={{-86,-88},{94,92}}, fileName=
+              "modelica://Buildings/Resources/Images/BoundaryConditions/SolarGeometry/BaseClasses/ZenithAngle.png"),
+                              Text(
           extent={{-150,110},{150,150}},
           textString="%name",
           lineColor={0,0,255}),
@@ -55,7 +58,5 @@ First implementation.
         Text(
           extent={{-98,-40},{-22,-58}},
           lineColor={0,0,127},
-          textString="solHouAng"),
-        Bitmap(extent={{-90,90},{90,-94}}, fileName=
-              "modelica://Buildings/Resources/Images/BoundaryConditions/SolarGeometry/BaseClasses/ZenithAngle.png")}));
+          textString="solHouAng")}));
 end ZenithAngle;

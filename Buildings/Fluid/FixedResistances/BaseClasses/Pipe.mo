@@ -32,10 +32,11 @@ model Pipe
     final linearized=linearizeFlowResistance,
     final homotopyInitialization=homotopyInitialization) "Flow resistance"
     annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
-  Buildings.Fluid.MixingVolumes.MixingVolume[nSeg] vol(
+  Buildings.Fluid.MixingVolumes.BaseClasses.MixingVolumeHeatPort[nSeg] vol(
     redeclare each final package Medium = Medium,
     each energyDynamics=energyDynamics,
     each massDynamics=massDynamics,
+    final initialize_p = {(i == 1 and (not Medium.singleState)) for i in 1:nSeg},
     each final V=VPipe/nSeg,
     each nPorts=2,
     each final m_flow_nominal=m_flow_nominal,
@@ -60,6 +61,7 @@ protected
   parameter Modelica.SIunits.Density rho_default = Medium.density(state_default);
   parameter Modelica.SIunits.DynamicViscosity mu_default = Medium.dynamicViscosity(state_default)
     "Dynamic viscosity at nominal condition";
+
 equation
   connect(port_a, preDro.port_a) annotation (Line(
       points={{-100,5.55112e-16},{-72,5.55112e-16},{-72,1.16573e-15},{-58,1.16573e-15},
@@ -100,8 +102,8 @@ equation
 Model of a pipe with flow resistance and optional heat storage.
 This model can be used for modeling the heat exchange between the pipe and environment.
 The model consists of a flow resistance
-<a href=\"modelica://Buildings.Fluid.FixedResistances.FixedResistanceDpM\">
-Buildings.Fluid.FixedResistances.FixedResistanceDpM</a>
+<a href=\"modelica://Buildings.Fluid.FixedResistances.PressureDrop\">
+Buildings.Fluid.FixedResistances.PressureDrop</a>
 and <code>nSeg</code> mixing volumes
 <a href=\"modelica://Buildings.Fluid.MixingVolumes.MixingVolume\">
 Buildings.Fluid.MixingVolumes.MixingVolume</a>.

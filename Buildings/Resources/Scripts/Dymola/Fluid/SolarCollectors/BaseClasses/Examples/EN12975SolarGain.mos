@@ -1,7 +1,5 @@
 removePlots();
-
 simulateModel("Buildings.Fluid.SolarCollectors.BaseClasses.Examples.EN12975SolarGain", tolerance=1e-6, stopTime=86400, method="dassl", resultFile="EN12975SolarGain");
-
 createPlot(id = 11,
  position = {0, 0, 1000, 500},
  y = {"solHeaGai.TFlu[1]", "solHeaGai.TFlu[2]", "solHeaGai.TFlu[3]"},
@@ -32,5 +30,3 @@ createPlot(id = 11,
  leftTitleType = 1,
  bottomTitleType = 1,
  colors = {{0,0,255}, {255,0,0}, {0,128,0}});
-
-

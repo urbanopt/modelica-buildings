@@ -1,4 +1,4 @@
-﻿within Buildings.Media.Refrigerants;
+within Buildings.Media.Refrigerants;
 package R410A "Refrigerant R410A"
   extends Modelica.Icons.VariantsPackage;
 
@@ -194,9 +194,8 @@ algorithm
 annotation (preferredView="info",Documentation(info="<HTML>
 <p>
 Function that calculates the derivatives of
-<a href=\"modelica://Buildings.Fluid.HeatPumps.Compressors.Refrigerants.R410A.specificVolumeVap_pT\">
-Buildings.Fluid.HeatPumps.Compressors.Refrigerants.R410A.specificVolumeVap_pT
-</a>
+<a href=\"modelica://Buildings.Media.Refrigerants.R410A.specificVolumeVap_pT\">
+Buildings.Media.Refrigerants.R410A.specificVolumeVap_pT</a>
 </p>
 </html>", revisions="<html>
 <ul>
@@ -226,10 +225,10 @@ protected
     "Critical temperature of refrigerant";
 
   Real x
-    "Independant variable";
+    "Independent variable";
 
 algorithm
-  // Independant variable
+  // Independent variable
   x := Buildings.Utilities.Math.Functions.smoothMax(1-T/TCri, 1e-4, 5e-3)^(1/3) - x0;
   // Pressure of saturated liquid refrigerant
   h := 1000*Buildings.Utilities.Math.Functions.polynomial(a = a, x = x);
@@ -275,10 +274,10 @@ protected
     "Critical temperature of refrigerant";
 
   Real x
-    "Independant variable";
+    "Independent variable";
 
 algorithm
-  // Independant variable
+  // Independent variable
   x := Buildings.Utilities.Math.Functions.smoothMax(1-T/TCri, 1e-4, 5e-3)^(1/3) - x0;
   // Pressure of saturated liquid refrigerant
   h := 1000*Buildings.Utilities.Math.Functions.polynomial(a = a, x = x);
@@ -386,10 +385,10 @@ protected
     "Critical pressure of refrigerant";
 
   Real x
-    "Independant variable";
+    "Independent variable";
 
 algorithm
-  // Independant variable
+  // Independent variable
   x := Buildings.Utilities.Math.Functions.smoothMax(1-T/TCri, 1e-4, 5e-3) - x0;
   // Pressure of saturated liquid refrigerant
   p := pCri*Modelica.Math.exp(TCri/T*Buildings.Utilities.Math.Functions.polynomial(a = a, x = x));
@@ -439,10 +438,10 @@ protected
     "Critical pressure of refrigerant";
 
   Real x
-    "Independant variable";
+    "Independent variable";
 
 algorithm
-  // Independant variable
+  // Independent variable
   x := Buildings.Utilities.Math.Functions.smoothMax(1-T/TCri, 1e-4, 5e-3) - x0;
   // Pressure of saturated refrigerant vapor
   p := pCri*Modelica.Math.exp(TCri/T*Buildings.Utilities.Math.Functions.polynomial(a = a, x = x));

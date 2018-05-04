@@ -56,7 +56,6 @@ model PPM "Test model for the extra property sensor outputting PPM"
     m_flow_nominal=m_flow_nominal) "PPM sensor with flow in reverse direction"
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
-        rotation=0,
         origin={50,-50})));
   Buildings.Fluid.Sensors.PPMTwoPort senPPMSta(
     redeclare package Medium = Medium,
@@ -65,7 +64,6 @@ model PPM "Test model for the extra property sensor outputting PPM"
     m_flow_nominal=m_flow_nominal) "Static PPM sensor" annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
-        rotation=0,
         origin={10,-50})));
 protected
      final parameter Medium.ThermodynamicState state_default = Medium.setState_pTX(
@@ -87,8 +85,7 @@ public
     energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState)
     "Mixing volume without dynamics"
     annotation (Placement(transformation(extent={{74,80},{94,100}})));
-  Buildings.Fluid.Sensors.PPM senPPMVol2(
-                                      redeclare package Medium = Medium)
+  Buildings.Fluid.Sensors.PPM senPPMVol2( redeclare package Medium = Medium)
     "PPM sensor for mixing volume"
     annotation (Placement(transformation(extent={{120,80},{140,100}})));
   Buildings.Fluid.Sources.MassFlowSource_T mSouSta(
@@ -145,7 +142,7 @@ revisions="<html>
 January 12, 2016, by Filip Jorissen:<br/>
 First implementation.
 See issue
-<a href=\"https://github.com/ibpsa/modelica/issues/372\">#372</a>
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/372\">#372</a>
 </li>
 </ul>
 </html>"));

@@ -1,11 +1,17 @@
 within Buildings.Fluid.MixingVolumes;
 model MixingVolumeMoistAir
-  "Mixing volume with heat port for latent heat exchange, to be used with media that contain water"
+  "Mixing volume with heat port for latent heat exchange, to be used if moisture is added or removed"
   extends BaseClasses.PartialMixingVolume(
-    redeclare replaceable package Medium =
-        Modelica.Media.Interfaces.PartialCondensingGases,
-    dynBal(final use_mWat_flow = true),
-    steBal(final use_mWat_flow = true));
+    dynBal(
+      final use_mWat_flow = true,
+      final use_C_flow = use_C_flow),
+    steBal(final use_mWat_flow = true,
+      final use_C_flow = use_C_flow),
+    final initialize_p = not Medium.singleState);
+
+  parameter Boolean use_C_flow = false
+    "Set to true to enable input connector for trace substance"
+    annotation(Evaluate=true, Dialog(tab="Advanced"));
 
   Modelica.Blocks.Interfaces.RealInput mWat_flow(final quantity="MassFlowRate",
                                                  final unit = "kg/s")
@@ -20,8 +26,11 @@ model MixingVolumeMoistAir
     "Heat port for sensible plus latent heat exchange with the control volume"
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 
+  Modelica.Blocks.Interfaces.RealInput[Medium.nC] C_flow if use_C_flow
+    "Trace substance mass flow rate added to the medium"
+    annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
+
 protected
-  parameter Integer i_w(fixed=false) "Index for water substance";
   parameter Real s[Medium.nXi] = {
   if Modelica.Utilities.Strings.isEqual(string1=Medium.substanceNames[i],
                                             string2="Water",
@@ -32,22 +41,6 @@ protected
   Modelica.Blocks.Sources.RealExpression XLiq(y=s*Xi)
     "Species composition of the medium"
     annotation (Placement(transformation(extent={{72,-52},{94,-28}})));
-
-initial algorithm
-  i_w := 0;
-  for i in 1:Medium.nXi loop
-    if s[i] > 1e-5 then
-      i_w  := i;
-    end if;
-  end for;
-  assert(Medium.nXi == 0 or i_w > 0,
-    "Substance 'water' is not present in medium '"
-         + Medium.mediumName + "'.\n"
-         + "Check medium model.");
-
-
-
-
 equation
   connect(mWat_flow, steBal.mWat_flow) annotation (Line(
       points={{-120,80},{-120,80},{4,80},{4,14},{18,14}},
@@ -60,6 +53,10 @@ equation
       color={0,0,127}));
   connect(heaFloSen.port_a, heatPort)
     annotation (Line(points={{-90,0},{-100,0}}, color={191,0,0}));
+  connect(C_flow, steBal.C_flow) annotation (Line(points={{-120,-60},{-80,-60},{
+          12,-60},{12,6},{18,6}}, color={0,0,127}));
+  connect(C_flow, dynBal.C_flow) annotation (Line(points={{-120,-60},{-52,-60},{
+          52,-60},{52,6},{58,6}}, color={0,0,127}));
   annotation (defaultComponentName="vol",
 Documentation(info="<html>
 <p>
@@ -71,22 +68,13 @@ and latent and sensible heat can be exchanged.
 This model represents the same physics as
 <a href=\"modelica://Buildings.Fluid.MixingVolumes.MixingVolume\">
 Buildings.Fluid.MixingVolumes.MixingVolume</a>, but in addition, it allows
-adding or subtracting water in liquid phase.
+adding or subtracting water to the control volume.
 The mass flow rate of the added or subtracted water is
 specified at the port <code>mWat_flow</code>.
-The water flow rate is assumed to be added or subtracted at the
-temperature of the input port <code>TWat</code>.
-Adding water causes a change in
-enthalpy and species concentration in the volume.
-</p>
-<p>
-Note that this model can only be used with medium models that include water
-as a substance. In particular, the medium model needs to implement the function
-<code>enthalpyOfLiquid(T)</code> and the integer variable <code>Water</code> that
-contains the index to the water substance. For medium that do not provide this
-functionality, use
-<a href=\"modelica://Buildings.Fluid.MixingVolumes.MixingVolume\">
-Buildings.Fluid.MixingVolumes.MixingVolume</a>.
+Adding <code>mWat_flow</code> itself does not affect the energy balance
+in this model. Hence, the enthalpy that is added or removed with the
+flow of <code>mWat_flow</code> needs to be added to the heat port
+<code>heatPort</code>.
 </p>
 <p>
 To increase the numerical robustness of the model, the constant
@@ -134,6 +122,14 @@ for an example.
 </html>", revisions="<html>
 <ul>
 <li>
+October 19, 2017, by Michael Wetter:<br/>
+Set <code>initialize_p</code> to <code>final</code> so that it does not
+appear as a user-selectable parameter. This is done because
+<code>initialize_p</code> has been changed from a <code>constant</code>
+to a <code>parameter</code> for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/1013\">Buildings, issue 1013</a>.
+</li>
+<li>
 April 11, 2017, by Michael Wetter:<br/>
 Changed comment of heat port, as this needs to be the total heat flow
 rate in order to be able to use this model for modeling steam humidifiers
@@ -153,7 +149,7 @@ January 19, 2016, by Michael Wetter:<br/>
 Updated documentation due to the addition of an input for trace substance
 in the mixing volume.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/372\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/372\">
 issue 372</a>.
 </li>
 <li>

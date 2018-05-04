@@ -29,7 +29,7 @@ model SpeedControlled_y
         origin={0,120}), iconTransformation(
         extent={{-20,-20},{20,20}},
         rotation=-90,
-        origin={-2,120})));
+        origin={0,120})));
 
 protected
   Modelica.Blocks.Math.Gain gain(final k=-1) "Pressure gain"
@@ -66,17 +66,29 @@ equation
             100}}),
             graphics={
             Text(
-              visible = inputType == Buildings.Fluid.Types.InputType.Continuous,
-              extent={{10,124},{102,102}},
-              textString="y [0, 1]"),
-            Text(
-          visible=inputType == Buildings.Fluid.Types.InputType.Constant,
-          extent={{-80,136},{78,102}},
-          lineColor={0,0,255},
-          textString="%normalized_speed"),
-        Text(extent={{64,68},{114,54}},
+              extent={{6,136},{104,114}},
           lineColor={0,0,127},
-          textString="y")}),
+          textString="y [0..1]"),
+        Rectangle(
+          visible=use_inputFilter,
+          extent={{-34,40},{32,100}},
+          lineColor={0,0,0},
+          fillColor={135,135,135},
+          fillPattern=FillPattern.Solid),
+        Ellipse(
+          visible=use_inputFilter,
+          extent={{-34,100},{32,40}},
+          lineColor={0,0,0},
+          fillColor={135,135,135},
+          fillPattern=FillPattern.Solid),
+        Text(
+          visible=use_inputFilter,
+          extent={{-22,92},{20,46}},
+          lineColor={0,0,0},
+          fillColor={135,135,135},
+          fillPattern=FillPattern.Solid,
+          textString="M",
+          textStyle={TextStyle.Bold})}),
     Documentation(info="<html>
 <p>
 This model describes a fan or pump with prescribed normalized speed.
@@ -101,25 +113,25 @@ User's Guide</a> for more information.
 March 24, 2017, by Michael Wetter:<br/>
 Renamed <code>filteredSpeed</code> to <code>use_inputFilter</code>.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/665\">#665</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/665\">#665</a>.
 </li>
 <li>
 December 2, 2016, by Michael Wetter:<br/>
 Removed <code>min</code> attribute as otherwise numerical noise can cause
 the assertion on the limit to fail.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/606\">#606</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/606\">#606</a>.
 </li>
 <li>
 March 2, 2016, by Filip Jorissen:<br/>
 Refactored model such that it directly extends <code>PartialFlowMachine</code>.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/417\">#417</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/417\">#417</a>.
 </li>
 <li>
 February 17, 2016, by Michael Wetter:<br/>
 Updated parameter names for
-<a href=\"https://github.com/ibpsa/modelica/issues/396\">#396</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/396\">#396</a>.
 </li>
 <li>
 April 2, 2015, by Filip Jorissen:<br/>
@@ -156,7 +168,5 @@ October 31, 2005 by <a href=\"mailto:francesco.casella@polimi.it\">Francesco Cas
 Model added to the Fluid library
 </li>
 </ul>
-</html>"),
-    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}})));
+</html>"));
 end SpeedControlled_y;

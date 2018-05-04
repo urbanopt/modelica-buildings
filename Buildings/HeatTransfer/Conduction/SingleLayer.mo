@@ -194,6 +194,8 @@ equation
         // Regular material
         for i in 1:nSta loop
           der(T[i]) = (Q_flow[i]-Q_flow[i+1])*CInv[i];
+        end for;
+        for i in 1:nSta loop
           u[i]=0; // u is not required in this case
         end for;
       end if;
@@ -298,8 +300,8 @@ Therefore, the governing equation is
 <p>
 The constitutive
 relation between specific internal energy <i>u</i> and temperature <i>T</i> is defined in
-<a href=\"modelica://Buildings.HeatTransfer.Conduction.BaseClasses.enthalpyTemperature\">
-Buildings.HeatTransfer.Conduction.BaseClasses.enthalyTemperature</a> by using
+<a href=\"modelica://Buildings.HeatTransfer.Conduction.BaseClasses.temperature_u\">
+Buildings.HeatTransfer.Conduction.BaseClasses.temperature_u</a> by using
 cubic hermite spline interpolation with linear extrapolation.
 </p>
 <h5>Steady-state heat conduction</h5>

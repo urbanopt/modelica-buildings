@@ -22,7 +22,7 @@ model FlatPlate "Test model for FlatPlate"
     annotation (Placement(transformation(extent={{0,-20},{20,0}})));
 
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
-    "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos")
+    Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
     "Weather data input file"
     annotation (Placement(transformation(extent={{-32,20},{-12,40}})));
   Buildings.Fluid.Sources.Boundary_pT sin(
@@ -78,9 +78,9 @@ equation
 <p>
 This example demonstrates the implementation of
 <a href=\"modelica://Buildings.Fluid.SolarCollectors.ASHRAE93\">
-Buildings.Fluid.SolarCollectors.ASHRAE93</a>.
-In it water is passed through a flat plate solar thermal collector while
-being heated by the sun in the San Francisco, CA, USA climate.
+Buildings.Fluid.SolarCollectors.ASHRAE93</a>
+for a variable fluid flow rate and weather data from
+San Francisco, CA, USA.
 </p>
 </html>",
 revisions="<html>
@@ -102,6 +102,6 @@ First implementation.
 </ul>
 </html>"),
 __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Fluid/SolarCollectors/Examples/FlatPlate.mos"
-        "Simulate and Plot"),
+        "Simulate and plot"),
  experiment(Tolerance=1e-6, StopTime=86400.0));
 end FlatPlate;

@@ -30,7 +30,6 @@ package Air
   redeclare record extends ThermodynamicState
     "ThermodynamicState record for moist air"
   end ThermodynamicState;
-
   // There must not be any stateSelect=StateSelect.prefer for
   // the pressure.
   // Otherwise, translateModel("Buildings.Fluid.FMI.ExportContainers.Examples.FMUs.ResistanceVolume")
@@ -608,7 +607,7 @@ revisions="<html>
 <li>
 April 30, 2015, by Filip Jorissen and Michael Wetter:<br/>
 Added <code>Inline=true</code> for
-<a href=\"https://github.com/ibpsa/modelica/issues/227\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/227\">
 issue 227</a>.
 </li>
 </ul>
@@ -721,7 +720,7 @@ revisions="<html>
 <li>
 April 30, 2015, by Filip Jorissen and Michael Wetter:<br/>
 Added <code>Inline=true</code> for
-<a href=\"https://github.com/ibpsa/modelica/issues/227\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/227\">
 issue 227</a>.
 </li>
 </ul>
@@ -736,7 +735,6 @@ algorithm
    Modelica.SIunits.Conversions.to_degC(state.T));
 annotation(LateInline=true);
 end thermalConductivity;
-
 //////////////////////////////////////////////////////////////////////
 // Protected classes.
 // These classes are only of use within this medium model.
@@ -776,7 +774,6 @@ First implementation.
 </ul>
 </html>"));
   end GasProperties;
-
   // In the assignments below, we compute cv as OpenModelica
   // cannot evaluate cv=cp-R as defined in GasProperties.
   constant GasProperties dryair(
@@ -893,7 +890,6 @@ algorithm
   annotation (
     Inline=true);
 end der_specificHeatCapacityCv;
-
   annotation(preferredView="info", Documentation(info="<html>
 <p>
 This medium package models moist air using a gas law in which pressure and temperature
@@ -969,7 +965,7 @@ if <i>T=0</i> &deg;C and no water vapor is present.
 November 4, 2016, by Michael Wetter:<br/>
 Set default value for <code>dT.start</code> in base properties.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/575\">#575</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/575\">#575</a>.
 </li>
 <li>
 June 6, 2015, by Michael Wetter:<br/>
@@ -985,7 +981,7 @@ Modelica.Media.Interfaces.Types</a>
 sets a default value of <i>1E-5</i>.
 A similar change has been done for pressure.
 This fixes
-<a href=\"https://github.com/ibpsa/modelica/issues/266\">#266</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/266\">#266</a>.
 </li>
 <li>
 June 5, 2015, by Michael Wetter:<br/>
@@ -997,7 +993,7 @@ Modelica.Media.Interfaces.PartialMedium</a>.
 Note that the default is <code>preferredMediumState=false</code>
 and hence the same states are used as were used before.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/260\">#260</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/260\">#260</a>.
 </li>
 <li>
 May 11, 2015, by Michael Wetter:<br/>
@@ -1013,20 +1009,20 @@ causing the translation to stop with an error.
 <li>
 May 1, 2015, by Michael Wetter:<br/>
 Added <code>Inline=true</code> for
-<a href=\"https://github.com/ibpsa/modelica/issues/227\">
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/227\">
 issue 227</a>.
 </li>
 <li>
 March 20, 2015, by Michael Wetter:<br/>
 Added missing term <code>state.p/reference_p</code> in function
 <code>specificEntropy</code>.
-<a href=\"https://github.com/ibpsa/modelica/issues/193\">#193</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/193\">#193</a>.
 </li>
 <li>
 February 3, 2015, by Michael Wetter:<br/>
 Removed <code>stateSelect.prefer</code> for temperature.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/160\">#160</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/160\">#160</a>.
 </li>
 <li>
 July 24, 2014, by Michael Wetter:<br/>
@@ -1059,7 +1055,7 @@ when models are checked in Dymola 2014 in the pedenatic mode.
 </li>
 <li>
 April 12, 2012, by Michael Wetter:<br/>
-Added keyword <code>each</code> to <code>Xi(stateSelect=...</code>.
+Added keyword <code>each</code> to <code>Xi(stateSelect=...)</code>.
 </li>
 <li>
 April 4, 2012, by Michael Wetter:<br/>
@@ -1081,6 +1077,7 @@ January 22, 2010, by Michael Wetter:<br/>
 Added implementation of function
 <a href=\"modelica://Buildings.Media.GasesPTDecoupled.MoistAirUnsaturated.enthalpyOfNonCondensingGas\">
 enthalpyOfNonCondensingGas</a> and its derivative.
+</li>
 <li>
 January 13, 2010, by Michael Wetter:<br/>
 Fixed implementation of derivative functions.

@@ -23,7 +23,7 @@ model FlatPlateWithTank
     annotation (Placement(transformation(extent={{-2,46},{18,66}})));
 
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
-    "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos",
+    Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"),
     computeWetBulbTemperature=false) "Weather data file reader"
     annotation (Placement(transformation(extent={{-30,80},{-10,100}})));
   Buildings.Fluid.Sensors.TemperatureTwoPort TOut(
@@ -173,7 +173,7 @@ equation
       color={0,0,127},
       smooth=Smooth.None));
   annotation (                      __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Fluid/SolarCollectors/Examples/FlatPlateWithTank.mos"
-        "Simulate and Plot"),
+        "Simulate and plot"),
         experiment(Tolerance=1e-6, StopTime=86400.0),
         Documentation(info="<html>
           <p>

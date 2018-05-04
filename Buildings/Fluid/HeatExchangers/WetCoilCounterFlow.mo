@@ -10,7 +10,7 @@ model WetCoilCounterFlow
   Modelica.SIunits.HeatFlowRate QSen2_flow = Q2_flow - QLat2_flow
     "Sensible heat input into air stream (negative if air is cooled)";
 
-  Modelica.SIunits.HeatFlowRate QLat2_flow =
+  Modelica.SIunits.HeatFlowRate QLat2_flow=
     Buildings.Utilities.Psychrometrics.Constants.h_fg * mWat_flow
     "Latent heat input into air (negative if air is dehumidified)";
 
@@ -33,8 +33,8 @@ The coil consists of two flow paths which are, at the design flow direction,
 in opposite direction to model a counterflow heat exchanger.
 The flow paths are discretized into <code>nEle</code> elements.
 Each element is modeled by an instance of
-<a href=\"modelica://Buildings.Fluid.HeatExchangers.BaseClasses.HexElement\">
-Buildings.Fluid.HeatExchangers.BaseClasses.HexElement</a>.
+<a href=\"modelica://Buildings.Fluid.HeatExchangers.BaseClasses.HexElementLatent\">
+Buildings.Fluid.HeatExchangers.BaseClasses.HexElementLatent</a>.
 Each element has a state variable for the metal.
 </p>
 <p>
@@ -73,6 +73,18 @@ Buildings.Fluid.HeatExchangers.DryCoilCounterFlow</a> instead of this model.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+April 14, 2017, by David Blum:<br/>
+Added heat of condensation to coil surface heat balance
+and removed it from the air stream.
+This gives higher coil surface temperature and avoids
+overestimating the latent heat ratio that was
+observed in the previous implementation.
+The code change was in
+<a href=\"modelica://Buildings.Fluid.HeatExchangers.BaseClasses.HexElementLatent\">
+Buildings.Fluid.HeatExchangers.BaseClasses.HexElementLatent</a>.<br/>
+This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/711\">#711</a>.
+</li>
 <li>
 April 11, 2017, by Michael Wetter:<br/>
 Changed computation of <code>QLat_flow</code> to be consistent with

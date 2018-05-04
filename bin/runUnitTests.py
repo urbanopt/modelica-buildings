@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 #######################################################
 # Script that runs all unit tests or, optionally,
-# only checks the html syntax.
+# only checks the html syntax or the validity of
+# the simulation parameters of the models
 #
 # To run the unit tests, this script
 # - creates temporary directories for each processor,
@@ -24,7 +25,15 @@
 # non-zero exit value.
 #
 # MWetter@lbl.gov                            2011-02-23
+# TSNouidui@lbl.gov                          2017-04-11
 #######################################################
+
+
+def _validate_experiment_setup(path):
+    import buildingspy.development.validator as v
+
+    val = v.Validator()
+    retVal = val.validateExperimentSetup(path)
 
 def _validate_html(path):
     import buildingspy.development.validator as v
@@ -56,10 +65,10 @@ def _setEnvironmentVariables(var, value):
     else:
         os.environ[var] = value
 
-def _runUnitTests(batch, package, path, n_pro, show_gui):
+def _runUnitTests(batch, tool, package, path, n_pro, show_gui):
     import buildingspy.development.regressiontest as u
 
-    ut = u.Tester()
+    ut = u.Tester(tool=tool)
     ut.batchMode(batch)
     ut.setLibraryRoot(path)
     if package is not None:
@@ -100,6 +109,10 @@ if __name__ == '__main__':
     unit_test_group.add_argument("-b", "--batch",
                         action="store_true",
                         help="Run in batch mode without user interaction")
+    unit_test_group.add_argument('-t', "--tool",
+                        metavar="dymola",
+                        default="dymola",
+                        help="Tool for the regression tests. Set to dymola or jmodelica")
     unit_test_group.add_argument('-s', "--single-package",
                         metavar="Modelica.Package",
                         help="Test only the Modelica package Modelica.Package")
@@ -119,6 +132,9 @@ if __name__ == '__main__':
     html_group.add_argument("--validate-html-only",
                            action="store_true")
 
+    experiment_setup_group = parser.add_argument_group("arguments to check validity of .mos and .mo experiment setup only")
+    experiment_setup_group.add_argument("--validate-experiment-setup",
+                           action="store_true")
 
     # Set environment variables
     if platform.system() == "Windows":
@@ -147,12 +163,18 @@ if __name__ == '__main__':
         ret_val = _validate_html(args.path)
         exit(ret_val)
 
+    if args.validate_experiment_setup:
+        # Match the mos file parameters with the mo files only, and then exit
+        ret_val = _validate_experiment_setup(args.path)
+        exit(ret_val)
+
     if args.single_package:
         single_package = args.single_package
     else:
         single_package = None
 
     retVal = _runUnitTests(batch = args.batch,
+                           tool = args.tool,
                            package = single_package,
                            path = args.path,
                            n_pro = args.number_of_processors,

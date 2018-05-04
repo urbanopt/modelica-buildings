@@ -34,7 +34,7 @@ V = R(T) i.
 The resistance <i>R(T)</i> varies depending on the temperature <i>T</i> as
 </p>
 <p align=\"center\" style=\"font-style:italic;\">
-R(T) = R (1 + &alpha; (T - T<sub>ref</sub>),
+R(T) = R (1 + &alpha; (T - T<sub>ref</sub>)),
 </p>
 <p>
 where the resistance <i>R</i> is the reference value of the resistance, <i>&alpha;</i> is the
@@ -51,7 +51,7 @@ the model in Dymola's pedantic mode.
 <li>May 14, 2015, by Marco Bonvini:<br/>
 Changed parent class to <a href=\"modelica://Buildings.Electrical.Interfaces.ResistiveLoad\">
 Buildings.Electrical.Interfaces.ResistiveLoad</a> in order
-to help openmodelica parsing the model. This fixes issue 
+to help openmodelica parsing the model. This fixes issue
 <a href=https://github.com/lbl-srg/modelica-buildings/issues/415>#415</a>.
 </li>
 <li>

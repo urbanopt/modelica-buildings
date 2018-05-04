@@ -129,7 +129,7 @@ i<sub>2</sub> = P V<sub>2</sub>/V<sub>RMS</sub><sup>2</sup>
 <p>
 where <i>V<sub>RMS</sub></i> is the Root Mean Square voltage of the AC system.
 Even though this linearized version of the load model introduces an approximation
-error in the current, it satisfies the contraints related to the ratio of the
+error in the current, it satisfies the constraints related to the ratio of the
 active and reactive powers.
 </p>
 <p>
@@ -161,7 +161,7 @@ The choices are between a null current or the linearized model.
 <li>May 14, 2015, by Marco Bonvini:<br/>
 Changed parent class to <a href=\"modelica://Buildings.Electrical.Interfaces.ResistiveLoad\">
 Buildings.Electrical.Interfaces.ResistiveLoad</a> in order
-to help openmodelica parsing the model. This fixes issue 
+to help openmodelica parsing the model. This fixes issue
 <a href=https://github.com/lbl-srg/modelica-buildings/issues/415>#415</a>.
 </li>
 <li>September 4, 2014, by Michael Wetter:<br/>

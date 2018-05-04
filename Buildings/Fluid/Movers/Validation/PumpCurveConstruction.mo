@@ -64,7 +64,6 @@ model PumpCurveConstruction
     use_inputFilter=false,
     per(pressure(V_flow={0.25*V_flow_nominal,0.5*V_flow_nominal,0.75*
             V_flow_nominal}, dp={0.75*dp_nominal,0.5*dp_nominal,0.25*dp_nominal})),
-
     inputType=Buildings.Fluid.Types.InputType.Constant)
     "Pump with 2 data points for the pressure flow relation, with no data at m_flow=0 and dp=0"
     annotation (Placement(transformation(extent={{40,-70},{60,-50}})));
@@ -175,7 +174,7 @@ of the pumps have different values. This then tests the correct extrapolation.
 December 6, 2016, by Michael Wetter:<br/>
 Relaxed input signal to allow simulation if bounds on min and max values are checked in Dymola.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/606\">#606</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/606\">#606</a>.
 </li>
 <li>February 20, 2016, by Ruben Baetens:<br/>
 Removal of <code>dynamicBalance</code> as parameter for <code>massDynamics</code> and <code>energyDynamics</code>.
@@ -184,7 +183,7 @@ Removal of <code>dynamicBalance</code> as parameter for <code>massDynamics</code
 January 22, 2016, by Michael Wetter:<br/>
 Corrected type declaration of pressure difference.
 This is
-for <a href=\"https://github.com/ibpsa/modelica/issues/404\">#404</a>.
+for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/404\">#404</a>.
 </li>
 <li>
 January 7, 2015, by Michael Wetter:<br/>

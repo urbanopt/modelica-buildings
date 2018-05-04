@@ -42,7 +42,7 @@ model EnthalpyFlowRate "Test model for the enthalpy flow rate sensors"
     annotation (Placement(transformation(extent={{0,54},{20,74}})));
 equation
   connect(ramp.y, sou.m_flow_in) annotation (Line(
-      points={{-79,-2},{-60,-2}},
+      points={{-79,-2},{-62,-2}},
       color={0,0,127}));
   connect(sou.ports[1], senH_flow.port_a) annotation (Line(
       points={{-40,-10},{-30,-10}},
@@ -85,7 +85,7 @@ November 2, 2016, by Michael Wetter:<br/>
 Changed assertions to blocks that compute the difference,
 and added the difference to the regression results.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/564\">issue 564</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/564\">issue 564</a>.
 </li>
 <li>
 August 31, 2013, by Michael Wetter:<br/>

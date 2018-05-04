@@ -39,13 +39,13 @@ Buildings.BoundaryConditions.SolarGeometry.BaseClasses.Examples.Declination</a>.
 January 6, 2015, by Michael Wetter:<br/>
 Updated documentation and added validation.
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/382\">issue 382</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/382\">issue 382</a>.
 </li>
 <li>
 January 5, 2015, by Michael Wetter:<br/>
 Updated comment of output signal as this is used in the weather bus connector.
 This is for
-issue <a href=\"https://github.com/ibpsa/modelica/issues/376\">376</a>.
+issue <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/376\">376</a>.
 </li>
 <li>
 November 11, 2015, by Michael Wetter:<br/>
@@ -62,9 +62,10 @@ First implementation.
 </ul>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{100,
-            100}}), graphics={Text(
+            100}}), graphics={  Bitmap(extent={{-90,-90},{90,90}}, fileName=
+              "modelica://Buildings/Resources/Images/BoundaryConditions/SolarGeometry/BaseClasses/Declination.png"),
+                              Text(
           extent={{-150,110},{150,150}},
           textString="%name",
-          lineColor={0,0,255}), Bitmap(extent={{-92,92},{92,-92}}, fileName=
-              "modelica://Buildings/Resources/Images/BoundaryConditions/SolarGeometry/BaseClasses/Declination.png")}));
+          lineColor={0,0,255})}));
 end Declination;

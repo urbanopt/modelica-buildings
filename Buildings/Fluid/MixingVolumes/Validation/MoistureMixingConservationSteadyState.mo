@@ -52,7 +52,7 @@ November 2, 2016, by Michael Wetter:<br/>
 Changed assertions to blocks that compute the difference,
 and added the difference to the regression results.<br/>
 This is for
-<a href=\"https://github.com/ibpsa/modelica/issues/564\">issue 564</a>.
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/564\">issue 564</a>.
 </li>
 <li>
 May 22 2015 by Filip Jorissen:<br/>
@@ -62,6 +62,5 @@ First implementation.
 </html>"),
     __Dymola_Commands(file=
           "Resources/Scripts/Dymola/Fluid/MixingVolumes/Validation/MoistureMixingConservationSteadyState.mos"
-        "Simulate and plot"),
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})));
+        "Simulate and plot"));
 end MoistureMixingConservationSteadyState;
