@@ -531,9 +531,9 @@ boundary temperatures is based on the 1-dimensional heat balance
 between the two fluids. We assume that the heat transfer coefficient and
 relevant area of heat transfer from the bulk water stream temperature to the
 surface temperature of the air-side of the coil is known and equal to
-<i>UA<sub>wat</sub></i>. We also assume that the heat transfer coefficient from
+<i>hA<sub>wat</sub></i>. We also assume that the heat transfer coefficient from
 the bulk air stream temperature to the coil surface is known as
-<i>UA<sub>air</sub></i>.
+<i>hA<sub>air</sub></i>.
 </p>
 
 <p>
@@ -541,7 +541,7 @@ Balancing these two conditions yields
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-Q<sub>air&rarr;wat,X</sub> = UA<sub>air</sub>  (T<sub>air,X</sub> -
+Q<sub>air&rarr;wat,X</sub> = hA<sub>air</sub>  (T<sub>air,X</sub> -
   T<sub>surf,X</sub>)
 </p>
 
@@ -550,7 +550,7 @@ and
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-Q<sub>air&rarr;wat,X</sub> = UA<sub>wat</sub> 
+Q<sub>air&rarr;wat,X</sub> = hA<sub>wat</sub>
   (T<sub>surf,X</sub> - T<sub>wat,X</sub>).
 </p>
 
@@ -572,8 +572,8 @@ otherwise dry coil,
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-(T<sub>air,out</sub> - T<sub>Dew Point, A</sub>)  UA<sub>air</sub> =
-  (T<sub>Dew Point A</sub> - T<sub>wat,in</sub>)  UA<sub>wat</sub>,
+(T<sub>air,out</sub> - T<sub>Dew Point, A</sub>)  hA<sub>air</sub> =
+  (T<sub>Dew Point A</sub> - T<sub>wat,in</sub>)  hA<sub>wat</sub>,
 </p>
 <p>
 where <i>T<sub>Dew Point, A</sub></i>, is the boundary to the dry
@@ -584,16 +584,16 @@ region of the coil. If the inlet air dew point is less than or equal to
 <p>
 Similarly, we can observe that a 100% wet coil will reach total coverage when
 the surface temperature at the air inlet is equal to the inlet air dew
-point temperature, i.e., 
+point temperature, i.e.,
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-(T<sub>air,out</sub> - T<sub>Dew Point, B</sub>)  UA<sub>air</sub> =
-  (T<sub>Dew Point B</sub> - T<sub>wat,in</sub>)  UA<sub>wat</sub>.
+(T<sub>air,out</sub> - T<sub>Dew Point, B</sub>)  hA<sub>air</sub> =
+  (T<sub>Dew Point B</sub> - T<sub>wat,in</sub>)  hA<sub>wat</sub>.
 </p>
-<p><b>fixme: Explain what is meant by A and B. These are used belwo in \"region = ...\"
-but it is not clear what the difference between 
-<i>T<sub>Dry Bulb, A</sub></i> and <i>T<sub>Dry Bulb, B</sub></i> is.
+<p><b>fixme: Explain what is meant by A and B. These are used below in \"region = ...\"
+but it is not clear what the difference between
+<i>T<sub>Dew Point, A</sub></i> and <i>T<sub>Dew Point, B</sub></i> is.
 <p>
 The equations in this section have been written for a \"counter-flow\"
 configuration in which the water stream's outlet is in thermal contact (via the
@@ -606,7 +606,7 @@ partially wet, and <i>III</i> for 100% wet, we can say the following:
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-region = if (T<sub>wat,in</sub> &ge; T<sub>air,in</sub> or 
+region = if (T<sub>wat,in</sub> &ge; T<sub>air,in</sub> or
              T<sub>Dry Bulb,in</sub> &le; T<sub>Dry Bulb, A</sub>)
          then I
          elseif (T<sub>Dry Bulb, B</sub> &le; T<sub>Dry Bulb,in</sub>)
@@ -667,7 +667,7 @@ determined as
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-UA = 1 / ((1 / UA<sub>air</sub>) + (1 / UA<sub>wat</sub>))
+UA = 1 / ((1 / hA<sub>air</sub>) + (1 / hA<sub>wat</sub>))
 </p>
 <p>
 Next, we can determine the number of transfer units:
@@ -696,7 +696,7 @@ The overall heat transfered from the air to the water is
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-Q<sub>tot, dry</sub> = &epsilon;  C<sub>min</sub> 
+Q<sub>tot, dry</sub> = &epsilon;  C<sub>min</sub>
   (T<sub>wat,in</sub> - T<sub>air,in</sub>)
 </p>
 
@@ -708,7 +708,7 @@ From this, we can determine the outlet conditions as
 capacity flow rate, e.g., if the water flow is throttled by a valve.</b>
 </p>
 <p align=\"center\" style=\"font-style:italic;\">
-T<sub>air,out</sub> = T<sub>air,in</sub> - &epsilon; 
+T<sub>air,out</sub> = T<sub>air,in</sub> - &epsilon;
   (T<sub>air,in</sub> - T<sub>wat,in</sub>),
 </p>
 and
@@ -729,17 +729,17 @@ T<sub>surf,out</sub> = T<sub>wat,in</sub>
       / NTU<sub>wat</sub>),
 </p>
 <p>
-where 
+where
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
 NTU<sub>air</sub> =
-  UA<sub>air</sub> / (m&#775;<sub>air</sub>  c<sub>p,air</sub>),
+  hA<sub>air</sub> / (m&#775;<sub>air</sub>  c<sub>p,air</sub>),
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
 NTU<sub>wat</sub> =
-  UA<sub>wat</sub> / (m&#775;<sub>wat</sub>  c<sub>p,wat</sub>)
+  hA<sub>wat</sub> / (m&#775;<sub>wat</sub>  c<sub>p,wat</sub>)
 </p>
 
 <p>
@@ -822,9 +822,9 @@ is analogous to the <i>UA</i> used in the 100% dry analysis, i.e.,
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-UA<sup>*</sup> = (UA<sub>air</sub> / c<sub>p,air</sub>)
-  / (1 + (c<sub>p,eff</sub>  UA<sub>air</sub>)
-    / (c<sub>p,air</sub>  UA<sub>wat</sub>)).
+UA<sup>*</sup> = (hA<sub>air</sub> / c<sub>p,air</sub>)
+  / (1 + (c<sub>p,eff</sub>  hA<sub>air</sub>)
+    / (c<sub>p,air</sub>  hA<sub>wat</sub>)).
 </p>
 
 <p>
@@ -840,8 +840,8 @@ The total heat transfer is then
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-Q<sub>tot</sub> = &epsilon;<sup>*</sup> 
-  m&#775;<sub>air</sub> 
+Q<sub>tot</sub> = &epsilon;<sup>*</sup>
+  m&#775;<sub>air</sub>
   (h<sub>air,in</sub> - h<sub>sat,surf,in</sub>)
 </p>
 
@@ -868,7 +868,7 @@ where <i>NTU<sup>*</sup><sub>air</sub></i> is
 
 <p align=\"center\" style=\"font-style:italic;\">
 NTU<sup>*</sup><sub>air</sub> =
-  UA<sub>air</sub> / (m&#775;<sub>air</sub>  c<sub>p,air</sub>)
+  hA<sub>air</sub> / (m&#775;<sub>air</sub>  c<sub>p,air</sub>)
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
@@ -925,8 +925,8 @@ that is dry.
 <p>
 The equations in this section are based primarily on Mitchell and Braun
 (2012b). The only thing new is that both the dry and wet coil analysis must be
-coupled. We scale the UA values for air and water for the dry section by
-<i>f<sub>dry</sub></i> and the UA values for air and water for the wet section
+coupled. We scale the hA values for air and water for the dry section by
+<i>f<sub>dry</sub></i> and the hA values for air and water for the wet section
 by <i>(1 - f<sub>dry</sub>)</i>.
 </p>
 
@@ -959,8 +959,8 @@ temperature at the dry/wet transition. This relationship can be written as
 </p>
 
 <p align=\"center\" style=\"font-style:italic;\">
-(T<sub>air,X</sub> - T<sub>surf,X</sub>)  UA<sub>air</sub>
-  = (T<sub>surf,X</sub> - T<sub>wat,X</sub>)  UA<sub>wat</sub>
+(T<sub>air,X</sub> - T<sub>surf,X</sub>)  hA<sub>air</sub>
+  = (T<sub>surf,X</sub> - T<sub>wat,X</sub>)  hA<sub>wat</sub>
 </p>
 
 <p>
@@ -968,7 +968,7 @@ Thus, this regime links together a dry and wet analysis through the above
 equation with <i>T<sub>surf,X</sub> = T<sub>Dew Point,in</sub></i>, and
 through the values of <i>T<sub>wat,X</sub></i> and <i>T<sub>air,X</sub></i>.
 By solving for <i>f<sub>dry</sub></i> (which attenuates the <i>A</i> part of
-the <i>UA</i> values) we can get the corresponding \"partially wet\" heat
+the <i>hA</i> values) we can get the corresponding \"partially wet\" heat
 transfer and conditions.
 </p>
 
@@ -1068,7 +1068,7 @@ calculations for air and water.
 <p>
 Validation results can be found in
 <a href=\"modelica://Buildings.Fluid.HeatExchangers.BaseClasses.Examples.DryWetCalcsSweep\">
-Buildings.Fluid.HeatExchangers.BaseClasses.Examples.DryWetCalcsSweep</a> 
+Buildings.Fluid.HeatExchangers.BaseClasses.Examples.DryWetCalcsSweep</a>
 which recreates the figure found in example 13.2 of
 Mitchell and Braun (2012a). Furthermore, the 100% dry, 100% wet, and partially
 wet regions have been validated versus the conditions found in Example 2-1 from
