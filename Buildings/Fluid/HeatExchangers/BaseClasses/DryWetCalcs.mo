@@ -224,8 +224,8 @@ model DryWetCalcs
     final hAirSatSurIn = hAirSatSurIn,
     final cfg = cfg)
     "Calculations for the wet part of the coil in a partially wet coil";
-
 // fixme: I don't understand the comment below as there is no dryFraFin
+
   Real dryFra(min=0, max=1, final unit="1", start=0.5)
     "Dry fraction of the coil; note: this is an iteration variable and is
     not always accurate; use dryFraFin for final determination of the region";
@@ -241,15 +241,7 @@ model DryWetCalcs
   // - 100% dry coil
   Modelica.SIunits.HeatFlowRate QSenDry_flow
     "Heat transferred water to air for a 100% dry coil";
-  Modelica.SIunits.Temperature TWatOutDry
-    "Water outlet temperature for a 100% dry coil";
-  Modelica.SIunits.Temperature TAirOutDry
-    "Water outlet temperature for a 100% dry coil";
   // - 100% wet coil
-  Modelica.SIunits.HeatFlowRate QTotWet_flow
-    "Heat transferred air to water for a 100% wet coil";
-  Modelica.SIunits.HeatFlowRate QSenWet_flow
-    "Heat transferred water to air for a 100% wet coil";
   Modelica.SIunits.Temperature TWatOutWet(start=TWatOut_init)
     "Water outlet temperature for a 100% wet coil";
   Modelica.SIunits.Temperature TAirOutWet
@@ -266,8 +258,6 @@ model DryWetCalcs
     "Water temperature at the wet/dry transition";
   Modelica.SIunits.Temperature TAirX
     "Air temperature at the wet/dry transition";
-  Modelica.SIunits.Temperature TAirOutPar
-    "Air outlet temperature for a partially wet/dry coil";
   Modelica.SIunits.HeatFlowRate QParTotWet_flow
     "Total heat transferred from air to water for a partially wet coil";
   Modelica.SIunits.HeatFlowRate QParSenWet_flow
@@ -285,13 +275,9 @@ equation
   TAirInDewPoi = TDewPoi_pW.T;
   hAirSatSurIn = hSat_pTSat.hSat;
   QSenDry_flow = dry.Q_flow;
-  TWatOutDry = dry.TWatOut;
-  TAirOutDry = dry.TAirOut;
   // Find TDewPoiA, the incoming air dew point temperature that would put us
   // at the point where dryFra just becomes 1; i.e., 100% dry coil.
-  (TAirOutDry - TDewPoiA) * UAAir = (TDewPoiA - TWatIn) * UAWat;
-  QTotWet_flow = wet.QTot_flow;
-  QSenWet_flow = wet.QSen_flow;
+  (dry.TAirOut - TDewPoiA) * UAAir = (TDewPoiA - TWatIn) * UAWat;
   TWatOutWet = wet.TWatOut;
   TAirOutWet = wet.TAirOut;
   mCon_flowWet = wet.mCon_flow;
@@ -304,7 +290,6 @@ equation
   QParTotWet_flow = parWet.QTot_flow;
   QParSenWet_flow = parWet.QSen_flow;
   TWatX = parWet.TWatOut;
-  TAirOutPar = parWet.TAirOut;
   mParCon_flow = parWet.mCon_flow;
   // fixme: check condition
   if noEvent(TWatIn >= TAirIn or TAirInDewPoi <= TDewPoiA) then
@@ -314,8 +299,8 @@ equation
     mCon_flow = 0;
   elseif noEvent(TAirInDewPoi >= TDewPoiB) then
     dryFra = 0;
-    QTot_flow = QTotWet_flow;
-    QSen_flow = QSenWet_flow;
+    QTot_flow = wet.QTot_flow;
+    QSen_flow = wet.QSen_flow;
     mCon_flow = -mCon_flowWet;
   else
     (TAirX - TAirInDewPoi) * UAAir = (TAirInDewPoi - TWatX) * UAWat;
@@ -521,9 +506,9 @@ represent partially wet coil physics.
 </p>
 
 <p>
-Extensive documentation can be found in the
+See
 <a href=\"modelica://Buildings.Fluid.HeatExchangers.WetEffectivenessNTU\">
-WetEffectivenessNTU</a> model.
+Buildings.Fluid.HeatExchangers.WetEffectivenessNTU</a> for documentation.
 </p>
 </html>"));
 end DryWetCalcs;
