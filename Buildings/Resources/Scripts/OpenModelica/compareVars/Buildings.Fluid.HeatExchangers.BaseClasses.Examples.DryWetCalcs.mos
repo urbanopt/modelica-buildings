@@ -1,14 +1,14 @@
 compareVars :=
   {
-    "dryWetCalcs.TAirOutPar",
+    "dryWetCalcs.parWet.TAirOut",
     "dryWetCalcs.TWatOutWet",
     "dryWetCalcs.TAirOutWet",
     "dryWetCalcs.TWatOutPar",
-    "dryWetCalcs.TWatOutDry",
-    "dryWetCalcs.TAirOutDry",
+    "dryWetCalcs.dry.TWatOut",
+    "dryWetCalcs.dry.TAirOut",
     "dryWetCalcs.QTot_flow",
     "dryWetCalcs.QSen_flow",
-    "dryWetCalcs.QSenDry_flow",
-    "dryWetCalcs.QTotWet_flow",
-    "dryWetCalcs.QSenWet_flow"
+    "dryWetCalcs.dry.Q_flow",
+    "dryWetCalcs.wet.QTot_flow",
+    "dryWetCalcs.wet.QSen_flow"
   };

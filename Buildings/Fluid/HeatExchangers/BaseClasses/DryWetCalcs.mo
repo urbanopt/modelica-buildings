@@ -233,39 +233,25 @@ model DryWetCalcs
   Modelica.SIunits.Temperature TAirInDewPoi
     "Dew point temperature of incoming air";
   Modelica.SIunits.Temperature TDewPoiA
-    "Dew point at the 100% Dry to partial wet/partial dry interface
+    "Dew point at the 100% dry to partial wet/partial dry interface
     (i.e., exactly where dryFra becomes 1)";
   Modelica.SIunits.Temperature TDewPoiB
     "Dew point at the partial wet/partial dry to 100% wet interface
     (i.e., exactly where dryFra becomes 0)";
-  // - 100% dry coil
-  Modelica.SIunits.HeatFlowRate QSenDry_flow
-    "Heat transferred water to air for a 100% dry coil";
+
   // - 100% wet coil
   Modelica.SIunits.Temperature TWatOutWet(start=TWatOut_init)
     "Water outlet temperature for a 100% wet coil";
   Modelica.SIunits.Temperature TAirOutWet
     "Water outlet temperature for a 100% wet coil";
-  Modelica.SIunits.MassFlowRate mCon_flowWet
-    "Mass flow of condensate for a 100% wet coil; a positive number or zero";
   // - Partially wet / Partially dry coil
-  Modelica.SIunits.HeatFlowRate QParSenDry_flow
-    "Sensible heat transferred from water to air for the dry part of
-    a partially wet coil";
   Modelica.SIunits.Temperature TWatOutPar
     "Water outlet temperature";
   Modelica.SIunits.Temperature TWatX(start=TWatOut_init)
     "Water temperature at the wet/dry transition";
   Modelica.SIunits.Temperature TAirX
     "Air temperature at the wet/dry transition";
-  Modelica.SIunits.HeatFlowRate QParTotWet_flow
-    "Total heat transferred from air to water for a partially wet coil";
-  Modelica.SIunits.HeatFlowRate QParSenWet_flow
-    "Sensible heat transferred from water to air for the wet part of
-    a partially wet coil";
-  Modelica.SIunits.MassFlowRate mParCon_flow
-    "Mass flow of condensate in a wet/dry coil. A positive number for flow.";
-// fixme: check if neede
+// fixme: check if needed
   constant Real DUMMY = 0
     "Used to 'switch off' the dry / wet coil calculation functions";
   Modelica.SIunits.SpecificEnthalpy hAirSatSurIn
@@ -274,39 +260,34 @@ model DryWetCalcs
 equation
   TAirInDewPoi = TDewPoi_pW.T;
   hAirSatSurIn = hSat_pTSat.hSat;
-  QSenDry_flow = dry.Q_flow;
   // Find TDewPoiA, the incoming air dew point temperature that would put us
   // at the point where dryFra just becomes 1; i.e., 100% dry coil.
   (dry.TAirOut - TDewPoiA) * UAAir = (TDewPoiA - TWatIn) * UAWat;
   TWatOutWet = wet.TWatOut;
   TAirOutWet = wet.TAirOut;
-  mCon_flowWet = wet.mCon_flow;
   // Find TDewPoiB, the incoming air dew point temperature that would put us
   // at the point where dryFra just becomes 0; i.e., 100% wet coil.
   (TAirIn - TDewPoiB) * UAAir = (TDewPoiB - TWatOutWet) * UAWat;
-  QParSenDry_flow = parDry.Q_flow;
   TWatOutPar = parDry.TWatOut;
   TAirX = parDry.TAirOut;
-  QParTotWet_flow = parWet.QTot_flow;
-  QParSenWet_flow = parWet.QSen_flow;
+
   TWatX = parWet.TWatOut;
-  mParCon_flow = parWet.mCon_flow;
   // fixme: check condition
   if noEvent(TWatIn >= TAirIn or TAirInDewPoi <= TDewPoiA) then
     dryFra = 1;
-    QTot_flow = QSenDry_flow;
-    QSen_flow = QSenDry_flow;
+    QTot_flow = dry.Q_flow;
+    QSen_flow = dry.Q_flow;
     mCon_flow = 0;
   elseif noEvent(TAirInDewPoi >= TDewPoiB) then
     dryFra = 0;
     QTot_flow = wet.QTot_flow;
     QSen_flow = wet.QSen_flow;
-    mCon_flow = -mCon_flowWet;
+    mCon_flow = -wet.mCon_flow;
   else
     (TAirX - TAirInDewPoi) * UAAir = (TAirInDewPoi - TWatX) * UAWat;
-    QTot_flow = QParTotWet_flow + QParSenDry_flow;
-    QSen_flow = QParSenDry_flow + QParSenWet_flow;
-    mCon_flow = -mParCon_flow;
+    QTot_flow = parWet.QTot_flow + parDry.Q_flow;
+    QSen_flow = parWet.QSen_flow + parDry.Q_flow;
+    mCon_flow = -parWet.mCon_flow;
   end if;
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-120},
             {140,120}}), graphics={
