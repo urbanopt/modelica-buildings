@@ -231,11 +231,10 @@ issue 622</a> for more information.
 <p>
 This model implements the calculation for a 100% wet coil.
 </p>
-
 <p>
-Extensive documentation can be found in the
+See
 <a href=\"modelica://Buildings.Fluid.HeatExchangers.WetEffectivenessNTU\">
-WetEffectivenessNTU</a> model.
+Buildings.Fluid.HeatExchangers.WetEffectivenessNTU</a> for documentation.
 </p>
 </html>"));
 end WetCalcs;
