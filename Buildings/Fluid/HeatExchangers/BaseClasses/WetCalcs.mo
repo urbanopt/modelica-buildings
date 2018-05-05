@@ -134,7 +134,7 @@ equation
     QLat_flow = 0;
   else
   pSatWatOut =
-    Buildings.Utilities.Psychrometrics.Functions.saturationPressure(
+    Buildings.Utilities.Psychrometrics.Functions.saturationPressureLiquid(
       TWatOutGuess);
   XAirSatOut[watIdx] =
     Buildings.Utilities.Psychrometrics.Functions.X_pSatpphi(
@@ -176,7 +176,7 @@ equation
   // hSurEff, which is given by the following relation.
   // For the saturation pressure, we assume the surface is never below 2 degC.
   // This avoids problems in computing the saturationPressure
-  pSatEff = Buildings.Utilities.Psychrometrics.Functions.saturationPressure(TSurEff);
+  pSatEff = Buildings.Utilities.Psychrometrics.Functions.saturationPressureLiquid(TSurEff);
   XSurEff[watIdx] = Buildings.Utilities.Psychrometrics.Functions.X_pSatpphi(
     pSat=pSatEff,
     p=pAir,
@@ -187,7 +187,7 @@ equation
     T=TSurEff,
     X=XSurEff);
   TAirOut = TSurEff + (TAirIn - TSurEff) * exp(-NTUAirSta);
-  pSatOut = Buildings.Utilities.Psychrometrics.Functions.saturationPressure(TAirOut);
+  pSatOut = Buildings.Utilities.Psychrometrics.Functions.saturationPressureLiquid(TAirOut);
   XOut[watIdx] = Buildings.Utilities.Psychrometrics.Functions.X_pSatpphi(
       pSat=pSatOut,
       p=pAir,
