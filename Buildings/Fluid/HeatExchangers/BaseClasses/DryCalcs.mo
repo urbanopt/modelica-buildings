@@ -83,6 +83,8 @@ equation
   // Use CMin to compute Q_flow
   Q_flow = eps * CMin_flow * (TWatIn - TAirIn)
       "Note: positive heat transfer is air to water";
+  // fixme: the next two equations are only valid if CWat >= CAir,
+  // but this is not true if the water flow is small
   TAirOut = TAirIn + eps * (TWatIn - TAirIn)
       "Braun 1988 eq 4.1.8";
   TWatOut = TWatIn + Z * (TAirIn - TAirOut)
@@ -115,9 +117,9 @@ This model implements the calculation for a 100% dry coil.
 </p>
 
 <p>
-Extensive documentation can be found in the
+See
 <a href=\"modelica://Buildings.Fluid.HeatExchangers.WetEffectivenessNTU\">
-WetEffectivenessNTU</a> model.
+Buildings.Fluid.HeatExchangers.WetEffectivenessNTU</a> for documentation.
 </p>
 </html>"));
 end DryCalcs;
