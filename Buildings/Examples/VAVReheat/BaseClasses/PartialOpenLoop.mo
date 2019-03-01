@@ -797,9 +797,9 @@ equation
       color={28,108,200},
       thickness=0.5));
   connect(gaiHeaCoi.y, souHea.m_flow_in) annotation (Line(points={{121,-210},{
-          124,-210},{124,-130}}, color={0,0,127}));
+          124,-210},{124,-132}}, color={0,0,127}));
   connect(gaiCooCoi.y, souCoo.m_flow_in) annotation (Line(points={{121,-248},{
-          222,-248},{222,-130}}, color={0,0,127}));
+          222,-248},{222,-132}}, color={0,0,127}));
   connect(dpDisSupFan.port_b, amb.ports[3]) annotation (Line(
       points={{320,10},{320,14},{-88,14},{-88,-47.9333},{-114,-47.9333}},
       color={0,0,0},

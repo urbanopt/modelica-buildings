@@ -86,8 +86,8 @@ model MixingBox
   Modelica.Blocks.Interfaces.RealInput yRet(
     min=0,
     max=1,
-    final unit="1")
-    "Return damper position (0: closed, 1: open)" annotation (Placement(
+    final unit="1") "Return damper position (0: closed, 1: open)"
+                                                  annotation (Placement(
         transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
@@ -98,8 +98,8 @@ model MixingBox
   Modelica.Blocks.Interfaces.RealInput yOut(
     min=0,
     max=1,
-    final unit="1")
-    "Outdoor air damper signal (0: closed, 1: open)" annotation (Placement(
+    final unit="1") "Outdoor air damper signal (0: closed, 1: open)"
+                                                     annotation (Placement(
         transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
@@ -110,8 +110,8 @@ model MixingBox
   Modelica.Blocks.Interfaces.RealInput yExh(
     min=0,
     max=1,
-    final unit="1")
-    "Exhaust air damper signal (0: closed, 1: open)" annotation (Placement(
+    final unit="1") "Exhaust air damper signal (0: closed, 1: open)"
+                                                     annotation (Placement(
         transformation(
         extent={{-20,-20},{20,20}},
         rotation=270,
