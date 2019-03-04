@@ -4,21 +4,56 @@ model VAVAHU "VAV air handler unit"
   package MediumWat = Buildings.Media.Water "Medium model for water";
 
   parameter Modelica.SIunits.MassFlowRate mAir_flow_nominal "Nominal air mass flow rate";
-  parameter Modelica.SIunits.MassFlowRate mWatCooCoi_flow_nominal "Nominal water mass flow rate for cooling coil";
-  parameter Modelica.SIunits.MassFlowRate mWatHeaCoi_flow_nominal "Nominal water mass flow rate for heating coil";
+  parameter Modelica.SIunits.MassFlowRate mWatCooCoi_flow_nominal
+    "Nominal water mass flow rate for cooling coil"
+      annotation(Dialog(group="Cooling coil"));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal
+  parameter Modelica.SIunits.MassFlowRate mWatHeaCoi_flow_nominal
+    "Nominal water mass flow rate for heating coil"
+    annotation(Dialog(group="Heating coil"));
+
+  parameter Modelica.SIunits.HeatFlowRate QHeaCoi_flow_nominal(min=0)=
+    mAir_flow_nominal * (THeaCoiAirIn_nominal-THeaCoiAirOut_nominal)*1006
     "Nominal heat transfer of heating coil";
-  parameter Modelica.SIunits.Temperature THeaCoiWatIn_nominal=318.15
-    "Nominal water inlet temperature heating coil";
   parameter Modelica.SIunits.Temperature THeaCoiAirIn_nominal=281.65
-    "Nominal air inlet temperature heating coil";
+    "Nominal air inlet temperature heating coil"
+    annotation(Dialog(group="Heating coil"));
+  parameter Modelica.SIunits.Temperature THeaCoiAirOut_nominal=313.65
+    "Nominal air inlet temperature heating coil"
+    annotation(Dialog(group="Heating coil"));
+  parameter Modelica.SIunits.Temperature THeaCoiWatIn_nominal=318.15
+    "Nominal water inlet temperature heating coil"
+    annotation(Dialog(group="Heating coil"));
+  parameter Modelica.SIunits.Temperature THeaCoiWatOut_nominal=THeaCoiWatIn_nominal-QHeaCoi_flow_nominal/mWatHeaCoi_flow_nominal/4200
+    "Nominal water inlet temperature heating coil"
+    annotation(Dialog(group="Heating coil"));
+
+
+  parameter Modelica.SIunits.Temperature TCooCoiAirIn_nominal=313.15
+    "Nominal air inlet temperature cooling coil"
+    annotation(Dialog(group="Cooling coil"));
+  parameter Modelica.SIunits.Temperature TCooCoiAirOut_nominal=291.15
+    "Nominal water outlet temperature cooling coil"
+    annotation(Dialog(group="Cooling coil"));
+  parameter Modelica.SIunits.MassFraction TCooCoiX_vIn_nominal=0.00
+    "Nominal air inlet absolute humidity cooling coil"
+    annotation(Dialog(group="Cooling coil"));
+  parameter Modelica.SIunits.MassFraction TCooCoiX_vOut_nominal=0.00
+    "Nominal water outlet absolute humidity cooling coil"
+    annotation(Dialog(group="Cooling coil"));
+
+  parameter Modelica.SIunits.Temperature TCooCoiWatIn_nominal=281.65
+    "Nominal air inlet temperature cooling coil"
+   annotation(Dialog(group="Cooling coil"));
 
   parameter Modelica.SIunits.PressureDifference dpHeaCoiWat_nominal=3000
-    "Water-side pressure drop of heating coil";
+    "Water-side pressure drop of heating coil"
+    annotation(Dialog(group="Heating coil"));
 
   parameter Modelica.SIunits.PressureDifference dpCooCoiWat_nominal=3000
-    "Water-side pressure drop of cooling coil";
+    "Water-side pressure drop of cooling coil"
+    annotation(Dialog(group="Cooling coil"));
+
 
   parameter Modelica.SIunits.PressureDifference dpSup_nominal=500
     "Pressure difference of supply air leg (coils and filter)";
@@ -34,7 +69,9 @@ model VAVAHU "VAV air handler unit"
       V_flow={0,mAir_flow_nominal/1.2*2},
       dp=2*{dpFanSup_nominal,0}))
     "Performance data for supply fan"
-    annotation (Placement(transformation(extent={{260,320},{280,340}})));
+    annotation (
+      Dialog(group="Fan"),
+    Placement(transformation(extent={{260,320},{280,340}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput yFanSup(
      final unit="1",
@@ -111,7 +148,7 @@ model VAVAHU "VAV air handler unit"
     m2_flow_nominal=mAir_flow_nominal,
     configuration=Buildings.Fluid.Types.HeatExchangerConfiguration.CounterFlow,
     use_Q_flow_nominal=true,
-    Q_flow_nominal=Q_flow_nominal,
+    Q_flow_nominal=QHeaCoi_flow_nominal,
     dp1_nominal=dpHeaCoiWat_nominal,
     dp2_nominal=0,
     T_a1_nominal=THeaCoiWatIn_nominal,
@@ -120,14 +157,14 @@ model VAVAHU "VAV air handler unit"
     annotation (Placement(transformation(extent={{20,-36},{0,-56}})));
 
   Fluid.HeatExchangers.WetCoilCounterFlow cooCoi(
-    redeclare package Medium1 = MediumW,
-    redeclare package Medium2 = MediumA,
-    UA_nominal=3*m_flow_nominal*1000*15/
+    redeclare package Medium1 = MediumWat,
+    redeclare package Medium2 = MediumAir,
+    UA_nominal=mAir_flow_nominal*1000*15/
         Buildings.Fluid.HeatExchangers.BaseClasses.lmtd(
-        T_a1=26.2,
-        T_b1=12.8,
-        T_a2=6,
-        T_b2=16),
+        T_a1=TCooCoiWatIn_nominal,
+        T_b1=TCooCoiWatOut_nominal,
+        T_a2=TCooCoiAirIn_nominal,
+        T_b2=TCooCoiAirOut_nominal),
     m1_flow_nominal=mWatCooCoi_flow_nominal,
     m2_flow_nominal=mAir_flow_nominal,
     dp1_nominal=dpCooCoiWat_nominal,
@@ -148,7 +185,7 @@ model VAVAHU "VAV air handler unit"
     m_flow_nominal=mAir_flow_nominal) "Mixed air temperature sensor"
     annotation (Placement(transformation(extent={{-60,-50},{-40,-30}})));
 
-  MixingBox eco(
+  Buildings.Examples.VAVReheat.BaseClasses.MixingBox eco(
     redeclare package Medium = MediumAir,
     mOut_flow_nominal=mAir_flow_nominal,
     dpOut_nominal=10,
@@ -160,6 +197,11 @@ model VAVAHU "VAV air handler unit"
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-90,2})));
+
+  Fluid.Sensors.TemperatureTwoPort senTSup(
+    redeclare package Medium = MediumAir,
+    m_flow_nominal=mAir_flow_nominal) "Supply air temperature sensor"
+    annotation (Placement(transformation(extent={{310,-50},{330,-30}})));
   Fluid.Sensors.TemperatureTwoPort TRet(
     redeclare package Medium = MediumAir,
     m_flow_nominal=mAir_flow_nominal) "Return air temperature sensor"
@@ -172,16 +214,13 @@ model VAVAHU "VAV air handler unit"
     annotation (Placement(transformation(extent={{160,30},{140,50}})));
   Fluid.Movers.SpeedControlled_y fanSup(
     redeclare package Medium = MediumAir,
-    per(pressure(V_flow={0,m_flow_nominal/1.2*2}, dp=2*{780 + 10 + dpBuiStaSet,0})),
+    per=datFanSup,
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial) "Supply air fan"
     annotation (Placement(transformation(extent={{220,-50},{240,-30}})));
 
-  Fluid.Sensors.TemperatureTwoPort senTSup(
+  Fluid.Sensors.VolumeFlowRate senVOut_flow(
     redeclare package Medium = MediumAir,
-    m_flow_nominal=mAir_flow_nominal) "Supply air temperature sensor"
-    annotation (Placement(transformation(extent={{310,-50},{330,-30}})));
-  Fluid.Sensors.VolumeFlowRate senVOut_flow(redeclare package Medium =
-        MediumAir, m_flow_nominal=mAir_flow_nominal)
+    m_flow_nominal=mAir_flow_nominal)
     "Outside air volume flow rate"
     annotation (Placement(transformation(extent={{-160,30},{-140,50}})));
 
