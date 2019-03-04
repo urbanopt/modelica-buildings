@@ -1,5 +1,5 @@
-within Buildings.Examples.VAVReheat.BaseClasses;
-model VAVAHU "VAV air handler unit"
+within Buildings.Experimental.Templates.Commercial.VAV;
+model AHU "VAV air handler unit"
   package MediumAir = Buildings.Media.Air "Medium model for air";
   package MediumWat = Buildings.Media.Water "Medium model for water";
 
@@ -281,4 +281,4 @@ equation
     annotation (Line(points={{82,-40},{140,-40}}, color={0,127,255}));
   annotation (Diagram(coordinateSystem(extent={{-400,-400},{400,400}})), Icon(
         coordinateSystem(extent={{-400,-400},{400,400}})));
-end VAVAHU;
+end AHU;
