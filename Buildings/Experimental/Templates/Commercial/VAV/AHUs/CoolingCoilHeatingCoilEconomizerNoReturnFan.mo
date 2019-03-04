@@ -1,12 +1,10 @@
-within Buildings.Experimental.Templates.Commercial.VAV;
-model AHU "VAV air handler unit"
-  package MediumAir = Buildings.Media.Air "Medium model for air";
-  package MediumWat = Buildings.Media.Water "Medium model for water";
+within Buildings.Experimental.Templates.Commercial.VAV.AHUs;
+model CoolingCoilHeatingCoilEconomizerNoReturnFan
+  "VAV air handler unit"
+  replaceable package MediumAir = Buildings.Media.Air "Medium model for air";
+  replaceable package MediumWat = Buildings.Media.Water "Medium model for water";
 
   parameter Modelica.SIunits.MassFlowRate mAir_flow_nominal "Nominal air mass flow rate";
-  parameter Modelica.SIunits.MassFlowRate mWatCooCoi_flow_nominal
-    "Nominal water mass flow rate for cooling coil"
-      annotation(Dialog(group="Cooling coil"));
 
   parameter Modelica.SIunits.MassFlowRate mWatHeaCoi_flow_nominal
     "Nominal water mass flow rate for heating coil"
@@ -28,49 +26,38 @@ model AHU "VAV air handler unit"
     "Nominal water inlet temperature heating coil"
     annotation(Dialog(group="Heating coil"));
 
-
-  parameter Modelica.SIunits.Temperature TCooCoiAirIn_nominal=313.15
-    "Nominal air inlet temperature cooling coil"
-    annotation(Dialog(group="Cooling coil"));
-  parameter Modelica.SIunits.Temperature TCooCoiAirOut_nominal=291.15
-    "Nominal water outlet temperature cooling coil"
-    annotation(Dialog(group="Cooling coil"));
-  parameter Modelica.SIunits.MassFraction TCooCoiX_vIn_nominal=0.00
-    "Nominal air inlet absolute humidity cooling coil"
-    annotation(Dialog(group="Cooling coil"));
-  parameter Modelica.SIunits.MassFraction TCooCoiX_vOut_nominal=0.00
-    "Nominal water outlet absolute humidity cooling coil"
-    annotation(Dialog(group="Cooling coil"));
-
-  parameter Modelica.SIunits.Temperature TCooCoiWatIn_nominal=281.65
-    "Nominal air inlet temperature cooling coil"
-   annotation(Dialog(group="Cooling coil"));
-
-  parameter Modelica.SIunits.PressureDifference dpHeaCoiWat_nominal=3000
+  parameter Modelica.SIunits.PressureDifference dpHeaCoiWat_nominal(
+    min=0,
+    displayUnit="Pa") = 3000
     "Water-side pressure drop of heating coil"
     annotation(Dialog(group="Heating coil"));
 
-  parameter Modelica.SIunits.PressureDifference dpCooCoiWat_nominal=3000
-    "Water-side pressure drop of cooling coil"
-    annotation(Dialog(group="Cooling coil"));
-
-
-  parameter Modelica.SIunits.PressureDifference dpSup_nominal=500
+  parameter Modelica.SIunits.PressureDifference dpSup_nominal(
+    min=0,
+    displayUnit="Pa") = 500
     "Pressure difference of supply air leg (coils and filter)";
 
-  parameter Modelica.SIunits.PressureDifference dpRet_nominal=50
+  parameter Modelica.SIunits.PressureDifference dpRet_nominal(
+    min=0,
+    displayUnit="Pa") = 50
     "Pressure difference of supply air leg (coils and filter)";
 
-  parameter Modelica.SIunits.PressureDifference dpFanSup_nominal(min=Modelica.Constants.small)
+  parameter Modelica.SIunits.PressureDifference dpFanSup_nominal(
+    min=Modelica.Constants.small,
+    displayUnit="Pa")
     "Fan head at mAir_flow_nominal and full speed";
 
-  parameter Fluid.Movers.Data.Generic datFanSup(
+  /* Fixme: This should be constrained to all fans, not all movers */
+  replaceable parameter Fluid.Movers.Data.Generic datFanSup(
     pressure(
       V_flow={0,mAir_flow_nominal/1.2*2},
       dp=2*{dpFanSup_nominal,0}))
+      constrainedby Fluid.Movers.Data.Generic
     "Performance data for supply fan"
     annotation (
-      Dialog(group="Fan"),
+      choicesAllMatching=true,
+      Dialog(
+        group="Fan"),
     Placement(transformation(extent={{260,320},{280,340}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput yFanSup(
@@ -114,7 +101,6 @@ model AHU "VAV air handler unit"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VOut_flow(
     final unit="m3/s") "Outdoor air flow rate"
     annotation (Placement(transformation(extent={{400,230},{420,250}})));
-
 
   Modelica.Fluid.Interfaces.FluidPort_a port_freAir(redeclare package Medium =
         MediumAir) "Fresh air intake" annotation (Placement(transformation(
@@ -161,14 +147,14 @@ model AHU "VAV air handler unit"
     redeclare package Medium2 = MediumAir,
     UA_nominal=mAir_flow_nominal*1000*15/
         Buildings.Fluid.HeatExchangers.BaseClasses.lmtd(
-        T_a1=TCooCoiWatIn_nominal,
-        T_b1=TCooCoiWatOut_nominal,
-        T_a2=TCooCoiAirIn_nominal,
-        T_b2=TCooCoiAirOut_nominal),
-    m1_flow_nominal=mWatCooCoi_flow_nominal,
-    m2_flow_nominal=mAir_flow_nominal,
-    dp1_nominal=dpCooCoiWat_nominal,
-    dp2_nominal=0,
+        T_a1=datCooCoi.TWatIn_nominal,
+        T_b1=datCooCoi.TWatOut_nominal,
+        T_a2=datCooCoi.TAirIn_nominal,
+        T_b2=datCooCoi.TOut_nominal),
+    m1_flow_nominal=datCooCoi.mWat_flow_nominal,
+    m2_flow_nominal=datCooCoi.mAir_flow_nominal,
+    dp1_nominal=datCooCoi.dpWat_nominal,
+    dp2_nominal=datCooCoi.dpAir_nominal,
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial)
     "Cooling coil"
     annotation (Placement(transformation(extent={{82,-36},{62,-56}})));
@@ -224,8 +210,8 @@ model AHU "VAV air handler unit"
     "Outside air volume flow rate"
     annotation (Placement(transformation(extent={{-160,30},{-140,50}})));
 
-
-
+  parameter Data.CoolingCoil datCooCoi
+    annotation (Placement(transformation(extent={{260,280},{280,300}})));
 equation
   connect(eco.port_Out, senVOut_flow.port_b) annotation (Line(points={{-100,8},{
           -120,8},{-120,40},{-140,40}}, color={0,127,255}));
@@ -279,6 +265,8 @@ equation
     annotation (Line(points={{240,-40},{310,-40}}, color={0,127,255}));
   connect(cooCoi.port_b2, resSup.port_a)
     annotation (Line(points={{82,-40},{140,-40}}, color={0,127,255}));
-  annotation (Diagram(coordinateSystem(extent={{-400,-400},{400,400}})), Icon(
+  annotation (
+    defaultComponentName="ahu",
+    Diagram(coordinateSystem(extent={{-400,-400},{400,400}})), Icon(
         coordinateSystem(extent={{-400,-400},{400,400}})));
-end AHU;
+end CoolingCoilHeatingCoilEconomizerNoReturnFan;
