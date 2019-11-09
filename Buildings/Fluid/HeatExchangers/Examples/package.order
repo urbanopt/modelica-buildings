@@ -17,4 +17,5 @@ WetCoilDiscretizedPControl
 WetCoilEffNtu
 WetCoilEffNtuMassFlow
 WetCoilEffNtuReverseFlow
+WetCoilEffNtuMassFlowFuzzy
 BaseClasses
