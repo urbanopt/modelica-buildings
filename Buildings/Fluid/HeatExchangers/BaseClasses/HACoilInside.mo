@@ -1,6 +1,6 @@
 within Buildings.Fluid.HeatExchangers.BaseClasses;
 model HACoilInside "Calculates the hA value for water inside a coil"
-  extends Buildings.BaseClasses.BaseIcon;
+  extends Modelica.Blocks.Icons.Block;
 
   parameter Modelica.SIunits.MassFlowRate m_flow_nominal "Water mass flow rate"
     annotation(Dialog(tab="General", group="Nominal condition"));
@@ -75,11 +75,7 @@ First implementation.
 </ul>
 </html>"),
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,
-            100}}), graphics={Rectangle(
-          extent={{-100,100},{100,-100}},
-          lineColor={0,0,0},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid), Text(
+            100}}), graphics={            Text(
           extent={{-66,88},{60,-2}},
           lineColor={0,0,0},
           fillColor={255,255,255},
@@ -98,7 +94,7 @@ First implementation.
         Line(points={{-52,-40},{56,-40},{44,-32}}, color={175,175,175}),
         Line(points={{56,-40},{44,-48}}, color={175,175,175})}),
               Icon(
-      Rectangle(extent=[-36,-36; -24,-72],   style(
+      Rectangle(extent={{-36,-36},{-24,-72}},   style(
           color=0,
           fillColor=8,
           fillPattern=8)),
@@ -111,7 +107,7 @@ First implementation.
       Line(points=[16,-40; 16,-68],    style(color=69, fillColor=47)),
       Line(points=[16,-68; 10,-58],     style(color=69, fillColor=47)),
       Line(points=[16,-68; 22,-58],     style(color=69, fillColor=47)),
-      Rectangle(extent=[-36,66; -24,30],     style(
+      Rectangle(extent={{-36,66},{-24,30}},     style(
           color=0,
           fillColor=8,
           fillPattern=8)),

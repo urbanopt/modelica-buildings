@@ -15,18 +15,12 @@ model ScrollWaterToWater_TemperatureProtection
   parameter Modelica.SIunits.MassFlowRate flowLoad = 0.47
     "Mass flow rate on the evaporator side";
 
-  Buildings.Fluid.Sources.FixedBoundary sin2(
+  Buildings.Fluid.Sources.Boundary_pT sin2(
     redeclare package Medium = Medium2, nPorts=1) "Source side sink"
-    annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        origin={-70,-40})));
-  Buildings.Fluid.Sources.FixedBoundary sin1(
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, origin={-70,-40})));
+  Buildings.Fluid.Sources.Boundary_pT sin1(
     redeclare package Medium = Medium1, nPorts=1) "Load side sink"
-    annotation (Placement(
-        transformation(
-        extent={{10,-10},{-10,10}},
-        origin={58,20})));
+    annotation (Placement(transformation(extent={{10,-10},{-10,10}}, origin={58,20})));
   Modelica.Blocks.Sources.Constant isOn(k=1)
     "Heat pump control signal"
     annotation (Placement(transformation(extent={{-52,-26},{-40,-14}})));
@@ -57,8 +51,7 @@ model ScrollWaterToWater_TemperatureProtection
     m2_flow_nominal=m2_flow_nominal,
     dp1_nominal=1000,
     dp2_nominal=1000,
-    redeclare package ref =
-        Buildings.Media.Refrigerants.R410A,
+    redeclare package ref = Buildings.Media.Refrigerants.R410A,
     show_T=true,
     enable_variable_speed=true,
     datHeaPum(
@@ -72,8 +65,7 @@ model ScrollWaterToWater_TemperatureProtection
       leaCoe=0.01),
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     TConMax=273.15 + 60,
-    enable_temperature_protection=true)
-                    "Scroll water to water heat pump"
+    enable_temperature_protection=true) "Scroll water to water heat pump"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.Sine yLoa(
     startTime=250,
@@ -125,6 +117,11 @@ requirements are not satisfied.
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+May 15, 2019, by Jianjun Hu:<br/>
+Replaced fluid source. This is for 
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
+</li>
 <li>
 May 30, 2017, by Filip Jorissen:<br/>
 First implementation.

@@ -1,10 +1,11 @@
 ConstantEffectiveness
 DryCoilCounterFlow
 DryCoilDiscretized
-DryEffectivenessNTU
+DryCoilEffectivenessNTU
 EvaporatorCondenser
 HeaterCooler_u
 Heater_T
+PlateHeatExchangerEffectivenessNTU
 PrescribedOutlet
 SensibleCooler_T
 WetCoilCounterFlow
@@ -14,7 +15,6 @@ WetEffectivenessNTU_Fuzzy
 ActiveBeams
 CoolingTowers
 DXCoils
-Ground
 RadiantSlabs
 Radiators
 Examples

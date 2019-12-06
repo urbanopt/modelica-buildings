@@ -219,7 +219,7 @@ model PlugFlowAIT
         extent={{-10,10},{10,-10}},
         rotation=90,
         origin={80,-10})));
-  Fluid.Sources.FixedBoundary ExcludedBranch(redeclare package Medium = Medium,
+  Buildings.Fluid.Sources.Boundary_pT ExcludedBranch(redeclare package Medium = Medium,
       nPorts=1) "Mass flow sink for excluded branch"
                 annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -348,8 +348,11 @@ equation
     experiment(
       StopTime=603900,
       Interval=900,
-      Tolerance=1e-006,
-      __Dymola_Algorithm="Dassl"),
+      Tolerance=1e-006),
+    __Dymola_Commands(file=
+          "Resources/Scripts/Dymola/Fluid/FixedResistances/Validation/PlugFlowPipes/PlugFlowAIT.mos"
+        "Simulate and plot"),
+    Diagram(coordinateSystem(extent={{-120,-160},{160,160}})),
     Documentation(info="<html>
 <p>
 The example contains
@@ -403,14 +406,15 @@ R=1/(0.208)+1/(2 &nbsp; lambda_g &nbsp; Modelica.Constants.pi) &nbsp; log(1/0.18
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+May 15, 2019, by Jianjun Hu:<br/>
+Replaced fluid source. This is for 
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
+</li>
 <li>July 4, 2016 by Bram van der Heijde:<br/>Added parameters to test the
 influence of allowFlowReversal and the presence of explicit volumes in the pipe.
 </li>
 <li>January 26, 2016 by Carles Ribas:<br/>First implementation. </li>
 </ul>
-</html>"),
-    __Dymola_Commands(file=
-          "Resources/Scripts/Dymola/Fluid/FixedResistances/Validation/PlugFlowPipes/PlugFlowAIT.mos"
-        "Simulate and plot"),
-    Diagram(coordinateSystem(extent={{-120,-160},{160,160}})));
+</html>"));
 end PlugFlowAIT;

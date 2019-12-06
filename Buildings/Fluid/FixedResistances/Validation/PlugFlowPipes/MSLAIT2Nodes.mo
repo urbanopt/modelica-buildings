@@ -53,7 +53,7 @@ model MSLAIT2Nodes
   Modelica.Blocks.Sources.RealExpression T_p1(y=DataReader.y[1])
     "Inlet temperature"
     annotation (Placement(transformation(extent={{18,-132},{58,-112}})));
-  Fluid.Sources.FixedBoundary ExcludedBranch(redeclare package Medium = Medium,
+  Buildings.Fluid.Sources.Boundary_pT ExcludedBranch(redeclare package Medium = Medium,
       nPorts=1) "Mass flow sink for excluded branch"
                 annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -431,9 +431,10 @@ equation
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{
             220,200}})),
-    experiment(StopTime=603900, Tolerance=1e-006,
-    __Dymola_Algorithm="Dassl"),
-    __Dymola_experimentSetupOutput(events=false),
+    experiment(StopTime=603900, Tolerance=1e-006),
+    __Dymola_Commands(file=
+          "Resources/Scripts/Dymola/Fluid/FixedResistances/Validation/PlugFlowPipes/MSLAIT2Nodes.mos"
+        "Simulate and plot"),
     Documentation(info="<html>
 <p>The example contains
 <a href=\"modelica://Buildings.Fluid.FixedResistances.Validation.PlugFlowPipes.Data.PipeDataAIT151218\">
@@ -492,6 +493,11 @@ Where the thermal conductivity of the ground <code>lambda_g</code> = 2.4 W/(m K)
 </p>
 </html>", revisions="<html>
 <ul>
+<li>
+May 15, 2019, by Jianjun Hu:<br/>
+Replaced fluid source. This is for 
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
+</li>
 <li>November 28, 2016 by Bram van der Heijde:<br/>Remove <code>pipVol.</code>
 </li>
 <li>
@@ -504,8 +510,5 @@ influence of allowFlowReversal and the presence of explicit volumes in the pipe.
 </li>
 <li>January 26, 2016 by Carles Ribas:<br/>First implementation. </li>
 </ul>
-</html>"),
-    __Dymola_Commands(file=
-          "Resources/Scripts/Dymola/Fluid/FixedResistances/Validation/PlugFlowPipes/MSLAIT2Nodes.mos"
-        "Simulate and plot"));
+</html>"));
 end MSLAIT2Nodes;
