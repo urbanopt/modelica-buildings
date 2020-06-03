@@ -13,7 +13,7 @@ model ParallelConstantFlowRCB3Z1
   parameter String weaName = "modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"
     "Name of the weather file";
   Modelica.Blocks.Sources.Constant massFlowMainPump(
-    k=datDes.mDisPum_flow_nominal)
+    k=datDes.mDis_flow_nominal)
     "Distribution pump mass flow rate"
     annotation (Placement(transformation(extent={{-280,-70},{-260,-50}})));
   Loads.BuildingRCZ1WithETS bui[nBui](

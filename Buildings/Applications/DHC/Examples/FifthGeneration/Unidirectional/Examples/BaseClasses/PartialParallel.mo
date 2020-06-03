@@ -21,7 +21,7 @@ partial model PartialParallel "Partial model for parallel network"
         origin={-130,-80})));
   Networks.BaseClasses.Pump_m_flow pumDis(
     redeclare final package Medium=Medium,
-    m_flow_nominal=datDes.mDisPum_flow_nominal)
+    m_flow_nominal=datDes.mDis_flow_nominal)
     "Distribution pump"
     annotation (Placement(transformation(
       extent={{10,-10},{-10,10}},
@@ -47,7 +47,7 @@ partial model PartialParallel "Partial model for parallel network"
         origin={-180,-80})));
   Networks.BaseClasses.ConnectionSeries conPla(
     redeclare final package Medium=Medium,
-    mDis_flow_nominal=datDes.mDisPum_flow_nominal,
+    mDis_flow_nominal=datDes.mDis_flow_nominal,
     mCon_flow_nominal=datDes.mPla_flow_nominal,
     lDis=0,
     lCon=10,
@@ -64,7 +64,6 @@ partial model PartialParallel "Partial model for parallel network"
     final nCon=nBui,
     final mDis_flow_nominal=datDes.mDis_flow_nominal,
     final mCon_flow_nominal=datDes.mCon_flow_nominal,
-    final mEnd_flow_nominal=datDes.mEnd_flow_nominal,
     final lDis=datDes.lDis,
     final lCon=datDes.lCon,
     final lEnd=datDes.lEnd,
@@ -72,10 +71,11 @@ partial model PartialParallel "Partial model for parallel network"
     final dhCon=datDes.dhCon,
     final dhEnd=datDes.dhEnd,
     final allowFlowReversal=allowFlowReversal)
+    "Distribution network"
     annotation (Placement(transformation(extent={{-20,130},{20,150}})));
   Networks.BaseClasses.ConnectionSeries conSto(
     redeclare final package Medium=Medium,
-    mDis_flow_nominal=datDes.mDisPum_flow_nominal,
+    mDis_flow_nominal=datDes.mDis_flow_nominal,
     mCon_flow_nominal=datDes.mSto_flow_nominal,
     lDis=0,
     lCon=0,
