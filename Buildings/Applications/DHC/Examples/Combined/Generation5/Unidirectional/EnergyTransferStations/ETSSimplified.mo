@@ -296,12 +296,12 @@ model ETSSimplified
   Buildings.Controls.OBC.CDL.Continuous.MultiSum PPumHea(nin=2)
     "Total power drawn by pumps motors for space heating (ETS included, building excluded)"
     annotation (Placement(transformation(extent={{190,410},{210,430}})));
-  Buildings.Fluid.Sources.Boundary_pT bouHeaWat(redeclare final package Medium =
-        MediumBui, nPorts=1)
+  Buildings.Fluid.Sources.Boundary_pT bouHeaWat(redeclare final package Medium
+      = MediumBui, nPorts=1)
     "Pressure boundary condition representing the expansion vessel"
     annotation (Placement(transformation(extent={{170,130},{150,150}})));
-  Buildings.Fluid.Sources.Boundary_pT bouChiWat(redeclare final package Medium =
-        MediumBui, nPorts=1)
+  Buildings.Fluid.Sources.Boundary_pT bouChiWat(redeclare final package Medium
+      = MediumBui, nPorts=1)
     "Pressure boundary condition representing the expansion vessel"
     annotation (Placement(transformation(extent={{-162,-210},{-142,-190}})));
   Buildings.Controls.OBC.CDL.Continuous.MultiSum PPumCoo(nin=3)
@@ -375,7 +375,7 @@ model ETSSimplified
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={112,-40})));
+        origin={110,-40})));
   Networks.BaseClasses.Junction bypChiWatSup(
    redeclare final package Medium = MediumBui,
    final m_flow_nominal=m2HexChi_flow_nominal*{1,-1,-1})
@@ -383,7 +383,7 @@ model ETSSimplified
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=0,
-        origin={112,-60})));
+        origin={110,-60})));
   // MISCELLANEOUS VARIABLES
   MediumDis.ThermodynamicState sta_aDis=if allowFlowReversalDis then
     MediumDis.setState_phX(port_aDis.p,
@@ -434,7 +434,7 @@ equation
                               color={0,0,127}));
   connect(senMasFloChiWat.m_flow, gai4.u) annotation (Line(points={{-260,-51},{
           -260,-160},{-142,-160}}, color={0,0,127}));
-  connect(heaPum.P, PCom) annotation (Line(points={{-11,126},{-28,126},{-28,100},
+  connect(heaPum.P, PCom) annotation (Line(points={{-11,126},{-20,126},{-20,100},
           {280,100},{280,-100},{320,-100}},
                  color={0,0,127}));
   connect(pumCon.P, PPumHea.u[1]) annotation (Line(points={{89,149},{80,149},{
@@ -522,18 +522,16 @@ equation
           80,200},{188,200},{188,378.667}}, color={0,0,127}));
   connect(senT2HexChiEnt.port_b, pum2CooHex.port_a)
     annotation (Line(points={{-90,-240},{-70,-240}},   color={0,127,255}));
-  connect(heaPum.P, PHea) annotation (Line(points={{-11,126},{-28.2353,126},{
-          -28.2353,100},{280,100},{280,60},{320,60}}, color={0,0,127}));
+  connect(heaPum.P, PHea) annotation (Line(points={{-11,126},{-20,126},{-20,100},
+          {280,100},{280,60},{320,60}},               color={0,0,127}));
   connect(ports_aHeaWat[1], senMasFloHeaWat.port_a) annotation (Line(points={{-300,
           260},{-296,260},{-296,260},{-270,260}},      color={0,127,255}));
-  connect(bypHeaWatSup.port_3, bypHeaWatRet.port_3)
-    annotation (Line(points={{110,250},{110,250}}, color={0,127,255}));
   connect(bypHeaWatSup.port_2, senTHeaWatSup.port_a)
     annotation (Line(points={{120,260},{190,260}}, color={0,127,255}));
   connect(senTHeaWatSup.port_b, ports_bHeaWat[1])
     annotation (Line(points={{210,260},{300,260}}, color={0,127,255}));
-  connect(senTConLvg.port_b, bypHeaWatSup.port_1) annotation (Line(points={{-50,
-          140},{-60,140},{-60,260},{100,260}}, color={0,127,255}));
+  connect(senTConLvg.port_b, bypHeaWatSup.port_1) annotation (Line(points={{-50,140},
+          {-60,140},{-60,260},{100,260}},      color={0,127,255}));
   connect(senMasFloHeaWat.port_b, bypHeaWatRet.port_1) annotation (Line(points=
           {{-250,260},{-150,260},{-150,240},{100,240}}, color={0,127,255}));
   connect(bypHeaWatRet.port_2, volHeaWatRet.ports[1]) annotation (Line(points={{120,240},
@@ -543,23 +541,27 @@ equation
   connect(bouHeaWat.ports[1], volHeaWatRet.ports[3]) annotation (Line(points={{150,140},
           {140,140},{140,182.667}},          color={0,127,255}));
   connect(senMasFloChiWat.port_b, bypChiWatRet.port_1)
-    annotation (Line(points={{-250,-40},{102,-40}}, color={0,127,255}));
+    annotation (Line(points={{-250,-40},{100,-40}}, color={0,127,255}));
   connect(ports_aChiWat[1], senMasFloChiWat.port_a) annotation (Line(points={{
           -300,200},{-280,200},{-280,-40},{-270,-40}}, color={0,127,255}));
   connect(senT2HexChiLvg.port_a, hexChi.port_b2) annotation (Line(points={{30,
           -240},{20,-240},{20,-248},{10,-248}}, color={0,127,255}));
   connect(volChiWat.ports[1], bypChiWatRet.port_2) annotation (Line(points={{
-          -102.667,-200},{140,-200},{140,-40},{122,-40}}, color={0,127,255}));
+          -102.667,-200},{140,-200},{140,-40},{120,-40}}, color={0,127,255}));
   connect(volChiWat.ports[2], senT2HexChiEnt.port_a) annotation (Line(points={{
           -100,-200},{-120,-200},{-120,-240},{-110,-240}}, color={0,127,255}));
   connect(bouChiWat.ports[1], volChiWat.ports[3])
     annotation (Line(points={{-142,-200},{-97.3333,-200}}, color={0,127,255}));
   connect(bypChiWatSup.port_2, senTChiWatSup.port_a)
-    annotation (Line(points={{122,-60},{150,-60}}, color={0,127,255}));
+    annotation (Line(points={{120,-60},{150,-60}}, color={0,127,255}));
   connect(senTChiWatSup.port_b, ports_bChiWat[1]) annotation (Line(points={{170,
           -60},{200,-60},{200,200},{300,200}}, color={0,127,255}));
-  connect(senT2HexChiLvg.port_b, bypChiWatSup.port_1) annotation (Line(points={
-          {50,-240},{80,-240},{80,-60},{102,-60}}, color={0,127,255}));
+  connect(senT2HexChiLvg.port_b, bypChiWatSup.port_1) annotation (Line(points={{50,-240},
+          {80,-240},{80,-60},{100,-60}},           color={0,127,255}));
+  connect(bypChiWatSup.port_3, bypChiWatRet.port_3)
+    annotation (Line(points={{110,-50},{110,-50}}, color={0,127,255}));
+  connect(bypHeaWatRet.port_3, bypHeaWatSup.port_3)
+    annotation (Line(points={{110,250},{110,250}}, color={0,127,255}));
   annotation (
   defaultComponentName="ets",
   Documentation(info="<html>

@@ -3,10 +3,10 @@ model BuildingTimeSeriesWithETS
   "Model of a building with thermal loads as time series, with an energy transfer station"
   extends BaseClasses.PartialBuildingWithETS(
     redeclare DHC.Loads.Examples.BaseClasses.BuildingTimeSeries bui(
-      final filName=filName),
+      final filNam=filNam),
     ets(QChiWat_flow_nominal=sum(bui.terUniCoo.QCoo_flow_nominal),
         QHeaWat_flow_nominal=sum(bui.terUniHea.QHea_flow_nominal)));
-  parameter String filName
+  parameter String filNam
     "Library path of the file with thermal loads as time series";
   annotation (Line(
       points={{-1,100},{0.1,100},{0.1,71.4}},

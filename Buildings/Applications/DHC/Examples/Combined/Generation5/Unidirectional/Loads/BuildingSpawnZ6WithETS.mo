@@ -5,7 +5,7 @@ model BuildingSpawnZ6WithETS
     redeclare DHC.Loads.Examples.BaseClasses.BuildingSpawnZ6 bui(
       final idfName=idfName, final weaName=weaName));
   parameter String idfName=
-    "modelica://Buildings/Resources/Data/ThermalZones/EnergyPlus/Validation/RefBldgSmallOfficeNew2004_Chicago.idf"
+    "modelica://Buildings/Resources/Data/ThermalZones/EnergyPlus/Validation/RefBldgSmallOffice/RefBldgSmallOfficeNew2004_Chicago.idf"
     "Name of the IDF file"
     annotation(Dialog(group="Building model parameters"));
   parameter String weaName=

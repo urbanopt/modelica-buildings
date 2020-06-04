@@ -1,7 +1,7 @@
 old_hidden_avoid_double_computation=Hidden.AvoidDoubleComputation;
 Hidden.AvoidDoubleComputation=true;
 simulateModel(
-    "Buildings.Applications.DHC.Examples.FifthGeneration.Unidirectional.Validation.BuildingETSConnection",
+    "Buildings.Applications.DHC.Examples.Combined.Generation5.Unidirectional.Validation.BuildingETSConnection",
     method="cvode",
     tolerance=1e-6,
     stopTime=172800,
