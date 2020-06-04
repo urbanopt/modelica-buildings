@@ -67,9 +67,7 @@ partial model PartialBuildingWithETS
       final allowFlowReversal=allowFlowReversalBui)
     "Building"
     annotation (Placement(transformation(extent={{-10,40},{10,60}})));
-  replaceable
-    Buildings.Applications.DHC.Examples.FifthGeneration.Unidirectional.EnergyTransferStations.ETSSimplified
-    ets(
+  replaceable EnergyTransferStations.ETSSimplified ets(
     final dT_nominal=dT_nominal,
     final TChiWatSup_nominal=TChiWatSup_nominal,
     final TChiWatRet_nominal=TChiWatRet_nominal,

@@ -16,8 +16,7 @@ model ETSSimplified
     nPorts_aChiWat=1,
     nPorts_bChiWat=1);
   outer
-    DHC.Examples.FifthGeneration.Unidirectional.Data.DesignDataSeries
-    datDes "DHC systenm design data";
+    Data.DesignDataSeries datDes "DHC systenm design data";
   // SYSTEM GENERAL
   parameter Modelica.SIunits.TemperatureDifference dT_nominal = 5
     "Water temperature drop/increase accross load and source-side HX (always positive)"
