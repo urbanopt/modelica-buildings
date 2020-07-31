@@ -5,6 +5,10 @@
 #ifndef Buildings_EnergyPlusFMU_h /* Not needed since it is only a typedef; added for safety */
 #define Buildings_EnergyPlusFMU_h
 
+#ifndef __linux__
+#error Modelica Spawn coupling is in this development phase only supported for Linux. Windows and OS X will be supported later.
+#endif
+
 #include "EnergyPlusTypes.h"
 
 #include <stdlib.h>
