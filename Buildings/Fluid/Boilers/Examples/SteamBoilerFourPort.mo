@@ -75,10 +75,11 @@ model SteamBoilerFourPort
         1; 3600,1])
     annotation (Placement(transformation(extent={{-110,80},{-90,100}})));
   Sources.Boundary_pT fluGasSin(
-    redeclare package Medium = MediumFlu,                             p(
-        displayUnit="Pa"),
-    nPorts=1)              "Flue gas sink"
-    annotation (Placement(transformation(extent={{100,-100},{80,-80}})));
+    redeclare package Medium = MediumFlu,
+    p(displayUnit="Pa"),
+    nPorts=1)
+    "Flue gas sink"
+    annotation (Placement(transformation(extent={{10,-30},{30,-10}})));
   Sources.Boundary_pT airSou(redeclare package Medium = MediumFlu,
     p(displayUnit="Pa"),
     nPorts=1) "Air source"
@@ -90,12 +91,12 @@ model SteamBoilerFourPort
     m2_flow_nominal=m2_flow_nominal,
     show_T=true,
     Q_flow_nominal=Q_flow_nominal,
-    pOut_nominal=pOut_nominal,
+    pBoi_nominal=pOut_nominal,
     effCur=Buildings.Fluid.Types.EfficiencyCurves.Polynomial,
     a={0.8,-0.004},
     fue=Data.Fuels.NaturalGasLowerHeatingValue(),
     redeclare package Medium2 = MediumFlu) "Steam boiler"
-    annotation (Placement(transformation(extent={{40,8},{60,30}})));
+    annotation (Placement(transformation(extent={{40,4},{60,24}})));
   Movers.FlowControlled_m_flow fan(
     redeclare package Medium = MediumFlu,
     m_flow_nominal=m2_flow_nominal,
@@ -135,15 +136,11 @@ equation
   connect(boi.port_b1, steSin.ports[1])
     annotation (Line(points={{60,20},{80,20}},
                                              color={0,127,255}));
-  connect(boi.port_b2, fluGasSin.ports[1]) annotation (Line(points={{60,12},{70,
-          12},{70,-90},{80,-90}}, color={0,127,255}));
   connect(airSou.ports[1], fan.port_a)
     annotation (Line(points={{-50,-90},{-30,-90}}, color={0,127,255}));
   connect(fan.port_b, dpAir.port_a)
     annotation (Line(points={{-10,-90},{0,-90}}, color={0,127,255}));
-  connect(dpAir.port_b, boi.port_a2) annotation (Line(points={{20,-90},{30,-90},
-          {30,12},{40,12}}, color={0,127,255}));
-  connect(y.y, boi.y) annotation (Line(points={{-89,90},{30,90},{30,29},{39,29}},
+  connect(y.y, boi.y) annotation (Line(points={{-89,90},{30,90},{30,25},{39,25}},
         color={0,0,127}));
   connect(y.y, gai.u) annotation (Line(points={{-89,90},{-80,90},{-80,-10},{-70,
           -10}}, color={0,0,127}));
@@ -153,6 +150,10 @@ equation
           -24},{-32,-24}}, color={0,0,127}));
   connect(m2Act_flow.y, fan.m_flow_in) annotation (Line(points={{-9,-30},{0,-30},
           {0,-70},{-20,-70},{-20,-78}}, color={0,0,127}));
+  connect(fluGasSin.ports[1], boi.port_b2) annotation (Line(points={{30,-20},{
+          36,-20},{36,8},{40,8}}, color={0,127,255}));
+  connect(boi.port_a2, dpAir.port_b) annotation (Line(points={{60,8},{64,8},{64,
+          -90},{20,-90}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
 experiment(Tolerance=1e-6, StopTime=3600.0),
