@@ -96,26 +96,27 @@ partial model PartialSteamBoiler
     "Fuel volume flow rate";
 
   Modelica.Blocks.Interfaces.RealInput y(min=0, max=1) "Part load ratio"
-    annotation (Placement(transformation(extent={{-140,60},{-100,100}}),
-        iconTransformation(extent={{-120,80},{-100,100}})));
+    annotation (Placement(transformation(extent={{-140,80},{-100,120}}),
+        iconTransformation(extent={{-120,100},{-100,120}})));
   Modelica.Blocks.Interfaces.RealOutput T(
     final quantity="ThermodynamicTemperature",
     final unit = "K",
     displayUnit = "degC",
     min=0)
     "Temperature of fluid in boiler volume"
-    annotation (Placement(transformation(extent={{100,50},{120,70}}),
-        iconTransformation(extent={{100,50},{120,70}})));
+    annotation (Placement(transformation(extent={{100,70},{120,90}}),
+        iconTransformation(extent={{100,70},{120,90}})));
   Modelica.Blocks.Interfaces.RealOutput Q_flow(
     final quantity="HeatFlowRate",
     final unit="W",
     displayUnit="kW") "Total heat transfer rate of boiler"
-    annotation (Placement(transformation(extent={{100,80},{120,100}}),
-        iconTransformation(extent={{100,80},{120,100}})));
+    annotation (Placement(transformation(extent={{100,100},{120,120}}),
+        iconTransformation(extent={{100,100},{120,120}})));
 
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort
     "Heat port, can be used to connect to ambient"
-    annotation (Placement(transformation(extent={{-10,90},{10,110}})));
+    annotation (Placement(transformation(extent={{-10,100},{10,120}}),
+        iconTransformation(extent={{-10,100},{10,120}})));
 
   Buildings.Fluid.MixingVolumes.MixingVolume vol(
     redeclare final package Medium = Medium_a,
@@ -152,7 +153,7 @@ partial model PartialSteamBoiler
     C=500*mDry,
     T(start=T_start)) if not (energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState)
     "heat capacity of boiler metal"
-    annotation (Placement(transformation(extent={{20,70},{40,90}})));
+    annotation (Placement(transformation(extent={{20,90},{40,110}})));
 
   // States and properties
 protected
@@ -182,12 +183,12 @@ protected
     annotation (Placement(transformation(extent={{-11,-46},{9,-26}})));
   Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temSenVol
     "Temperature of fluid volume"
-    annotation (Placement(transformation(extent={{50,50},{70,70}})));
+    annotation (Placement(transformation(extent={{50,70},{70,90}})));
   Modelica.Blocks.Math.Gain cp(k=cp_default) "Specific heat"
     annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor UAOve(G=UA)
     "Overall thermal conductance (if heatPort is connected)"
-    annotation (Placement(transformation(extent={{-20,50},{0,70}})));
+    annotation (Placement(transformation(extent={{-20,70},{0,90}})));
   Modelica.Blocks.Math.Product QSen_flow_mea
     "Measured sensible heat transfer rate"
     annotation (Placement(transformation(extent={{-40,-46},{-20,-26}})));
@@ -196,19 +197,19 @@ protected
     annotation (Placement(transformation(extent={{40,-60},{20,-40}})));
   Modelica.Blocks.Sources.RealExpression Q_flow_out(y=QWatTot_flow)
     "Total heat transfer rate"
-    annotation (Placement(transformation(extent={{60,80},{80,100}})));
+    annotation (Placement(transformation(extent={{60,100},{80,120}})));
   Sensors.MassFlowRate senMasFlo(redeclare package Medium = Medium_a)
     "Measured mass flow rate"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Sensors.Pressure senPre(redeclare package Medium = Medium_a)
     "Measured absolute pressure of inflowing fluid"
-    annotation (Placement(transformation(extent={{-60,10},{-40,30}})));
+    annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
   Modelica.Blocks.Math.Add dpSen(k2=-1)
     "Change in pressure needed to meet setpoint"
-    annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
+    annotation (Placement(transformation(extent={{-30,30},{-10,50}})));
   Modelica.Blocks.Sources.RealExpression pOutSet(y=pOut_nominal)
     "Pressure setpoint for outgoing fluid"
-    annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
+    annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   Sensors.TemperatureTwoPort temSen_in(redeclare package Medium = Medium_a,
       m_flow_nominal=m_flow_nominal) "Inflowing temperature sensor"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
@@ -255,22 +256,22 @@ equation
 
   connect(UAOve.port_b, vol.heatPort)
     annotation (Line(
-      points={{0,60},{16,60},{16,-10},{19,-10}},
+      points={{0,80},{16,80},{16,-10},{19,-10}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(UAOve.port_a, heatPort)
     annotation (Line(
-      points={{-20,60},{-26,60},{-26,80},{0,80},{0,100}},
+      points={{-20,80},{-26,80},{-26,100},{0,100},{0,110}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(heaCapDry.port, vol.heatPort)
     annotation (Line(
-      points={{30,70},{30,60},{16,60},{16,-10},{19,-10}},
+      points={{30,90},{30,80},{16,80},{16,-10},{19,-10}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(temSenVol.T, T)
     annotation (Line(
-      points={{70,60},{110,60}},
+      points={{70,80},{110,80}},
       color={0,0,127},
       smooth=Smooth.None));
   connect(preHeaFlo.port, vol.heatPort)
@@ -280,7 +281,7 @@ equation
       smooth=Smooth.None));
   connect(vol.heatPort, temSenVol.port)
     annotation (Line(
-      points={{19,-10},{16,-10},{16,60},{50,60}},
+      points={{19,-10},{16,-10},{16,80},{50,80}},
       color={191,0,0},
       smooth=Smooth.None));
   connect(dpCon.port_b, vol.ports[1])
@@ -288,9 +289,10 @@ equation
   connect(vol.ports[2], eva.port_a)
     annotation (Line(points={{31,0},{40,0}}, color={0,127,255}));
   connect(Q_flow_out.y, Q_flow)
-    annotation (Line(points={{81,90},{110,90}}, color={0,0,127}));
+    annotation (Line(points={{81,110},{110,110}},
+                                                color={0,0,127}));
   connect(heatPort, heatPort)
-    annotation (Line(points={{0,100},{0,100}}, color={191,0,0}));
+    annotation (Line(points={{0,110},{0,110}}, color={191,0,0}));
   connect(eva.port_b, temSen_out.port_a)
     annotation (Line(points={{60,0},{70,0}}, color={0,127,255}));
   connect(QSen_flow_mea.y, preHeaFlo.Q_flow)
@@ -307,15 +309,15 @@ equation
     annotation (Line(points={{19,-50},{-50,-50},{-50,-42},{-42,-42}},
         color={0,0,127}));
   connect(pOutSet.y, dpSen.u1)
-    annotation (Line(points={{-39,40},{-36,40},{-36,36},{-32,36}},
+    annotation (Line(points={{-39,50},{-36,50},{-36,46},{-32,46}},
         color={0,0,127}));
   connect(senPre.p, dpSen.u2)
-    annotation (Line(points={{-39,20},{-36,20},{-36,24},{-32,24}},
+    annotation (Line(points={{-39,30},{-36,30},{-36,34},{-32,34}},
         color={0,0,127}));
   connect(senPre.port, senMasFlo.port_b)
-    annotation (Line(points={{-50,10},{-50,0},{-60,0}}, color={0,127,255}));
+    annotation (Line(points={{-50,20},{-50,0},{-60,0}}, color={0,127,255}));
   connect(dpSen.y, dpCon.dp_in)
-    annotation (Line(points={{-9,30},{0,30},{0,12}}, color={0,0,127}));
+    annotation (Line(points={{-9,40},{0,40},{0,12}}, color={0,0,127}));
   connect(senMasFlo.port_b, temSen_in.port_a)
     annotation (Line(points={{-60,0},{-40,0}}, color={0,127,255}));
   connect(temSen_in.port_b, dpCon.port_a)
@@ -328,58 +330,31 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false,
     extent={{-100,-100},{100,100}}),
     graphics={
-        Rectangle(
-          extent={{-80,80},{80,-80}},
-          lineColor={0,0,255},
-          pattern=LinePattern.None,
-          fillColor={95,95,95},
-          fillPattern=FillPattern.Solid),
         Text(
           extent={{-149,-114},{151,-154}},
           lineColor={0,0,255},
           textString="%name"),
-        Text(
-          extent={{-138,138},{-102,108}},
-          lineColor={0,0,127},
-          textString="y"),
-        Text(
-          extent={{100,48},{138,18}},
-          lineColor={0,0,127},
-          textString="T"),
+        Rectangle(
+          extent={{-80,90},{80,-90}},
+          lineColor={0,0,255},
+          pattern=LinePattern.None,
+          fillColor={95,95,95},
+          fillPattern=FillPattern.Solid),
+        Ellipse(
+          extent={{-40,42},{40,-38}},
+          fillColor={127,0,0},
+          fillPattern=FillPattern.Solid,
+          pattern=LinePattern.None),
       Line(
-        points={{38,68},{18,58},{38,38},{18,28}},
+        points={{20,20},{0,10},{20,-10},{0,-20}},
         color={238,46,47},
         smooth=Smooth.Bezier,
           extent={{-60,-22},{-36,2}}),
       Line(
-        points={{60,68},{40,58},{60,38},{40,28}},
+        points={{-2,20},{-22,10},{-2,-10},{-22,-20}},
         color={238,46,47},
         smooth=Smooth.Bezier,
-          extent={{-60,-22},{-36,2}}),
-        Ellipse(
-          extent={{-58,60},{-46,72}},
-          lineColor={0,0,0},
-          fillColor={28,108,200},
-          fillPattern=FillPattern.Solid),
-        Ellipse(
-          extent={{-38,44},{-26,56}},
-          lineColor={0,0,0},
-          fillColor={28,108,200},
-          fillPattern=FillPattern.Solid),
-        Ellipse(
-          extent={{-54,30},{-42,42}},
-          lineColor={0,0,0},
-          fillColor={28,108,200},
-          fillPattern=FillPattern.Solid),
-        Ellipse(
-          extent={{-34,20},{-22,32}},
-          lineColor={0,0,0},
-          fillColor={28,108,200},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{82,134},{218,106}},
-          lineColor={0,0,127},
-          textString="Q_flow")}),
+          extent={{-60,-22},{-36,2}})}),
     Diagram(coordinateSystem(preserveAspectRatio=false,
-        extent={{-100,-100},{100,100}})));
+        extent={{-100,-100},{100,120}})));
 end PartialSteamBoiler;

@@ -1,6 +1,6 @@
 within Buildings.Fluid.Interfaces;
-partial model PartialFourPortFourMediumCounter
-  "Partial model with four ports,  four separate medium models, and counter flow without storing mass or energy"
+partial model PartialFourPortFourMedium
+  "Partial model with four ports and four separate medium models without storing mass or energy"
 
   replaceable package Medium_a1 =
       Modelica.Media.Interfaces.PartialMedium
@@ -105,4 +105,4 @@ protected
   final parameter Modelica.SIunits.PressureDifference _dp2_start(displayUnit="Pa") = 0
   "Start value for dp2, used to avoid a warning if not set in dp, and to avoid dp.start in parameter window";
 
-end PartialFourPortFourMediumCounter;
+end PartialFourPortFourMedium;
