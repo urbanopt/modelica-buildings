@@ -12,7 +12,7 @@ model SteamBoilerFourPort
       m_flow_small=m1_flow_small,
       V=m1_flow_nominal*tau/rho_default),
     eva(final m_flow_nominal=m1_flow_nominal, m_flow_small=m1_flow_small,
-      pSte_nominal=pOut_nominal),
+      pSte_nominal=pBoi_nominal),
     dpCon(
       m_flow_nominal=m1_flow_nominal,
       m_flow_small=m1_flow_small,

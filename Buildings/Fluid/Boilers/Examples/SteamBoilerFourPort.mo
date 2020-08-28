@@ -75,9 +75,10 @@ model SteamBoilerFourPort
         1; 3600,1])
     annotation (Placement(transformation(extent={{-110,80},{-90,100}})));
   Sources.Boundary_pT fluGasSin(
-    redeclare package Medium = MediumFlu,                             p(
-        displayUnit="Pa"),
-    nPorts=1)              "Flue gas sink"
+    redeclare package Medium = MediumFlu,
+    p(displayUnit="Pa"),
+    nPorts=1)
+    "Flue gas sink"
     annotation (Placement(transformation(extent={{10,-30},{30,-10}})));
   Sources.Boundary_pT airSou(redeclare package Medium = MediumFlu,
     p(displayUnit="Pa"),
@@ -90,7 +91,7 @@ model SteamBoilerFourPort
     m2_flow_nominal=m2_flow_nominal,
     show_T=true,
     Q_flow_nominal=Q_flow_nominal,
-    pOut_nominal=pOut_nominal,
+    pBoi_nominal=pOut_nominal,
     effCur=Buildings.Fluid.Types.EfficiencyCurves.Polynomial,
     a={0.8,-0.004},
     fue=Data.Fuels.NaturalGasLowerHeatingValue(),

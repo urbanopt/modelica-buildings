@@ -53,10 +53,10 @@ partial model PartialSteamBoiler
   parameter Modelica.SIunits.Power Q_flow_nominal
     "Nominal heating power"
     annotation(Dialog(group = "Nominal condition"));
-  parameter Modelica.SIunits.AbsolutePressure pOut_nominal
+  parameter Modelica.SIunits.AbsolutePressure pBoi_nominal
     "Nominal pressure of boiler"
     annotation(Dialog(group = "Nominal condition"));
-  parameter Modelica.SIunits.Temperature TOut_nominal = Medium_b.saturationTemperature_p(pOut_nominal)
+  parameter Modelica.SIunits.Temperature TOut_nominal = Medium_b.saturationTemperature_p(pBoi_nominal)
     "Nominal temperature leaving the boiler";
 
   // Assumptions
@@ -109,7 +109,7 @@ partial model PartialSteamBoiler
   Modelica.Blocks.Interfaces.RealOutput Q_flow(
     final quantity="HeatFlowRate",
     final unit="W",
-    displayUnit="kW") "Total heat transfer rate of boiler"
+    displayUnit="kW") "Heat transfer rate of fuel"
     annotation (Placement(transformation(extent={{100,100},{120,120}}),
         iconTransformation(extent={{100,100},{120,120}})));
 
@@ -145,7 +145,7 @@ partial model PartialSteamBoiler
     final show_T=show_T,
     addPowerToMedium=false,
     nominalValuesDefineDefaultPressureCurve=true,
-    constantHead=pOut_nominal)
+    constantHead=pBoi_nominal)
     "Flow controller with specifiied pressure change between ports"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 
@@ -195,8 +195,8 @@ protected
   Modelica.Blocks.Math.Add dTSen(k1=-1)
     "Change in temperature between inflowing and outflowing fluids"
     annotation (Placement(transformation(extent={{40,-60},{20,-40}})));
-  Modelica.Blocks.Sources.RealExpression Q_flow_out(y=QWatTot_flow)
-    "Total heat transfer rate"
+  Modelica.Blocks.Sources.RealExpression Q_flow_out(y=QFue_flow)
+    "Total heat transfer rate of fuel"
     annotation (Placement(transformation(extent={{60,100},{80,120}})));
   Sensors.MassFlowRate senMasFlo(redeclare package Medium = Medium_a)
     "Measured mass flow rate"
@@ -207,7 +207,7 @@ protected
   Modelica.Blocks.Math.Add dpSen(k2=-1)
     "Change in pressure needed to meet setpoint"
     annotation (Placement(transformation(extent={{-30,30},{-10,50}})));
-  Modelica.Blocks.Sources.RealExpression pOutSet(y=pOut_nominal)
+  Modelica.Blocks.Sources.RealExpression pOutSet(y=pBoi_nominal)
     "Pressure setpoint for outgoing fluid"
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   Sensors.TemperatureTwoPort temSen_in(redeclare package Medium = Medium_a,
