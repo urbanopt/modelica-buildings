@@ -22,14 +22,11 @@ model CondensateSubsystem
                            num=num)
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Fluid.Sources.Boundary_pT watSou(nPorts=1) "Water source"
-    annotation (Placement(transformation(extent={{-90,-40},{-70,-20}})));
-  Modelica.Blocks.Interfaces.RealOutput P[num](each final quantity="Power",
-      each final unit="W")
-    "Electrical power consumed by the pumps"
-    annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        origin={110,40})));
+    annotation (Placement(transformation(extent={{-90,20},{-70,40}})));
+  Modelica.Blocks.Interfaces.RealOutput P_ConWatPum[num](each final quantity=
+        "Power", each final unit="W") "Electrical power consumed by the pumps"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, origin={
+            110,40})));
   Modelica.Blocks.Interfaces.RealInput u[num](
     each final unit="1",
     each max=1,
@@ -39,38 +36,61 @@ model CondensateSubsystem
       iconTransformation(extent={{-140,40},{-100,80}})));
 
   Fluid.Sensors.MassFlowRate senMasFlo "Mass flow sensor for make up water"
-    annotation (Placement(transformation(extent={{-60,-40},{-40,-20}})));
+    annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
 Modelica.Blocks.Interfaces.RealOutput mMUW_flow(quantity="MassFlowRate", final
       unit="kg/s") "Make up water mass flow rate"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
+  Fluid.MixingVolumes.MixingVolume conStoTan(nPorts=3)
+    "Condensate storage tank"
+    annotation (Placement(transformation(extent={{-40,0},{-20,-20}})));
+  Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heaCapDry(C=500*mDry,
+      T(start=T_start)) if
+                         not (energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState)
+    "heat capacity of boiler metal"
+    annotation (Placement(transformation(extent={{-10,-60},{10,-80}})));
+  Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort
+    "Heat port, can be used to connect to ambient"
+    annotation (Placement(transformation(extent={{-10,90},{10,110}})));
+protected
+  Modelica.Thermal.HeatTransfer.Components.ThermalConductor UAOve(G=UA)
+    "Overall thermal conductance (if heatPort is connected)"
+    annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 equation
   connect(pum_y.port_b, port_b)
     annotation (Line(points={{40,0},{100,0}}, color={0,127,255}));
-  connect(pum_y.P, P) annotation (Line(points={{41,4},{80,4},{80,40},{110,40}},
-        color={0,0,127}));
+  connect(pum_y.P, P_ConWatPum) annotation (Line(points={{41,4},{80,4},{80,40},
+          {110,40}}, color={0,0,127}));
   connect(u, pum_y.u) annotation (Line(points={{-120,60},{10,60},{10,4},{18,4}},
         color={0,0,127}));
-  connect(port_a, pum_y.port_a)
-    annotation (Line(points={{-100,0},{20,0},{20,0}}, color={0,127,255}));
   connect(watSou.ports[1], senMasFlo.port_a)
-    annotation (Line(points={{-70,-30},{-60,-30}}, color={0,127,255}));
-  connect(senMasFlo.port_b, pum_y.port_a) annotation (Line(points={{-40,-30},{-30,
-          -30},{-30,0},{20,0}}, color={0,127,255}));
+    annotation (Line(points={{-70,30},{-60,30}},   color={0,127,255}));
   connect(senMasFlo.m_flow, mMUW_flow)
-    annotation (Line(points={{-50,-19},{-50,80},{110,80}}, color={0,0,127}));
+    annotation (Line(points={{-50,41},{-50,80},{110,80}},  color={0,0,127}));
+  connect(port_a, conStoTan.ports[1])
+    annotation (Line(points={{-100,0},{-32.6667,0}}, color={0,127,255}));
+  connect(conStoTan.ports[2], pum_y.port_a) annotation (Line(points={{-30,0},{
+          20,0}},                    color={0,127,255}));
+  connect(senMasFlo.port_b, conStoTan.ports[3]) annotation (Line(points={{-40,30},
+          {-30,30},{-30,0},{-27.3333,0}}, color={0,127,255}));
+  connect(conStoTan.heatPort, UAOve.port_a) annotation (Line(points={{-40,-10},
+          {-52,-10},{-52,-50},{-40,-50}}, color={191,0,0}));
+  connect(UAOve.port_b, heatPort)
+    annotation (Line(points={{-20,-50},{0,-50},{0,100}}, color={191,0,0}));
+  connect(heaCapDry.port, heatPort)
+    annotation (Line(points={{0,-60},{0,100}}, color={191,0,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
-          extent={{-80,-66},{-8,-80}},
+          extent={{-72,-34},{-20,-46}},
           lineColor={0,0,0},
-          fillColor={255,255,0},
-          fillPattern=FillPattern.Solid),
+          fillColor={166,166,166},
+          fillPattern=FillPattern.Sphere),
         Rectangle(
           extent={{12,54},{68,42}},
           lineColor={0,0,0},
           fillColor={0,127,255},
           fillPattern=FillPattern.HorizontalCylinder),
         Rectangle(
-          extent={{-100,6},{-70,-6}},
+          extent={{-96,6},{-66,-6}},
           lineColor={0,0,0},
           fillColor={0,127,255},
           fillPattern=FillPattern.HorizontalCylinder),
@@ -138,34 +158,20 @@ equation
           visible=energyDynamics <> Modelica.Fluid.Types.Dynamics.SteadyState,
           fillColor={0,100,199}),
         Rectangle(
-          extent={{-80,70},{-76,-74}},
-          lineColor={0,0,255},
+          extent={{-72,40},{-20,-40}},
+          fillColor={166,166,166},
+          fillPattern=FillPattern.VerticalCylinder,
           pattern=LinePattern.None,
-          fillColor={255,255,0},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{-14,70},{-8,-74}},
-          lineColor={0,0,255},
-          pattern=LinePattern.None,
-          fillColor={255,255,0},
-          fillPattern=FillPattern.Solid),
-        Rectangle(
-          extent={{-76,70},{-12,-70}},
-          fillColor={238,46,47},
-          fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None),
+          lineColor={0,0,0}),
+        Line(points={{-72,40},{-72,-40}}, color={0,0,0}),
+        Line(points={{-20,40},{-20,-40}},
+                                        color={0,0,0}),
         Ellipse(
-          extent={{-80,76},{-8,64}},
+          extent={{-72,46},{-20,34}},
           lineColor={0,0,0},
-          fillColor={255,255,0},
-          fillPattern=FillPattern.Solid),
-        Line(points={{-80,70},{-80,-74}}, color={0,0,0}),
-        Line(points={{-8,70},{-8,-74}}, color={0,0,0}),
-        Ellipse(
-          extent={{-76,-64},{-12,-76}},
-          lineColor={0,0,0},
-          fillColor={238,46,47},
-          fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None)}),                           Diagram(
+          fillColor={166,166,166},
+          fillPattern=FillPattern.Sphere),
+        Line(points={{-46,46},{-46,80},{0,80},{0,90}}, color={238,46,47})}),
+                                                                 Diagram(
         coordinateSystem(preserveAspectRatio=false)));
 end CondensateSubsystem;

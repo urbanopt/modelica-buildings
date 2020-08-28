@@ -70,9 +70,34 @@ model HeatingPlant "First generation district heating plant"
     displayUnit="kWh") "Total heating energy" annotation (Placement(
         transformation(extent={{100,40},{120,60}}), iconTransformation(extent={
             {100,40},{120,60}})));
-  Fluid.Boilers.SteamBoilerFourPort boi[num]
-    annotation (Placement(transformation(extent={{-40,20},{-20,42}})));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+  Subsystems.CondensateSubsystem conSubSys "Condensate water subsystem"
+    annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
+  Fluid.Sources.Boundary_pT feeWatTan(nPorts=1) "Feed water tank"
+    annotation (Placement(transformation(extent={{10,20},{-10,40}})));
+  DataCenters.ChillerCooled.Equipment.FlowMachine_y feeWatPum_y(
+    m_flow_nominal=mPum_flow_nominal,
+    dpValve_nominal=dpValve_nominal,
+    num=num) "Feedwater pumps"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+  Subsystems.BoilerSubsystem boiSubSys "Boiler subsystem"
+    annotation (Placement(transformation(extent={{30,-10},{50,10}})));
+  Fluid.Sensors.Pressure senPreSte "Steam pressure sensor"
+    annotation (Placement(transformation(extent={{60,20},{80,40}})));
+equation
+  connect(boiSubSys.port_b, port_b)
+    annotation (Line(points={{50,0},{100,0}}, color={0,127,255}));
+  connect(senPreSte.port, port_b)
+    annotation (Line(points={{70,20},{70,0},{100,0}}, color={0,127,255}));
+  connect(port_a, conSubSys.port_a) annotation (Line(points={{100,-60},{-80,-60},
+          {-80,0},{-60,0}}, color={0,127,255}));
+  connect(conSubSys.port_b, feeWatPum_y.port_a)
+    annotation (Line(points={{-40,0},{-10,0}}, color={0,127,255}));
+  connect(feeWatPum_y.port_b, boiSubSys.port_a)
+    annotation (Line(points={{10,0},{30,0},{30,0}}, color={0,127,255}));
+  connect(feeWatTan.ports[1], feeWatPum_y.port_a) annotation (Line(points={{-10,
+          30},{-20,30},{-20,0},{-10,0}}, color={0,127,255}));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -120},{100,100}}),                                  graphics={
                                 Rectangle(
         extent={{-100,-100},{100,100}},
         lineColor={0,0,127},
@@ -152,5 +177,6 @@ model HeatingPlant "First generation district heating plant"
         Text(
           extent={{-149,-114},{151,-154}},
           lineColor={0,0,255},
-          textString="%name")}), Diagram(coordinateSystem(preserveAspectRatio=false)));
+          textString="%name")}), Diagram(coordinateSystem(preserveAspectRatio=false, extent={
+            {-100,-120},{100,100}})));
 end HeatingPlant;
