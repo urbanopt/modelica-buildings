@@ -6,7 +6,7 @@ model SteamBoilerFourPort
   package MediumSte = IBPSA.Media.Steam (
      T_default=173.5+273.15,
      p_default=861844.7) "Steam medium";
-  package MediumWat = IBPSA.Media.WaterHighTemperature (
+  package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature (
      T_default=173.5+273.15,
      p_default=861844.7) "Water medium";
   package MediumFlu = Buildings.Media.Air
