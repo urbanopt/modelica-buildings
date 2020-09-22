@@ -83,15 +83,15 @@ model ThermalZone "Model to connect to an EnergyPlus thermal zone"
             220,110}})));
 
   Buildings.ThermalZones.EnergyPlus.BaseClasses.FMUZoneAdapter fmuZon(
-    final buildingsLibraryRoot=Buildings.ThermalZones.EnergyPlus.BaseClasses.buildingsLibraryRoot,
     final modelicaNameBuilding=modelicaNameBuilding,
     final modelicaNameThermalZone=modelicaNameThermalZone,
     final idfName=idfName,
-    final weaName=epWeaName,
+    final weaName=weaName,
     final zoneName=zoneName,
     final nFluPor=nPorts,
     final usePrecompiledFMU=usePrecompiledFMU,
     final fmuName=fmuName,
+    final spawnLinuxExecutable=spawnLinuxExecutable,
     final verbosity=verbosity) "FMU zone adapter"
     annotation (Placement(transformation(extent={{80,100},{100,120}})));
 
@@ -154,7 +154,7 @@ protected
   final parameter Modelica.SIunits.MolarMass MM=
     Modelica.Media.IdealGases.Common.SingleGasesData.CO2.MM
     "Molar mass of the trace substance";
-  final parameter Real s[:]= {
+  final parameter Real s[Medium.nC]= {
     if ( Modelica.Utilities.Strings.isEqual(string1=Medium.extraPropertiesNames[i],
                                             string2=substanceName,
                                             caseSensitive=false))
@@ -197,7 +197,7 @@ protected
   Modelica.Thermal.HeatTransfer.Sensors.HeatFlowSensor heaFloSen
     "Heat flow sensor"
     annotation (Placement(transformation(extent={{-32,-10},{-52,10}})));
-  HeatTransfer.Sources.PrescribedTemperature preTem
+  Buildings.HeatTransfer.Sources.PrescribedTemperature preTem
     "Port temperature"
     annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
   Modelica.Blocks.Sources.RealExpression TFlu(y=Medium.temperature_phX(
@@ -350,7 +350,10 @@ equation
         Text(
           extent={{174,-126},{54,-176}},
           lineColor={255,255,255},
-          textString=DynamicSelect("", String(heaPorAir.T-273.15, format=".1f")))}),
+          textString=DynamicSelect("", String(heaPorAir.T-273.15, format=".1f"))),
+        Bitmap(extent={{134,-176},{174,-146}},
+          fileName="modelica://Buildings/Resources/Images/ThermalZones/EnergyPlus/EnergyPlusLogo.png",
+          visible=not usePrecompiledFMU)}),
    Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-200,-200},{200,200}})),
     Documentation(info="<html>
