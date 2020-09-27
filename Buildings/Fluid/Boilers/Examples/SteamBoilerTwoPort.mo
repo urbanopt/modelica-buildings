@@ -5,7 +5,7 @@ model SteamBoilerTwoPort "Test model for the steam boiler with two fluid ports"
   package MediumSte = IBPSA.Media.Steam (
      T_default=173.5+273.15,
      p_default=861844.7) "Steam medium";
-  package MediumWat = IBPSA.Media.WaterHighTemperature (
+  package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature (
      T_default=173.5+273.15,
      p_default=861844.7) "Water medium";
 
@@ -59,7 +59,7 @@ model SteamBoilerTwoPort "Test model for the steam boiler with two fluid ports"
     redeclare package Medium_a = MediumWat,
     redeclare package Medium_b = MediumSte,
     m_flow_nominal=m_flow_nominal,
-    pOut_nominal=pOut_nominal,
+    pBoi_nominal=pOut_nominal,
     show_T=true,
     Q_flow_nominal=Q_flow_nominal,
     effCur=Buildings.Fluid.Types.EfficiencyCurves.Constant,
@@ -96,7 +96,7 @@ equation
           {-10,20},{-40,20},{-40,12}}, color={0,0,127}));
   connect(y.y, mAct_flow.u1) annotation (Line(points={{-59,70},{-52,70},{-52,56},
           {-42,56}}, color={0,0,127}));
-  connect(y.y, boi.y) annotation (Line(points={{-59,70},{10,70},{10,9},{19,9}},
+  connect(y.y, boi.y) annotation (Line(points={{-59,70},{10,70},{10,11},{19,11}},
         color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
