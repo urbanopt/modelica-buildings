@@ -22,9 +22,11 @@ partial model PartialFourPortFourMediumCounter
     "Nominal mass flow rate (flow 2)"
     annotation(Dialog(group = "Nominal condition"));
   parameter Modelica.SIunits.MassFlowRate m1_flow_small(min=0) = 1E-4*abs(m1_flow_nominal)
-    "Small mass flow rate for regularization of zero flow (flow 1)";
+    "Small mass flow rate for regularization of zero flow (flow 1)"
+    annotation(Dialog(tab="Advanced"));
   parameter Modelica.SIunits.MassFlowRate m2_flow_small(min=0) = 1E-4*abs(m2_flow_nominal)
-    "Small mass flow rate for regularization of zero flow (flow 2)";
+    "Small mass flow rate for regularization of zero flow (flow 2)"
+    annotation(Dialog(tab="Advanced"));
 
   // Diagnostics
    parameter Boolean show_T = false
