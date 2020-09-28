@@ -43,7 +43,8 @@ model HeatingPlantIdealClosedLoop
   Modelica.Blocks.Sources.Ramp ramp(duration(displayUnit="min") = 1200,
       startTime(displayUnit="h"))
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
-  Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.Heating1stGenIdeal ets(
+  Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.HeatingIndirect
+    ets(
     redeclare package Medium_a = MediumSte,
     redeclare package Medium_b = MediumWat,
     m_flow_nominal=m_flow_nominal,

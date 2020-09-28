@@ -71,8 +71,9 @@ model BuildingTimeSeriesWithETSHeating
     final allowFlowReversal=allowFlowReversalBui)
     "Building"
     annotation (Placement(transformation(extent={{-10,40},{10,60}})));
-  replaceable Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.Heating1stGenIdeal ets
-    annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
+  replaceable
+    Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.HeatingIndirect
+    ets annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
   inner Modelica.Fluid.System system
     "System properties and default values"
     annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
@@ -96,8 +97,8 @@ model BuildingTimeSeriesWithETSHeating
       extent={{10,-10},{-10,10}},
       rotation=0,
       origin={30,90})));
-  Fluid.Sensors.RelativePressure           senRelPre(redeclare package Medium
-      = Medium)
+  Fluid.Sensors.RelativePressure           senRelPre(redeclare package Medium =
+        Medium)
     "Pressure difference measurement"
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},

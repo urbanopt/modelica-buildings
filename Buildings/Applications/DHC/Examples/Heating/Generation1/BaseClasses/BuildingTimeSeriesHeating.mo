@@ -76,13 +76,13 @@ model BuildingTimeSeriesHeating
     timeScale=timeScale)
     "Heating demand"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
-  Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.Heating1stGenIdeal ets(
+  Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.HeatingIndirect
+    ets(
     redeclare final package Medium_a = Medium_a,
     redeclare final package Medium_b = Medium_b,
     m_flow_nominal=m_flow_nominal,
     Q_flow_nominal=Q_flow_nominal,
-    pSte_nominal=pSte_nominal)
-                          "Energy transfer station"
+    pSte_nominal=pSte_nominal) "Energy transfer station"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
   Modelica.Fluid.Interfaces.FluidPort_a port_a(
