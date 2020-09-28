@@ -69,12 +69,6 @@ model HeatingPlantIdealClosedLoop
   Modelica.Blocks.Math.Product Q_flow
     annotation (Placement(transformation(extent={{0,26},{20,46}})));
 equation
-  connect(pla.port_b, ets.port_a)
-    annotation (Line(points={{-40,-10},{40,-10}},
-                                                color={0,127,255}));
-  connect(ets.port_b, pip.port_a) annotation (Line(points={{60,-10},{70,-10},{
-          70,-70},{20,-70}},
-                          color={0,127,255}));
   connect(pip.port_b, pla.port_a) annotation (Line(points={{0,-70},{-30,-70},{
           -30,-16},{-40,-16}},
                        color={0,127,255}));

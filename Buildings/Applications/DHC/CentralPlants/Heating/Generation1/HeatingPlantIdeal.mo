@@ -64,7 +64,7 @@ model HeatingPlantIdeal
     show_T=show_T,
     energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
     Q_flow_nominal=QPla_flow_nominal,
-    pOut_nominal=pOut_nominal,
+    pBoi_nominal=pOut_nominal,
     effCur=effCur,
     a=a,
     fue=Buildings.Fluid.Data.Fuels.NaturalGasLowerHeatingValue())
@@ -140,14 +140,17 @@ equation
     annotation (Line(points={{50,-60},{32,-60}}, color={0,127,255}));
   connect(mSen_flow.port_b, dp.port_a) annotation (Line(points={{12,-60},{-90,-60},
           {-90,0},{-80,0}}, color={0,127,255}));
-  connect(PLR.y, boi.y) annotation (Line(points={{-53,-30},{-86,-30},{-86,9},{-41,
-          9}}, color={0,0,127}));
+  connect(PLR.y, boi.y) annotation (Line(points={{-53,-30},{-86,-30},{-86,11},{
+          -41,11}},
+               color={0,0,127}));
   connect(exp.ports[1], boi.port_b) annotation (Line(points={{30,30},{34,30},{34,
           0},{-20,0}}, color={0,127,255}));
   connect(IntEHea.u, boi.Q_flow)
-    annotation (Line(points={{58,50},{0,50},{0,9},{-19,9}}, color={0,0,127}));
+    annotation (Line(points={{58,50},{0,50},{0,11},{-19,11}},
+                                                            color={0,0,127}));
   connect(boi.Q_flow, Q_flow)
-    annotation (Line(points={{-19,9},{0,9},{0,80},{110,80}}, color={0,0,127}));
+    annotation (Line(points={{-19,11},{0,11},{0,80},{110,80}},
+                                                             color={0,0,127}));
   connect(IntEHea.y, EHea)
     annotation (Line(points={{81,50},{110,50}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
