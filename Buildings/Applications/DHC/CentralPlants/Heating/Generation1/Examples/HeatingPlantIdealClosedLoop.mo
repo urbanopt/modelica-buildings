@@ -43,14 +43,6 @@ model HeatingPlantIdealClosedLoop
   Modelica.Blocks.Sources.Ramp ramp(duration(displayUnit="min") = 1200,
       startTime(displayUnit="h"))
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
-  Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.HeatingIndirect
-    ets(
-    redeclare package Medium_a = MediumSte,
-    redeclare package Medium_b = MediumWat,
-    m_flow_nominal=m_flow_nominal,
-    Q_flow_nominal=Q_flow_nominal,
-    pSte_nominal=pSte) "Energy transfer station"
-    annotation (Placement(transformation(extent={{40,-20},{60,0}})));
   Buildings.Fluid.FixedResistances.Pipe pip(
     redeclare package Medium = MediumWat,
     energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
@@ -76,8 +68,6 @@ equation
     annotation (Line(points={{-19,30},{-2,30}}, color={0,0,127}));
   connect(Q_flow.u1, ramp.y) annotation (Line(points={{-2,42},{-8,42},{-8,70},{
           -19,70}}, color={0,0,127}));
-  connect(Q_flow.y, ets.Q_flow) annotation (Line(points={{21,36},{30,36},{30,-4},
-          {38,-4}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
   __Dymola_Commands(file=

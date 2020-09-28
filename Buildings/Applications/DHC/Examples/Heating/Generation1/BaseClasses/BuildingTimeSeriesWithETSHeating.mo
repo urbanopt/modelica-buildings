@@ -1,9 +1,8 @@
 within Buildings.Applications.DHC.Examples.Heating.Generation1.BaseClasses;
 model BuildingTimeSeriesWithETSHeating
   "Model of a building with thermal loads as time series, with an energy transfer station"
-  extends Buildings.Fluid.Interfaces.PartialTwoPortInterface(
+  extends Buildings.Fluid.Interfaces.PartialTwoPortTwoMedium(
     final m_flow_nominal=mDis_flow_nominal,
-    final m_flow_small=1E-4*m_flow_nominal,
     final allowFlowReversal=allowFlowReversalDis);
 
   parameter Boolean allowFlowReversalBui = false
@@ -68,7 +67,11 @@ model BuildingTimeSeriesWithETSHeating
     final energyDynamics=energyDynamics,
     final use_inputFilter=false,
     final filNam=filNam,
-    final allowFlowReversal=allowFlowReversalBui)
+    final allowFlowReversal=allowFlowReversalBui,
+    nPorts_aChiWat=1,
+    nPorts_bChiWat=1,
+    nPorts_aHeaWat=1,
+    nPorts_bHeaWat=1)
     "Building"
     annotation (Placement(transformation(extent={{-10,40},{10,60}})));
   replaceable
@@ -83,61 +86,34 @@ model BuildingTimeSeriesWithETSHeating
     annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
   Modelica.Blocks.Sources.RealExpression THeaWatSup(y=bui.T_aChiWat_nominal)
     "Heating water supply temperature"
-    annotation (Placement(transformation(extent={{-90,80},{-70,100}})));
+    annotation (Placement(transformation(extent={{-90,74},{-70,94}})));
   Fluid.Sources.Boundary_pT           supChiWat(
     redeclare package Medium = Medium,
-    use_T_in=true) "Chilled water supply"
+    use_T_in=true,
+    nPorts=1)      "Chilled water supply"
     annotation (Placement(transformation(
       extent={{-10,-10},{10,10}},
       rotation=0,
-      origin={-50,90})));
+      origin={-50,80})));
   Fluid.Sources.Boundary_pT           sinChiWat(
-    redeclare package Medium = Medium, p=300000) "Sink for chilled water"
+    redeclare package Medium = Medium, p=300000,
+    nPorts=1)                                    "Sink for chilled water"
     annotation (Placement(transformation(
       extent={{10,-10},{-10,10}},
       rotation=0,
-      origin={30,90})));
-  Fluid.Sensors.RelativePressure           senRelPre(redeclare package Medium =
-        Medium)
+      origin={50,80})));
+  Fluid.Sensors.RelativePressure           senRelPre(redeclare package Medium
+      = Medium)
     "Pressure difference measurement"
     annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
+        extent={{-10,10},{10,-10}},
         origin={0,20})));
   Modelica.Blocks.Interfaces.RealOutput p_rel
     "Relative pressure of port_a minus port_b"
-    annotation (    Placement(transformation(extent={{200,0},{220,20}}),
+    annotation (    Placement(transformation(extent={{100,20},{120,40}}),
         iconTransformation(extent={{100,20},{120,40}})));
-  Modelica.Blocks.Continuous.Integrator EHeaReq(y(unit="J"))
-    "Time integral of heating load"
-    annotation (Placement(transformation(extent={{120,20},{140,40}})));
-  Modelica.Blocks.Continuous.Integrator EHeaAct(y(unit="J"))
-    "Actual energy used for heating"
-    annotation (Placement(transformation(extent={{160,20},{180,40}})));
-  Buildings.Controls.OBC.CDL.Continuous.MovingMean QAveHeaReq_flow(y(unit="W"),
-      final delta=perAve)
-    "Time average of heating load"
-    annotation (Placement(transformation(extent={{120,60},{140,80}})));
-  Buildings.Controls.OBC.CDL.Continuous.MovingMean QAveHeaAct_flow(y(unit="W"),
-      final delta=perAve)
-    "Time average of heating heat flow rate"
-    annotation (Placement(transformation(extent={{160,60},{180,80}})));
-  Modelica.Blocks.Continuous.Integrator ECooReq(y(unit="J"))
-    "Time integral of cooling load"
-    annotation (Placement(transformation(extent={{120,-40},{140,-20}})));
-  Modelica.Blocks.Continuous.Integrator ECooAct(y(unit="J"))
-    "Actual energy used for cooling"
-    annotation (Placement(transformation(extent={{160,-40},{180,-20}})));
-  Buildings.Controls.OBC.CDL.Continuous.MovingMean QAveCooReq_flow(y(unit="W"),
-      final delta=perAve)
-    "Time average of cooling load"
-    annotation (Placement(transformation(extent={{120,-80},{140,-60}})));
-  Buildings.Controls.OBC.CDL.Continuous.MovingMean QAveCooAct_flow(y(unit="W"),
-      final delta=perAve)
-    "Time average of cooling heat flow rate"
-    annotation (Placement(transformation(extent={{160,-80},{180,-60}})));
-  Modelica.Blocks.Interfaces.RealOutput PPum "Power drawn by pump motors"
-    annotation (Placement(transformation(extent={{200,40},{220,60}}),
-        iconTransformation(extent={{100,60},{120,80}})));
+  CentralPlants.BaseClasses.PowerMeter powerMeter
+    annotation (Placement(transformation(extent={{80,40},{100,60}})));
 protected
   parameter Modelica.SIunits.SpecificHeatCapacity cp=
    Medium.specificHeatCapacityCp(
@@ -145,36 +121,34 @@ protected
     "Default specific heat capacity of medium";
 
 equation
-  connect(supChiWat.T_in,THeaWatSup. y) annotation (Line(points={{-62,94},{-66,94},
-          {-66,90},{-69,90}}, color={0,0,127}));
-  connect(senRelPre.p_rel, p_rel) annotation (Line(points={{0,11},{0,10},{210,10}},
-                            color={0,0,127}));
-  connect(bui.QReqHea_flow,QAveHeaReq_flow. u) annotation (Line(points={{6.66667,
-          39.3333},{6.66667,34},{60,34},{60,-6},{114,-6},{114,70},{118,70}},
-                                                            color={0,0,127}));
-  connect(bui.QReqHea_flow,EHeaReq. u) annotation (Line(points={{6.66667,
-          39.3333},{6.66667,34},{60,34},{60,-6},{114,-6},{114,30},{118,30}},
-                                                 color={0,0,127}));
-  connect(bui.QHea_flow,QAveHeaAct_flow. u) annotation (Line(points={{10.6667,
-          58.6667},{114,58.6667},{114,56},{154,56},{154,70},{158,70}},
-                                                            color={0,0,127}));
-  connect(bui.QHea_flow,EHeaAct. u) annotation (Line(points={{10.6667,58.6667},
-          {114,58.6667},{114,56},{154,56},{154,30},{158,30}},
-                                                           color={0,0,127}));
-  connect(bui.QReqCoo_flow,ECooReq. u) annotation (Line(points={{8.66667,
-          39.3333},{8.66667,34},{60,34},{60,-6},{114,-6},{114,-30},{118,-30}},
-                                                     color={0,0,127}));
-  connect(bui.QReqCoo_flow,QAveCooReq_flow. u) annotation (Line(points={{8.66667,
-          39.3333},{8.66667,36},{8,36},{8,34},{60,34},{60,-6},{114,-6},{114,-70},
-          {118,-70}},                                           color={0,0,127}));
-  connect(bui.QCoo_flow,ECooAct. u) annotation (Line(points={{10.6667,57.3333},
-          {114,57.3333},{114,-6},{150,-6},{150,-30},{158,-30}},color={0,0,127}));
-  connect(bui.QCoo_flow,QAveCooAct_flow. u) annotation (Line(points={{10.6667,
-          57.3333},{114,57.3333},{114,-6},{150,-6},{150,-70},{158,-70}},
-                                                                color={0,0,127}));
-  connect(bui.PPum,PPum)  annotation (Line(points={{10.6667,52},{114,52},{114,
-          50},{210,50}},
-                   color={0,0,127}));
+  connect(supChiWat.T_in,THeaWatSup. y) annotation (Line(points={{-62,84},{-69,
+          84}},               color={0,0,127}));
+  connect(senRelPre.p_rel, p_rel) annotation (Line(points={{0,29},{0,30},{110,
+          30}},             color={0,0,127}));
+  connect(port_a, ets.port_a1) annotation (Line(points={{-100,0},{-20,0},{-20,
+          -24},{-10,-24}}, color={0,127,255}));
+  connect(ets.port_b1, port_b) annotation (Line(points={{10,-24},{20,-24},{20,0},
+          {100,0}}, color={0,127,255}));
+  connect(supChiWat.ports[1], bui.ports_aChiWat[1]) annotation (Line(points={{
+          -40,80},{-20,80},{-20,44},{-10,44}}, color={0,127,255}));
+  connect(bui.ports_bChiWat[1], sinChiWat.ports[1]) annotation (Line(points={{
+          10,44},{20,44},{20,80},{40,80}}, color={0,127,255}));
+  connect(bui.PPum, powerMeter.PPumIn) annotation (Line(points={{10.6667,52},{
+          50,52},{50,50},{78,50}}, color={0,0,127}));
+  connect(bui.QReqCoo_flow, powerMeter.QCooReq_flow) annotation (Line(points={{
+          8.66667,39.3333},{8.66667,36},{50,36},{50,41},{78,41}}, color={0,0,
+          127}));
+  connect(powerMeter.QHeaReq_flow, bui.QReqHea_flow) annotation (Line(points={{
+          78,55},{60,55},{60,34},{6,34},{6,39.3333},{6.66667,39.3333}}, color={
+          0,0,127}));
+  connect(bui.QCoo_flow, powerMeter.QCooAct_flow) annotation (Line(points={{
+          10.6667,57.3333},{40,57.3333},{40,45},{78,45}}, color={0,0,127}));
+  connect(bui.QHea_flow, powerMeter.QHeaAct_flow) annotation (Line(points={{
+          10.6667,58.6667},{78,58.6667},{78,59}}, color={0,0,127}));
+  connect(bui.ports_bHeaWat[1], ets.port_b2) annotation (Line(points={{10,48},{
+          36,48},{36,-52},{-20,-52},{-20,-36},{-10,-36}}, color={0,127,255}));
+  connect(bui.ports_aHeaWat[1], ets.port_a2) annotation (Line(points={{-10,48},
+          {-26,48},{-26,6},{32,6},{32,-36},{10,-36}}, color={0,127,255}));
   annotation (Line(
       points={{-1,100},{0.1,100},{0.1,71.4}},
       color={255,204,51},
@@ -296,6 +270,5 @@ equation
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid,
           origin={57,-13},
-          rotation=90)}),
-    Diagram(coordinateSystem(extent={{-100,-100},{200,100}})));
+          rotation=90)}));
 end BuildingTimeSeriesWithETSHeating;
