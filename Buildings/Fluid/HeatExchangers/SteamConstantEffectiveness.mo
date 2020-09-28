@@ -1,7 +1,7 @@
 within Buildings.Fluid.HeatExchangers;
 model SteamConstantEffectiveness
   "Model for a shell-and-tube heat exchanger with phase change in one side and a prescribed constant effectiveness"
-  extends Buildings.Fluid.Interfaces.PartialFourPortFourMediumCounter(
+  extends Buildings.Fluid.Interfaces.PartialFourPortFourMedium(
     redeclare final package Medium_b2 = Medium,
     redeclare final package Medium_a2 = Medium,
     redeclare final package Medium_b1 = Medium,
