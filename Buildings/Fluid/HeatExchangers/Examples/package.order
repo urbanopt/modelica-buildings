@@ -7,7 +7,7 @@ DryCoilDiscretizedPControl
 DryCoilEffectivenessNTUMassFlow
 DryCoilEffectivenessNTUPControl
 PlateHeatExchangerEffectivenessNTUPControl
-SteamHeatExchangerIdeal
+SteamConstantEffectiveness
 WaterCooler_T
 WaterHeater_T
 WaterHeater_u

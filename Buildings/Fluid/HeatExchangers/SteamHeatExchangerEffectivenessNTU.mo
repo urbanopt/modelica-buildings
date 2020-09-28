@@ -1,7 +1,7 @@
 within Buildings.Fluid.HeatExchangers;
 model SteamHeatExchangerEffectivenessNTU
   "Steam heat exchanger with effectiveness - NTU relation"
-  extends Buildings.Fluid.Interfaces.PartialFourPortFourMediumCounter;
+  extends Buildings.Fluid.Interfaces.PartialFourPortFourMedium;
 
   parameter con configuration "Heat exchanger configuration"
     annotation (Evaluate=true);

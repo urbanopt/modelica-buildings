@@ -9,7 +9,7 @@ PlateHeatExchangerEffectivenessNTU
 PrescribedOutlet
 SensibleCooler_T
 SteamHeatExchangerEffectivenessNTU
-SteamHeatExchangerIdeal
+SteamConstantEffectiveness
 WetCoilCounterFlow
 WetCoilDiscretized
 ActiveBeams
