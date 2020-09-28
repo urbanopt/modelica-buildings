@@ -30,7 +30,6 @@ block Economizer "Controller for economizer"
   Modelica.Blocks.Math.Gain gain(k=1/VOut_flow_min) "Normalize mass flow rate"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
   Buildings.Controls.Continuous.LimPID conV_flow(
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     k=k,
     Ti=Ti,
     yMax=0.995,
@@ -62,7 +61,6 @@ block Economizer "Controller for economizer"
     k=k,
     Ti=Ti,
     Td=60,
-    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     yMax=1,
     yMin=0)
     "Control signal for outdoor damper to track freeze temperature setpoint"
@@ -242,7 +240,7 @@ air requirement and an override for freeze protection.
 December 20, 2016, by Michael Wetter:<br/>
 Added type conversion for enumeration when used as an array index.<br/>
 This is for
-<a href=\"modelica://https://github.com/lbl-srg/modelica-buildings/issues/602\">#602</a>.
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/602\">#602</a>.
 </li>
 <li>
 April 26, 2016, by Michael Wetter:<br/>
