@@ -7,47 +7,36 @@ model CoolingTowerParellel
      use_inputFilter=true,
     final numFil=num);
 
-  parameter Integer num(min=1)=2 "Number of cooling towers";
-
+  parameter Integer num(final min=1)=2 "Number of cooling towers";
   replaceable package Medium=Buildings.Media.Water
     "Condenser water medium";
-
   parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial
     "Type of energy balance: dynamic (3 initialization options) or steady state"
     annotation(Evaluate=true, Dialog(tab = "Dynamics", group="Equations"));
-
   parameter Boolean show_T = true
     "= true, if actual temperature at port is computed"
     annotation(Dialog(tab="Advanced",group="Diagnostics"));
-
   parameter Modelica.SIunits.MassFlowRate m_flow_nominal
     "Nominal mass flow rate of condenser water in each tower"
     annotation (Dialog(group="Nominal condition"));
-
   parameter Modelica.SIunits.Pressure dp_nominal
     "Nominal pressure difference of the tower"
     annotation (Dialog(group="Nominal condition"));
-
-  parameter Real ratWatAir_nominal(min=0, unit="1")=0.625
+  parameter Real ratWatAir_nominal(final min=0,final unit="1")=0.625
     "Design water-to-air ratio"
     annotation (Dialog(group="Nominal condition"));
-
   parameter Modelica.SIunits.Temperature TAirInWB_nominal
     "Nominal outdoor (air inlet) wetbulb temperature"
     annotation (Dialog(group="Heat transfer"));
-
   parameter Modelica.SIunits.Temperature TWatIn_nominal
     "Nominal water inlet temperature"
     annotation (Dialog(group="Heat transfer"));
-
   parameter Modelica.SIunits.TemperatureDifference dT_nominal
     "Temperature difference between inlet and outlet of the tower"
      annotation (Dialog(group="Heat transfer"));
-
   parameter Modelica.SIunits.Power PFan_nominal
     "Fan power"
     annotation (Dialog(group="Fan"));
-
   Medium.ThermodynamicState sta_a=
       Medium.setState_phX(port_a.p,
                           noEvent(actualStream(port_a.h_outflow)),
@@ -60,41 +49,39 @@ model CoolingTowerParellel
                           noEvent(actualStream(port_b.Xi_outflow))) if
           show_T "Medium properties in port_b";
 
-  Modelica.Fluid.Interfaces.FluidPort_a port_a(redeclare package Medium=Medium)
+  Modelica.Fluid.Interfaces.FluidPort_a port_a(
+    redeclare final package Medium=Medium)
     "Fluid connector a (positive design flow direction is from port_a to port_b)"
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
-
-  Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium=Medium)
+  Modelica.Fluid.Interfaces.FluidPort_b port_b(
+    redeclare final package Medium=Medium)
     "Fluid connector b (positive design flow direction is from port_a to port_b)"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-
   Modelica.Blocks.Interfaces.RealInput on[num](
-    min=0, max=1, unit="1")
+    each final min=0,
+    each final max=1,
+    each final unit="1")
     "On signal for cooling towers"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
-
-  Modelica.Blocks.Interfaces.RealInput speFan(unit="1")
+  Modelica.Blocks.Interfaces.RealInput speFan(
+    final unit="1")
     "Fan speed control signal"
     annotation (Placement(transformation(extent={{-140,0},{-100,40}})));
-
   Modelica.Blocks.Interfaces.RealInput TWetBul(
     final unit="K",
     displayUnit="degC")
     "Entering air wetbulb temperature"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
-
   Modelica.Blocks.Interfaces.RealOutput PFan[num](
-    final quantity="Power",
-    final unit="W")
+    each final quantity="Power",
+    each final unit="W")
     "Electric power consumed by fan"
     annotation (Placement(transformation(extent={{100,50},{120,70}})));
-
   Modelica.Blocks.Interfaces.RealOutput TLvg[num](
-    final unit="K",
-    displayUnit="degC")
+    each final unit="K",
+    each displayUnit="degC")
     "Leaving water temperature"
     annotation (Placement(transformation(extent={{100,20},{120,40}})));
-
   replaceable Fluid.HeatExchangers.CoolingTowers.Merkel cooTow[num](
      each final ratWatAir_nominal=ratWatAir_nominal,
      each final TAirInWB_nominal=TAirInWB_nominal,
@@ -110,9 +97,8 @@ model CoolingTowerParellel
      each final energyDynamics=energyDynamics)
     "Cooling tower type"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-
   Buildings.Fluid.Actuators.Valves.TwoWayEqualPercentage val[num](
-    redeclare package Medium = Medium,
+    redeclare each final package Medium = Medium,
     each final m_flow_nominal=m_flow_nominal,
     each final dpValve_nominal=dp_nominal)
     "Cooling tower valves"
@@ -145,7 +131,9 @@ equation
   end if;
   connect(y_actual, val.y) annotation (Line(points={{-20,74},{-14,74},{-14,60},{
           -50,60},{-50,12}}, color={0,0,127}));
-  annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+  annotation (
+    defaultComponentName="cooTowPar",
+    Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),           Icon(coordinateSystem(
           preserveAspectRatio=false, extent={{-100,-100},{100,100}}), graphics={
         Rectangle(
@@ -286,11 +274,8 @@ First implementation.
 </li>
 </ul>
 </html>", info="<html>
-<p>
-This model implements a parallel cooling tower system with <code>num</code> identical cooling towers. 
-The cooling tower type is replacable.
-<a href=\"modelica://Buildings.Fluid.HeatExchangers.CoolingTowers.Merkel\">Buildings.Fluid.HeatExchangers.CoolingTowers.Merkel</a> is currently used in this model. 
-</p>
+<p>This model implements a parallel cooling tower system with <i><span style=\"font-family: Courier New;\">num</span></i> identical cooling towers. </p>
+<p>The cooling tower type is replacable. <a href=\"modelica://Buildings.Fluid.HeatExchangers.CoolingTowers.Merkel\">Buildings.Fluid.HeatExchangers.CoolingTowers.Merkel</a> is currently used in this model. </p>
 </html>"),
     __Dymola_Commands);
 end CoolingTowerParellel;
