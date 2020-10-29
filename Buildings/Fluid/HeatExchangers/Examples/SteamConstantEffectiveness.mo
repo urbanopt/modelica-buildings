@@ -2,7 +2,7 @@ within Buildings.Fluid.HeatExchangers.Examples;
 model SteamConstantEffectiveness
   extends Modelica.Icons.Example;
 
- package MediumWat = IBPSA.Media.WaterHighTemperature "Medium model for liquid water";
+ package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature "Medium model for liquid water";
  package MediumSte = IBPSA.Media.Steam "Medium model for steam vapor";
   parameter Modelica.SIunits.Temperature T_a1_nominal = 150+273.15
     "Temperature at nominal conditions as port a1";
