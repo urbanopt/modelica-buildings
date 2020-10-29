@@ -48,13 +48,13 @@ model CondensateSubsystem
   parameter Real threshold(min = 0.01) = 0.05
     "Hysteresis threshold";
 
-  Buildings.Applications.DataCenters.ChillerCooled.Equipment.FlowMachine_y pum_y(
+  Buildings.Applications.DataCenters.ChillerCooled.Equipment.FlowMachine_y pum(
     redeclare package Medium = Medium,
     final per=fill(perCWPum, num),
     final m_flow_nominal=mCW_flow_nominal,
     final dpValve_nominal=dpCWPum_nominal,
     final num=num,
-    threshold=threshold)
+    threshold=threshold) "Speed controlled pump"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Buildings.Fluid.Sources.Boundary_pT watSou(
     redeclare package Medium = Medium,
@@ -104,11 +104,11 @@ protected
     "Overall thermal conductance (if heatPort is connected)"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 equation
-  connect(pum_y.port_b, port_b)
+  connect(pum.port_b, port_b)
     annotation (Line(points={{40,0},{100,0}}, color={0,127,255}));
-  connect(pum_y.P, P_ConWatPum) annotation (Line(points={{41,4},{80,4},{80,40},
-          {110,40}}, color={0,0,127}));
-  connect(u, pum_y.u) annotation (Line(points={{-120,60},{10,60},{10,4},{18,4}},
+  connect(pum.P, P_ConWatPum) annotation (Line(points={{41,4},{80,4},{80,40},{
+          110,40}}, color={0,0,127}));
+  connect(u, pum.u) annotation (Line(points={{-120,60},{10,60},{10,4},{18,4}},
         color={0,0,127}));
   connect(watSou.ports[1], senMasFlo.port_a)
     annotation (Line(points={{-70,30},{-60,30}},   color={0,127,255}));
@@ -116,8 +116,8 @@ equation
     annotation (Line(points={{-50,41},{-50,80},{110,80}},  color={0,0,127}));
   connect(port_a, conStoTan.ports[1])
     annotation (Line(points={{-100,0},{-32.6667,0}}, color={0,127,255}));
-  connect(conStoTan.ports[2], pum_y.port_a) annotation (Line(points={{-30,0},{
-          20,0}},                    color={0,127,255}));
+  connect(conStoTan.ports[2], pum.port_a)
+    annotation (Line(points={{-30,0},{20,0}}, color={0,127,255}));
   connect(conStoTan.heatPort, UAOve.port_a) annotation (Line(points={{-40,-10},
           {-52,-10},{-52,-50},{-40,-50}}, color={191,0,0}));
   connect(UAOve.port_b, heatPort)

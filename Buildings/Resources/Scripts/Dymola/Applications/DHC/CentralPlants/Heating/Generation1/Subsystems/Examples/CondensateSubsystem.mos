@@ -1,0 +1,25 @@
+simulateModel("Buildings.Applications.DHC.CentralPlants.Heating.Generation1.Subsystems.Examples.CondensateSubsystem", stopTime=360, tolerance= 1e-6, method="Cvode", resultFile="CondensateSubsystem");
+createPlot(id=1,
+ position={0, 0, 863, 526},
+ y={"conSubSys.pum.val[1].y", "conSubSys.pum.val[1].y_actual"},
+ range={0.0, 360.0, -0.5, 1.5},
+ erase=false,
+ grid=true,
+ colors={{28,108,200}, {238,46,47}});
+createPlot(id=1,
+ position={0, 0, 863, 172},
+ y={"conSubSys.m_flow", "conSubSys.mMUW_flow"},
+ range={0.0, 360.0, -0.5, 1.5},
+ erase=false,
+ grid=true,
+ subPlot=2,
+ colors={{28,108,200}, {238,46,47}});
+createPlot(id=1,
+ position={0, 0, 863, 173},
+ y={"conSubSys.conStoTan.V"},
+ range={0.0, 360.0, -0.002, 0.008},
+ erase=false,
+ grid=true,
+ subPlot=3,
+ filename="CondensateSubsystem.mat",
+ colors={{28,108,200}});

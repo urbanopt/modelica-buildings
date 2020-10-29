@@ -82,5 +82,11 @@ equation
     annotation (Line(points={{60,10},{70,10}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=360));
+  __Dymola_Commands(file=
+    "modelica://Buildings/Resources/Scripts/Dymola/Applications/DHC/CentralPlants/Heating/Generation1/Subsystems/Examples/CondensateSubsystem.mos"
+    "Simulate and plot"),
+  experiment(
+    StartTime=0,
+    StopTime=360,
+    Tolerance=1e-06));
 end CondensateSubsystem;
