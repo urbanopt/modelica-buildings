@@ -9,7 +9,7 @@ model SteamBoilerFourPort
   package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature (
      T_default=173.5+273.15,
      p_default=861844.7) "Water medium";
-  package MediumFlu = Buildings.Media.Air
+  package MediumAir = Buildings.Media.Air
     "Flue gas assumed to be air";
 
   parameter Modelica.SIunits.AbsolutePressure pOut_nominal=861844.7
@@ -75,18 +75,19 @@ model SteamBoilerFourPort
         1; 3600,1])
     annotation (Placement(transformation(extent={{-110,80},{-90,100}})));
   Sources.Boundary_pT fluGasSin(
-    redeclare package Medium = MediumFlu,
+    redeclare package Medium = MediumAir,
     p(displayUnit="Pa"),
     nPorts=1)
     "Flue gas sink"
     annotation (Placement(transformation(extent={{10,-30},{30,-10}})));
-  Sources.Boundary_pT airSou(redeclare package Medium = MediumFlu,
+  Sources.Boundary_pT airSou(redeclare package Medium = MediumAir,
     p(displayUnit="Pa"),
     nPorts=1) "Air source"
     annotation (Placement(transformation(extent={{-70,-100},{-50,-80}})));
   Buildings.Fluid.Boilers.SteamBoilerFourPort boi(
-    redeclare package Medium_a1 = MediumWat,
-    redeclare package Medium_b1 = MediumSte,
+    redeclare package MediumWat = MediumWat,
+    redeclare package MediumSte = MediumSte,
+    redeclare package MediumAir = MediumAir,
     m1_flow_nominal=m1_flow_nominal,
     m2_flow_nominal=m2_flow_nominal,
     show_T=true,
@@ -94,16 +95,15 @@ model SteamBoilerFourPort
     pBoi_nominal=pOut_nominal,
     effCur=Buildings.Fluid.Types.EfficiencyCurves.Polynomial,
     a={0.8,-0.004},
-    fue=Data.Fuels.NaturalGasLowerHeatingValue(),
-    redeclare package Medium2 = MediumFlu) "Steam boiler"
+    fue=Data.Fuels.NaturalGasLowerHeatingValue()) "Steam boiler"
     annotation (Placement(transformation(extent={{40,4},{60,24}})));
   Movers.FlowControlled_m_flow fan(
-    redeclare package Medium = MediumFlu,
+    redeclare package Medium = MediumAir,
     m_flow_nominal=m2_flow_nominal,
     nominalValuesDefineDefaultPressureCurve=true) "Fan"
     annotation (Placement(transformation(extent={{-30,-100},{-10,-80}})));
   FixedResistances.PressureDrop dpAir(
-    redeclare package Medium = MediumFlu,
+    redeclare package Medium = MediumAir,
     m_flow_nominal=m2_flow_nominal,
     dp_nominal(displayUnit="Pa") = 6000) "Pressure drop in air side"
     annotation (Placement(transformation(extent={{0,-100},{20,-80}})));

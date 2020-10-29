@@ -2,11 +2,13 @@ within Buildings.Fluid.Boilers;
 model SteamBoilerFourPort
   "Model for a steam boiler with four ports for air and water flows, including medium changes"
   extends Buildings.Fluid.Interfaces.PartialFourPortFourMedium(
-    redeclare final package Medium_a2 = Medium2,
-    redeclare final package Medium_b2 = Medium2);
+    redeclare final package Medium_a1 = MediumWat,
+    redeclare final package Medium_b1 = MediumSte,
+    redeclare final package Medium_a2 = MediumAir,
+    redeclare final package Medium_b2 = MediumAir);
   extends Buildings.Fluid.Boilers.BaseClasses.PartialSteamBoiler(
-    redeclare final package Medium_a = Medium_a1,
-    redeclare final package Medium_b = Medium_b1,
+    redeclare final package Medium_a = MediumWat,
+    redeclare final package Medium_b = MediumSte,
     final m_flow_nominal = m1_flow_nominal,
     vol(
       m_flow_small=m1_flow_small,
@@ -19,26 +21,26 @@ model SteamBoilerFourPort
       addPowerToMedium=false,
       nominalValuesDefineDefaultPressureCurve=true));
 
-  replaceable package Medium_a1 =
+  replaceable package MediumWat =
       Modelica.Media.Interfaces.PartialMedium
-    "Medium model (liquid state) for port_a1 (inlet)";
-  replaceable package Medium_b1 =
+    "Medium model for liquid water";
+  replaceable package MediumSte =
       IBPSA.Media.Interfaces.PartialPureSubstanceWithSat
-    "Medium model (vapor state) for port_b1 (outlet)";
-  replaceable package Medium2 =
+    "Medium model air water vapor";
+  replaceable package MediumAir =
       Modelica.Media.Interfaces.PartialMedium
-    "Medium model for fluid stream 2 (from a2 to b2)";
+    "Medium model for air";
 
   parameter Real ratAirFue = 10
     "Air-to-fuel ratio (by volume)";
 
   BaseClasses.Combustion com(
     m_flow_nominal=m2_flow_nominal,
-    redeclare final package Medium = Medium2,
+    redeclare final package Medium = MediumAir,
     final show_T = show_T) "Combustion process"
     annotation (Placement(transformation(extent={{-40,-90},{-60,-70}})));
   FixedResistances.PressureDrop preDroAir(
-    redeclare package Medium = Medium2,
+    redeclare package Medium = MediumAir,
     m_flow_nominal=m2_flow_nominal,
     dp_nominal=1400,
     final show_T = show_T) "Air side total pressure drop"

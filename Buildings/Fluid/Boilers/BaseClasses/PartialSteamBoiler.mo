@@ -136,7 +136,10 @@ partial model PartialSteamBoiler
   Evaporation eva(
     redeclare package Medium_a = Medium_a,
     redeclare package Medium_b = Medium_b,
-    final show_T=show_T)  "Evaporation process"
+    m_flow_nominal=m_flow_nominal,
+    final show_T=show_T,
+    pSte_nominal=pBoi_nominal)
+                          "Evaporation process"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
   Movers.FlowControlled_dp dpCon(

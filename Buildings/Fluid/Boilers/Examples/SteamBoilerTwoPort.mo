@@ -56,8 +56,8 @@ model SteamBoilerTwoPort "Test model for the steam boiler with two fluid ports"
     nPorts=1) "Water source"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Buildings.Fluid.Boilers.SteamBoilerTwoPort boi(
-    redeclare package Medium_a = MediumWat,
-    redeclare package Medium_b = MediumSte,
+    redeclare package MediumWat = MediumWat,
+    redeclare package MediumSte = MediumSte,
     m_flow_nominal=m_flow_nominal,
     pBoi_nominal=pOut_nominal,
     show_T=true,
