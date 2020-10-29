@@ -1,22 +1,21 @@
 within Buildings.Applications.DHC.CentralPlants.Heating.Generation1.Subsystems;
 model CondensateSubsystem
   "Condensate subsystem with a storage tank and parallel pumps"
-  extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+  extends Buildings.Fluid.Interfaces.PartialTwoPortInterface(
+    final m_flow_nominal=mCW_flow_nominal);
 
   parameter Integer num=2 "The number of pumps";
 
   // Nominal Conditions
-  parameter Modelica.SIunits.Power Q_flow_nominal
-    "Nominal heating power"
+  parameter Modelica.SIunits.HeatFlowRate QCWTan_flow_nominal
+    "Nominal condensate water tank heat flow rate"
     annotation(Dialog(group = "Nominal condition"));
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal
-    "Nominal mass flow rate";
-  final parameter Modelica.SIunits.MassFlowRate mPum_flow_nominal=m_flow_nominal/num
-    "Nominal mass flow rate through 1 pump";
-  parameter Modelica.SIunits.PressureDifference dpValve_nominal(
+  parameter Modelica.SIunits.MassFlowRate mCW_flow_nominal
+    "Nominal condensate water mass flow rate";
+  parameter Modelica.SIunits.PressureDifference dpCWPum_nominal(
      displayUnit="Pa",
      min=0)
-    "Nominal pressure drop of fully open valve";
+    "Nominal pressure drop of condensate water pump";
 
   // Dynamics
   parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.DynamicFreeInitial
@@ -28,22 +27,38 @@ model CondensateSubsystem
     "Start value of inflow temperature"
     annotation(Dialog(tab = "Initialization"));
 
+  // Pump parameters
+  replaceable parameter Buildings.Fluid.Movers.Data.Generic perCWPum
+    constrainedby Buildings.Fluid.Movers.Data.Generic
+    "Performance data of condenser water pump"
+    annotation (Dialog(group="Pump"),choicesAllMatching=true,
+      Placement(transformation(extent={{-78,82},{-62,98}})));
+
   // Tank parameters
-  parameter Modelica.SIunits.ThermalConductance UA=0.05*Q_flow_nominal/30
+  parameter Modelica.SIunits.ThermalConductance UA=0.05*QCWTan_flow_nominal/30
     "Overall UA value";
-  parameter Modelica.SIunits.Volume VWat = 1.5E-6*Q_flow_nominal
+  parameter Modelica.SIunits.Volume VWat = 1.5E-6*QCWTan_flow_nominal
     "Water volume of boiler"
     annotation(Dialog(tab = "Dynamics", enable = not (energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState)));
-  parameter Modelica.SIunits.Mass mDry = 1.5E-3*Q_flow_nominal
+  parameter Modelica.SIunits.Mass mDry = 1.5E-3*QCWTan_flow_nominal
     "Mass of boiler that will be lumped to water heat capacity"
     annotation(Dialog(tab = "Dynamics", enable = not (energyDynamics == Modelica.Fluid.Types.Dynamics.SteadyState)));
 
+  // Valve parameters
+  parameter Real threshold(min = 0.01) = 0.05
+    "Hysteresis threshold";
+
   Buildings.Applications.DataCenters.ChillerCooled.Equipment.FlowMachine_y pum_y(
-    final m_flow_nominal=mPum_flow_nominal,
-    final dpValve_nominal=dpValve_nominal,
-    final num=num)
+    redeclare package Medium = Medium,
+    final per=fill(perCWPum, num),
+    final m_flow_nominal=mCW_flow_nominal,
+    final dpValve_nominal=dpCWPum_nominal,
+    final num=num,
+    threshold=threshold)
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
-  Buildings.Fluid.Sources.Boundary_pT watSou(nPorts=1) "Water source"
+  Buildings.Fluid.Sources.Boundary_pT watSou(
+    redeclare package Medium = Medium,
+    nPorts=1) "Water source"
     annotation (Placement(transformation(extent={{-90,20},{-70,40}})));
   Modelica.Blocks.Interfaces.RealOutput P_ConWatPum[num](
     each final quantity= "Power",
@@ -58,15 +73,18 @@ model CondensateSubsystem
     annotation (Placement(transformation(extent={{-140,40},{-100,80}}),
       iconTransformation(extent={{-140,40},{-100,80}})));
 
-  Buildings.Fluid.Sensors.MassFlowRate senMasFlo "Mass flow sensor for make up water"
+  Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare package Medium =
+        Medium)                                  "Mass flow sensor for make up water"
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
   Modelica.Blocks.Interfaces.RealOutput mMUW_flow(
     quantity="MassFlowRate",
     final unit="kg/s") "Make up water mass flow rate"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
   Buildings.Fluid.MixingVolumes.MixingVolume conStoTan(
-    m_flow_nominal=m_flow_nominal,
-    V=VWat,                                            nPorts=3)
+    redeclare package Medium = Medium,
+    m_flow_nominal=mCW_flow_nominal,
+    V=VWat,
+    nPorts=3)
     "Condensate storage tank"
     annotation (Placement(transformation(extent={{-40,0},{-20,-20}})));
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heaCapDry(C=500*mDry,
@@ -76,6 +94,11 @@ model CondensateSubsystem
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort
     "Heat port, can be used to connect to ambient"
     annotation (Placement(transformation(extent={{-10,90},{10,110}})));
+  Fluid.FixedResistances.CheckValve cheVal(
+    redeclare package Medium = Medium,
+    m_flow_nominal=mCW_flow_nominal*0.01,
+    dpValve_nominal=6000)
+    annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
 protected
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor UAOve(G=UA)
     "Overall thermal conductance (if heatPort is connected)"
@@ -95,14 +118,16 @@ equation
     annotation (Line(points={{-100,0},{-32.6667,0}}, color={0,127,255}));
   connect(conStoTan.ports[2], pum_y.port_a) annotation (Line(points={{-30,0},{
           20,0}},                    color={0,127,255}));
-  connect(senMasFlo.port_b, conStoTan.ports[3]) annotation (Line(points={{-40,30},
-          {-30,30},{-30,0},{-27.3333,0}}, color={0,127,255}));
   connect(conStoTan.heatPort, UAOve.port_a) annotation (Line(points={{-40,-10},
           {-52,-10},{-52,-50},{-40,-50}}, color={191,0,0}));
   connect(UAOve.port_b, heatPort)
     annotation (Line(points={{-20,-50},{0,-50},{0,100}}, color={191,0,0}));
   connect(heaCapDry.port, heatPort)
     annotation (Line(points={{0,-60},{0,100}}, color={191,0,0}));
+  connect(senMasFlo.port_b, cheVal.port_a)
+    annotation (Line(points={{-40,30},{-30,30}}, color={0,127,255}));
+  connect(conStoTan.ports[3], cheVal.port_b) annotation (Line(points={{-27.3333,
+          0},{-27.3333,8},{-4,8},{-4,30},{-10,30}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(
           extent={{-72,-34},{-20,-46}},
