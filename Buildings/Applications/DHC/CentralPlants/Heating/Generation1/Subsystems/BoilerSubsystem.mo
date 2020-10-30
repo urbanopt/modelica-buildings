@@ -1,7 +1,11 @@
 within Buildings.Applications.DHC.CentralPlants.Heating.Generation1.Subsystems;
 model BoilerSubsystem
   "Boiler subsystem containing parallel boilers and economizers"
-  extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+  extends Buildings.Fluid.Interfaces.PartialTwoPortTwoMedium(
+    redeclare replaceable package Medium_b =
+      IBPSA.Media.Interfaces.PartialPureSubstanceWithSat);
+
+  replaceable package MediumAir = Buildings.Media.Air "Air medium model";
 
   parameter Integer num=2 "The number of boilers";
 
@@ -19,22 +23,32 @@ model BoilerSubsystem
     constrainedby Buildings.Fluid.Movers.Data.Generic
     "Performance data of fan"
     annotation (Dialog(group="Fan"),choicesAllMatching=true,
-      Placement(transformation(extent={{-78,62},{-62,78}})));
+      Placement(transformation(extent={{62,62},{78,78}})));
 
-  Fluid.Boilers.SteamBoilerFourPort boi[num](
+  Buildings.Fluid.Boilers.SteamBoilerFourPort boi[num](
+    redeclare package MediumWat = Medium_a,
+    redeclare package MediumSte = Medium_b,
     each Q_flow_nominal=QBoi_flow_nominal,
-    each fue= Fluid.Data.Fuels.NaturalGasHigherHeatingValue())  "Boiler"
+    each fue= Fluid.Data.Fuels.NaturalGasHigherHeatingValue(),
+    redeclare package MediumAir = MediumAir)                      "Boiler"
     annotation (Placement(transformation(extent={{-10,-16},{10,4}})));
-  Fluid.HeatExchangers.PlateHeatExchangerEffectivenessNTU hex[num](
+  Buildings.Fluid.HeatExchangers.PlateHeatExchangerEffectivenessNTU hex[num](
+    redeclare package Medium1 = Medium_a,
+    redeclare package Medium2 = MediumAir,
     each Q_flow_nominal=QHex_flow_nominal)  "Economizing heat exchanger"
     annotation (Placement(transformation(extent={{-40,-16},{-20,4}})));
-  Fluid.Sources.Boundary_pT airSou(nPorts=1)  "Air source"
+  Buildings.Fluid.Sources.Boundary_pT airSou(redeclare package Medium = MediumAir,
+                                   nPorts=1)  "Air source"
     annotation (Placement(transformation(extent={{80,-80},{60,-60}})));
-  Fluid.Sources.Boundary_pT airSin(nPorts=1)  "Air sink"
+  Buildings.Fluid.Sources.Boundary_pT airSin(redeclare package Medium = MediumAir,
+                                   nPorts=1)  "Air sink"
     annotation (Placement(transformation(extent={{-90,-80},{-70,-60}})));
-  Fluid.Movers.SpeedControlled_y fan[num]  "Fan"
+  Buildings.Fluid.Movers.SpeedControlled_y fan[num](redeclare package Medium = MediumAir,
+      per=fill(perFan,num))                          "Fan"
     annotation (Placement(transformation(extent={{50,-80},{30,-60}})));
-  Fluid.Actuators.Valves.TwoWayEqualPercentage val[num](
+  Buildings.Fluid.Actuators.Valves.TwoWayEqualPercentage val[num](redeclare
+      package
+      Medium = Medium_a,
     each dpValve_nominal=dpValve_nominal)  "Control valve"
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
   Modelica.Thermal.HeatTransfer.Interfaces.HeatPort_a heatPort[num]
@@ -54,16 +68,28 @@ model BoilerSubsystem
             100,50},{120,70}})));
 
 
+  Modelica.Blocks.Interfaces.RealInput yFan[num](
+    each final unit="1",
+    each max=1,
+    each min=0) "Continuous input signal for the fan" annotation (Placement(
+        transformation(extent={{-140,60},{-100,100}}), iconTransformation(
+          extent={{-140,60},{-100,100}})));
+  Modelica.Blocks.Interfaces.RealInput yVal[num](
+    each final unit="1",
+    each max=1,
+    each min=0) "Continuous input signal for the control valve" annotation (
+      Placement(transformation(extent={{-140,20},{-100,60}}),
+        iconTransformation(extent={{-140,60},{-100,100}})));
 equation
   for i in 1:num loop
-    connect(port_a, val[i].port_a)
-      annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
-    connect(boi[i].port_b1, port_b)
-      annotation (Line(points={{10,0},{100,0}}, color={0,127,255}));
     connect(fan[i].port_a, airSou.ports[i])
       annotation (Line(points={{50,-70},{60,-70}}, color={0,127,255}));
     connect(hex[i].port_b2, airSin.ports[i])
       annotation (Line(points={{-40,-12},{-50,-12},{-50,-70},{-70,-70}}, color={0,127,255}));
+    connect(port_a, val[i].port_a)
+      annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
+  connect(port_b, boi[i].port_b1)
+      annotation (Line(points={{100,0},{10,0}}, color={0,127,255}));
   end for;
 
   connect(boi.heatPort, heatPort)
@@ -76,6 +102,10 @@ equation
     annotation (Line(points={{30,-70},{20,-70},{20,-12},{10,-12}}, color={0,127,255}));
   connect(boi.port_b2, hex.port_a2)
     annotation (Line(points={{-10,-12},{-20,-12}}, color={0,127,255}));
+  connect(val.y, yVal)
+    annotation (Line(points={{-60,12},{-60,40},{-120,40}}, color={0,0,127}));
+  connect(fan.y, yFan)
+    annotation (Line(points={{40,-58},{40,80},{-120,80}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
           extent={{-80,56},{80,44}},
