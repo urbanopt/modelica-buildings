@@ -4,7 +4,7 @@ model BuildingTimeSeriesWithETSHeating
   extends Modelica.Icons.Example;
 
   package MediumSte = IBPSA.Media.Steam "Steam medium";
-  package MediumWat = IBPSA.Media.WaterHighTemperature "Water medium";
+  package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature "Water medium";
 
   parameter String filNam=
     "modelica://Buildings/Resources/Data/Applications/DHC/Examples/FirstGeneration/HeatingSystem-WP3-DESTEST/HeatingLoadProfiles.csv"

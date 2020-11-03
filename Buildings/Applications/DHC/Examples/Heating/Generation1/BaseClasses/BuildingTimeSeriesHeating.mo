@@ -111,18 +111,12 @@ model BuildingTimeSeriesHeating
         transformation(extent={{100,40},{120,60}}), iconTransformation(extent={
             {100,40},{120,60}})));
 equation
-  connect(port_a, ets.port_a) annotation (Line(points={{100,-60},{0,-60},{0,0},
-          {40,0}},  color={0,127,255}));
-  connect(ets.port_b, port_b) annotation (Line(points={{60,0},{100,0}},
-                 color={0,127,255}));
   connect(QHea.y[1], pro.u1) annotation (Line(points={{-59,70},{-50,70},{-50,56},
           {-42,56}}, color={0,0,127}));
   connect(ram.y, pro.u2) annotation (Line(points={{-59,30},{-50,30},{-50,44},{
           -42,44}}, color={0,0,127}));
   connect(pro.y, Q_flow) annotation (Line(points={{-19,50},{0,50},{0,80},{110,
           80}}, color={0,0,127}));
-  connect(pro.y, ets.Q_flow)
-    annotation (Line(points={{-19,50},{0,50},{0,6},{38,6}}, color={0,0,127}));
   connect(pro.y, IntEHea.u)
     annotation (Line(points={{-19,50},{58,50}}, color={0,0,127}));
   connect(Q_flow, Q_flow) annotation (Line(points={{110,80},{107,80},{107,80},{

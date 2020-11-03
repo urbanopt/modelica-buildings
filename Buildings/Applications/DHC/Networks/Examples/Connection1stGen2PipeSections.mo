@@ -4,7 +4,7 @@ model Connection1stGen2PipeSections
 
   package MediumSte = IBPSA.Media.Steam (
      T_default=179.91+273.15) "Steam medium";
-  package MediumWat = IBPSA.Media.WaterHighTemperature "Water medium";
+  package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature "Water medium";
 
   parameter Modelica.SIunits.AbsolutePressure pSte=1000000
     "Steam pressure";

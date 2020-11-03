@@ -4,7 +4,7 @@ model HeatingPlantIdealOpenLoop
   extends Modelica.Icons.Example;
 
   package MediumSte = IBPSA.Media.Steam "Steam medium";
-  package MediumWat = IBPSA.Media.WaterHighTemperature "Water medium";
+  package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature "Water medium";
 
   parameter Modelica.SIunits.SpecificEnthalpy dh_nominal=
     MediumSte.enthalpyOfVaporization_sat(MediumSte.saturationState_p(pSte))
