@@ -24,7 +24,7 @@ model BuildingTimeSeriesWithETSHeating
     annotation (Placement(transformation(extent={{-80,0},{-60,20}})));
   Fluid.Sources.Boundary_pT watSin(
     redeclare package Medium = MediumWat,
-    p=pSte,
+    p=pSte - 50000,
     nPorts=1) "Water sink"
     annotation (Placement(transformation(extent={{60,0},{40,20}})));
   Buildings.Applications.DHC.Examples.Heating.Generation1.BaseClasses.BuildingTimeSeriesWithETSHeating
