@@ -4,13 +4,13 @@ model BuildingTimeSeriesHeatingTableMatrix
   extends Modelica.Icons.Example;
 
   package MediumSte = IBPSA.Media.Steam "Steam medium";
-  package MediumWat = IBPSA.Media.WaterHighTemperature "Water medium";
+  package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature "Water medium";
 
   parameter Modelica.SIunits.SpecificEnthalpy dh_nominal=
     MediumSte.enthalpyOfVaporization_sat(MediumSte.saturationState_p(pSte))
     "Nominal change in enthalpy";
 
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal = Q_flow_nominal/dh_nominal
+  parameter Modelica.SIunits.MassFlowRate mDis_flow_nominal = QDis_flow_nominal/dh_nominal
     "Nominal mass flow rate";
 
   parameter Modelica.SIunits.AbsolutePressure pSte=1000000
@@ -22,15 +22,17 @@ model BuildingTimeSeriesHeatingTableMatrix
 
   parameter Real QHeaLoa[:, :]= [0, 200E3; 6, 200E3; 6, 50E3; 18, 50E3; 18, 75E3; 24, 75E3]
     "Heating load profile for the building";
-  parameter Modelica.SIunits.Power Q_flow_nominal= 200E3
+  parameter Modelica.SIunits.Power QDis_flow_nominal= 200E3
     "Nominal heat flow rate";
 
   Buildings.Applications.DHC.Examples.Heating.Generation1.BaseClasses.BuildingTimeSeriesHeating
     bld(
     redeclare package Medium_a = MediumSte,
     redeclare package Medium_b = MediumWat,
+    mDis_flow_nominal=mDis_flow_nominal,
+    mBui_flow_nominal=10,
     QHeaLoa=QHeaLoa,
-    Q_flow_nominal=Q_flow_nominal,
+    Q_flow_nominal=QDis_flow_nominal,
     pSte_nominal=pSte,
     timeScale=3600) "Building model, heating only"
     annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
@@ -42,7 +44,7 @@ model BuildingTimeSeriesHeatingTableMatrix
     annotation (Placement(transformation(extent={{80,-6},{60,14}})));
   Fluid.Sources.Boundary_pT           watSin(redeclare package Medium =
         MediumWat,
-    p=pSte,        nPorts=1)
+    p=30000000000, nPorts=1)
               "Water sink"
     annotation (Placement(transformation(extent={{60,20},{40,40}})));
 equation

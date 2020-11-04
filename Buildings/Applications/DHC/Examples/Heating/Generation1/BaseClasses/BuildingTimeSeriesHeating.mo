@@ -8,17 +8,31 @@ model BuildingTimeSeriesHeating
       Modelica.Media.Interfaces.PartialMedium
     "Medium model (liquid state) for port_b (outlet)";
 
-  parameter Modelica.SIunits.Power Q_flow_nominal
+  parameter Modelica.SIunits.Power Q_flow_nominal=mBui_flow_nominal*cp*(50 - 30)
     "Nominal heat flow rate";
 
   parameter Modelica.SIunits.AbsolutePressure pSte_nominal
     "Nominal steam pressure";
-  final parameter Modelica.SIunits.SpecificEnthalpy dh_nominal=
-    Medium_a.enthalpyOfVaporization_sat(Medium_a.saturationState_p(pSte_nominal))
-    "Nominal change in enthalpy";
-  final parameter Modelica.SIunits.MassFlowRate m_flow_nominal=
-    Q_flow_nominal/dh_nominal
-    "Nominal mass flow rate";
+//  final parameter Modelica.SIunits.SpecificEnthalpy dh_nominal=
+//    Medium_a.enthalpyOfVaporization_sat(Medium_a.saturationState_p(pSte_nominal))
+//    "Nominal change in enthalpy";
+  parameter Modelica.SIunits.MassFlowRate mDis_flow_nominal(
+    final min=0,
+    final start=0.5)
+    "Nominal mass flow rate of primary (district) district cooling side";
+  parameter Modelica.SIunits.MassFlowRate mBui_flow_nominal(
+    final min=0,
+    final start=0.5)
+    "Nominal mass flow rate of secondary (building) district cooling side";
+  parameter Modelica.SIunits.Temperature TBuiSupSet=50+273.15
+    "Building hot water supply temperature setpoint";
+  parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial
+    "Type of energy balance: dynamic (3 initialization options) or steady state"
+    annotation(Evaluate=true, Dialog(tab = "Dynamics", group="Equations"));
+  parameter Modelica.SIunits.Time tau = 30
+    "Time constant at nominal flow (if energyDynamics <> SteadyState)"
+     annotation (Dialog(tab = "Dynamics", group="Nominal condition"));
+
 
   // Table parameters
   parameter Boolean tableOnFile=false
@@ -78,12 +92,12 @@ model BuildingTimeSeriesHeating
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
   Buildings.Applications.DHC.EnergyTransferStations.Heating.Generation1.HeatingIndirect
     ets(
-    redeclare final package Medium_a = Medium_a,
-    redeclare final package Medium_b = Medium_b,
-    m_flow_nominal=m_flow_nominal,
-    Q_flow_nominal=Q_flow_nominal,
+    redeclare package Medium = Medium_b,
+    redeclare package MediumSat = Medium_a,
+    mDis_flow_nominal=mDis_flow_nominal,
+    mBui_flow_nominal=mBui_flow_nominal,
     pSte_nominal=pSte_nominal) "Energy transfer station"
-    annotation (Placement(transformation(extent={{40,-10},{60,10}})));
+    annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
 
   Modelica.Fluid.Interfaces.FluidPort_a port_a(
     redeclare package Medium = Medium_a)
@@ -91,38 +105,77 @@ model BuildingTimeSeriesHeating
   Modelica.Fluid.Interfaces.FluidPort_b port_b(
     redeclare package Medium = Medium_b)
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Modelica.Blocks.Interfaces.RealOutput Q_flow(
-    final quantity="HeatFlowRate",
-    final unit="W",
-    displayUnit="kW") "Total heat transfer rate"
-    annotation (Placement(transformation(extent={{100,70},{120,90}}),
-        iconTransformation(extent={{100,70},{120,90}})));
   Modelica.Blocks.Sources.Ramp ram(duration=120)
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
   Modelica.Blocks.Math.Product pro
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
-  Modelica.Blocks.Continuous.Integrator IntEHea(y(unit="J"))
-    "Integrator for heating energy of building"
-    annotation (Placement(transformation(extent={{60,40},{80,60}})));
-  Modelica.Blocks.Interfaces.RealOutput EHea(
-    final quantity="HeatFlow",
-    final unit="J",
-    displayUnit="kWh") "Total heating energy" annotation (Placement(
-        transformation(extent={{100,40},{120,60}}), iconTransformation(extent={
-            {100,40},{120,60}})));
+  Fluid.Movers.FlowControlled_m_flow           pum(
+    redeclare replaceable package Medium = Medium_b,
+    energyDynamics=energyDynamics,
+    m_flow_nominal=mBui_flow_nominal,
+    addPowerToMedium=false,
+    nominalValuesDefineDefaultPressureCurve=true,
+    constantMassFlowRate=mBui_flow_nominal)
+    "Building primary pump"
+    annotation (Placement(transformation(extent={{18,-48},{-2,-28}})));
+  Modelica.Blocks.Math.Gain m_flow(k=-1/(cp*(50 - 30)))
+    "Multiplier gain for calculating m_flow"
+    annotation (Placement(transformation(extent={{-40,-28},{-20,-8}})));
+  Fluid.MixingVolumes.MixingVolume           vol(
+    redeclare package Medium = Medium_b,
+    energyDynamics=energyDynamics,
+    m_flow_nominal=mBui_flow_nominal,
+    V=mBui_flow_nominal*tau/rho_default,
+    nPorts=2) "Building volume"
+    annotation (Placement(transformation(extent={{40,0},{60,20}})));
+  HeatTransfer.Sources.PrescribedHeatFlow           heaFlo "Heat flow"
+    annotation (Placement(transformation(extent={{10,0},{30,20}})));
+  Modelica.Blocks.Sources.Constant TSetBuiSup(k=TBuiSupSet)
+    "Building supply temperature"
+    annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
+  Modelica.Blocks.Math.Gain heaGai(k=-1)
+    "Multiplier for calculating heat gain of the volume"
+    annotation (Placement(transformation(extent={{-30,0},{-10,20}})));
 equation
   connect(QHea.y[1], pro.u1) annotation (Line(points={{-59,70},{-50,70},{-50,56},
           {-42,56}}, color={0,0,127}));
   connect(ram.y, pro.u2) annotation (Line(points={{-59,30},{-50,30},{-50,44},{
           -42,44}}, color={0,0,127}));
-  connect(pro.y, Q_flow) annotation (Line(points={{-19,50},{0,50},{0,80},{110,
-          80}}, color={0,0,127}));
-  connect(pro.y, IntEHea.u)
-    annotation (Line(points={{-19,50},{58,50}}, color={0,0,127}));
-  connect(Q_flow, Q_flow) annotation (Line(points={{110,80},{107,80},{107,80},{
-          110,80}}, color={0,0,127}));
-  connect(IntEHea.y, EHea) annotation (Line(points={{81,50},{96,50},{96,50},{
-          110,50}}, color={0,0,127}));
+  connect(pum.port_b,vol. ports[1]) annotation (Line(points={{-2,-38},{-10,-38},
+          {-10,0},{48,0}},    color={0,127,255}));
+  connect(m_flow.y,pum. m_flow_in) annotation (Line(points={{-19,-18},{8,-18},{8,
+          -26}},                                                                        color={0,0,127}));
+  connect(pro.y, m_flow.u) annotation (Line(points={{-19,50},{-4,50},{-4,30},{-42,
+          30},{-42,-18}}, color={0,0,127}));
+  connect(TSetBuiSup.y, ets.TSetBuiSup) annotation (Line(points={{-59,-50},{30,-50},
+          {30,-30},{38,-30}}, color={0,0,127}));
+  connect(port_a, ets.port_a1) annotation (Line(points={{100,-60},{26,-60},{26,-24},
+          {40,-24}}, color={0,127,255}));
+  connect(ets.port_b1, port_b) annotation (Line(points={{60,-24},{80,-24},{80,0},
+          {100,0}}, color={0,127,255}));
+  connect(ets.port_b2, pum.port_a) annotation (Line(points={{40,-36},{38,-36},{38,
+          -38},{18,-38}}, color={0,127,255}));
+  connect(vol.ports[2], ets.port_a2) annotation (Line(points={{52,0},{70,0},{70,
+          -36},{60,-36}}, color={0,127,255}));
+
+protected
+  parameter Modelica.SIunits.SpecificHeatCapacity cp=
+   Medium_b.specificHeatCapacityCp(
+      Medium_b.setState_pTX(Medium_b.p_default, Medium_b.T_default, Medium_b.X_default))
+    "Default specific heat capacity of medium";
+  parameter Medium_b.ThermodynamicState sta_default=Medium_b.setState_pTX(
+      T=Medium_b.T_default, p=Medium_b.p_default, X=Medium_b.X_default);
+  parameter Modelica.SIunits.Density rho_default=Medium_b.density(sta_default)
+    "Density, used to compute fluid volume";
+
+
+equation
+  connect(heaFlo.port, vol.heatPort)
+    annotation (Line(points={{30,10},{40,10}}, color={191,0,0}));
+  connect(heaGai.y, heaFlo.Q_flow)
+    annotation (Line(points={{-9,10},{10,10}}, color={0,0,127}));
+  connect(pro.y, heaGai.u) annotation (Line(points={{-19,50},{-4,50},{-4,30},{
+          -42,30},{-42,10},{-32,10}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Polygon(
           points={{20,-70},{60,-85},{20,-100},{20,-70}},
