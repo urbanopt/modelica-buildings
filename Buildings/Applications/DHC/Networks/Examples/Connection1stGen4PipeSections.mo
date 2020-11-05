@@ -55,6 +55,8 @@ model Connection1stGen4PipeSections
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
   Buildings.Applications.DHC.Examples.Heating.Generation1.BaseClasses.BuildingTimeSeriesHeating
     bld1(
+    redeclare package Medium_a = MediumSte,
+    redeclare package Medium_b = MediumWat,
     QHeaLoa=QBui1_flow_profile,
     Q_flow_nominal=QBui_flow_nominal,
     pSte_nominal=pSte,
@@ -69,6 +71,8 @@ model Connection1stGen4PipeSections
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
   Buildings.Applications.DHC.Examples.Heating.Generation1.BaseClasses.BuildingTimeSeriesHeating
     bld2(
+    redeclare package Medium_a = MediumSte,
+    redeclare package Medium_b = MediumWat,
     QHeaLoa=QBui2_flow_profile,
     Q_flow_nominal=QBui_flow_nominal,
     pSte_nominal=pSte,
