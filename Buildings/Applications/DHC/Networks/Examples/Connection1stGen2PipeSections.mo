@@ -3,14 +3,14 @@ model Connection1stGen2PipeSections
   extends Modelica.Icons.Example;
 
   package MediumSte = IBPSA.Media.Steam (
-     T_default=179.91+273.15) "Steam medium";
+     T_default=179.91+273.15,
+     h_default=2777100) "Steam medium";
   package MediumWat = IBPSA.Media.Specialized.Water.HighTemperature "Water medium";
 
   parameter Modelica.SIunits.AbsolutePressure pSte=1000000
     "Steam pressure";
 
-  parameter Modelica.SIunits.Temperature TSte=
-    MediumSte.saturationTemperature_p(pSte)
+  parameter Modelica.SIunits.Temperature TSte=179.91+273.15
     "Steam temperature";
 
   parameter Modelica.SIunits.Power QBui_flow_nominal= 9000E3
