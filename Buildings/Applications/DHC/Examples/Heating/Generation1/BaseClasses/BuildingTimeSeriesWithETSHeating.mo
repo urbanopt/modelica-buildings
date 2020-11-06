@@ -100,6 +100,9 @@ model BuildingTimeSeriesWithETSHeating
   Modelica.Blocks.Sources.Constant TSetBuiSup(k=TSetHotWat)
     "Building supply temperature setpoint"
     annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
+  Fluid.Sources.Boundary_pT pRef(redeclare package Medium = MediumWat, nPorts=1)
+    "Reference pressure"
+    annotation (Placement(transformation(extent={{60,20},{40,40}})));
 protected
   parameter Modelica.SIunits.SpecificHeatCapacity cp=
    Medium_b.specificHeatCapacityCp(
@@ -111,12 +114,14 @@ equation
           -24},{-10,-24}}, color={0,127,255}));
   connect(ets.port_b1, port_b) annotation (Line(points={{10,-24},{20,-24},{20,0},
           {100,0}}, color={0,127,255}));
-  connect(bui.ports_bHeaWat[1], ets.port_b2) annotation (Line(points={{10,48},{
-          36,48},{36,-52},{-20,-52},{-20,-36},{-10,-36}}, color={0,127,255}));
-  connect(bui.ports_aHeaWat[1], ets.port_a2) annotation (Line(points={{-10,48},
-          {-26,48},{-26,6},{32,6},{32,-36},{10,-36}}, color={0,127,255}));
   connect(TSetBuiSup.y, ets.TSetBuiSup)
     annotation (Line(points={{-59,-30},{-12,-30}}, color={0,0,127}));
+  connect(ets.port_b2, bui.ports_aHeaWat[1]) annotation (Line(points={{-10,-36},
+          {-30,-36},{-30,48},{-10,48},{-10,48}}, color={0,127,255}));
+  connect(bui.ports_bHeaWat[1], ets.port_a2) annotation (Line(points={{10,48},{
+          30,48},{30,-36},{10,-36}}, color={0,127,255}));
+  connect(pRef.ports[1], ets.port_a2) annotation (Line(points={{40,30},{30,30},
+          {30,-36},{10,-36}}, color={0,127,255}));
   annotation (Line(
       points={{-1,100},{0.1,100},{0.1,71.4}},
       color={255,204,51},
