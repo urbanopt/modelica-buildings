@@ -29,11 +29,11 @@ model BuildingTimeSeriesWithETSHeating
   parameter String filNam
     "Library path of the file with thermal loads as time series"
     annotation (Dialog(group="Building"));
-  final parameter Modelica.SIunits.Power Q_flow_nominal(max=-Modelica.Constants.eps)=
+  final parameter Modelica.SIunits.Power Q_flow_nominal=
     Buildings.Experimental.DistrictHeatingCooling.SubStations.VaporCompression.BaseClasses.getPeakLoad(
-    string="#Peak space cooling load",
+    string="#Peak space heating load",
     filNam=Modelica.Utilities.Files.loadResource(filNam))
-    "Design cooling heat flow rate (<=0)Nominal heat flow rate, negative";
+    "Design heating flow rate (>=0)Nominal heat flow rate, positive";
   parameter Modelica.SIunits.Temperature THotWatSup_nominal=273.15 + 50
     "Nominal temperature for hot water supply"
     annotation (Dialog(group="Building"));
@@ -243,5 +243,9 @@ equation
           fillColor={0,0,255},
           fillPattern=FillPattern.Solid,
           origin={57,-13},
-          rotation=90)}));
+          rotation=90),
+        Text(
+          extent={{-149,-114},{151,-154}},
+          lineColor={0,0,255},
+          textString="%name")}));
 end BuildingTimeSeriesWithETSHeating;
