@@ -35,7 +35,8 @@ model BuildingTimeSeriesWithETSHeating
     filNam=filNam,
     pSte_nominal=pSte,
     TSteSup_nominal=TSte,
-    mDis_flow_nominal=5)
+    TConRet_nominal=TSte - 2,
+    mDis_flow_nominal=1)
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
 
 equation
@@ -45,8 +46,8 @@ equation
     annotation (Line(points={{0,10},{40,10}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
-  experiment(StopTime=31536000),
+  experiment(StopTime=86400),
 __Dymola_Commands(file=
-          "Resources/Scripts/Dymola/Applications/DHC/Examples/Heating/Generation1/BaseClasses/Examples/BuildingTimeSeriesHeatingTableRead.mos"
+          "Resources/Scripts/Dymola/Applications/DHC/Examples/Heating/Generation1/BaseClasses/Examples/BuildingTimeSeriesWithETSHeating.mos"
         "Simulate and plot"));
 end BuildingTimeSeriesWithETSHeating;

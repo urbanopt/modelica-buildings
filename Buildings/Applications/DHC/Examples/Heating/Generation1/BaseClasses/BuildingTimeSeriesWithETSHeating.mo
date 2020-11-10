@@ -34,10 +34,10 @@ model BuildingTimeSeriesWithETSHeating
     string="#Peak space heating load",
     filNam=Modelica.Utilities.Files.loadResource(filNam))
     "Design heating flow rate (>=0)Nominal heat flow rate, positive";
-  parameter Modelica.SIunits.Temperature THotWatSup_nominal=273.15 + 50
+  parameter Modelica.SIunits.Temperature THotWatSup_nominal=273.15 + 60
     "Nominal temperature for hot water supply"
     annotation (Dialog(group="Building"));
-  parameter Modelica.SIunits.Temperature TWatRet_nominal=273.15 + 30
+  parameter Modelica.SIunits.Temperature TWatRet_nominal=273.15 + 38
     "Nominal temperature for water return"
     annotation (Dialog(group="Building"));
 
@@ -74,8 +74,11 @@ model BuildingTimeSeriesWithETSHeating
     have_watCoo=false,
     T_aHeaWat_nominal=THotWatSup_nominal,
     T_bHeaWat_nominal=TWatRet_nominal,
+    mLoaHea_flow_nominal=2,
     loa(
-    columns = {2,3}, timeScale=3600, offset={0,0}),
+      columns={2,3},
+      timeScale(displayUnit="h") = 3600,
+      offset={0,0}),
     final energyDynamics=energyDynamics,
     final use_inputFilter=false,
     final filNam=filNam,
@@ -247,5 +250,6 @@ equation
         Text(
           extent={{-149,-114},{151,-154}},
           lineColor={0,0,255},
-          textString="%name")}));
+          textString="%name")}),
+    experiment(StopTime=86400));
 end BuildingTimeSeriesWithETSHeating;
