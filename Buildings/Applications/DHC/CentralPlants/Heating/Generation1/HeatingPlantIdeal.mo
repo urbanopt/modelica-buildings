@@ -58,8 +58,9 @@ model HeatingPlantIdeal
   Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium =
         Medium_b)
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
-  Buildings.Fluid.Boilers.SteamBoilerTwoPort boi(redeclare package Medium_a =
-        Medium_a, redeclare package Medium_b = Medium_b,
+  Buildings.Fluid.Boilers.SteamBoilerTwoPort boi(
+    redeclare package MediumWat = Medium_a,
+    redeclare package MediumSte = Medium_b,
     m_flow_nominal=mPla_flow_nominal,
     show_T=show_T,
     energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
